@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Blackfin</string>
+    <string name="occupation_detail">Here is a rough guide for selecting an Occupation. Note that,because of variations between insurers, sometimes the only way to know for sure is to call an underwriter.</string>
+</resources>

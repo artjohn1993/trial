@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="8dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="16dp"
+    >
+
+    <ImageView
+        android:id="@+id/closeButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/btn_close"
+        android:tint="#fff"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/iconHealth"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_02_life_cover"
+        app:layout_constraintTop_toBottomOf="@id/closeButton"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Life Cover"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="@id/iconHealth"
+        app:layout_constraintBottom_toBottomOf="@id/iconHealth"
+        app:layout_constraintStart_toEndOf="@id/iconHealth"
+        android:layout_marginStart="16dp"
+        />
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#fff"
+        app:layout_constraintTop_toBottomOf="@id/iconHealth"
+        android:layout_marginTop="8dp"
+        />
+    <TextView
+        android:id="@+id/excessText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cover Amount"
+        android:textColor="#fff"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        android:layout_marginTop="16dp"
+        />
+    
+    <EditText
+        android:id="@+id/coverAmountEdit"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#803cbdd0"
+        app:layout_constraintTop_toBottomOf="@id/excessText"
+        android:layout_marginTop="8dp"
+        android:paddingStart="20dp"
+        android:textColor="#fff"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$"
+        android:textColor="#fff"
+        app:layout_constraintTop_toTopOf="@id/coverAmountEdit"
+        app:layout_constraintBottom_toBottomOf="@id/coverAmountEdit"
+        app:layout_constraintStart_toStartOf="@id/coverAmountEdit"
+        android:layout_marginStart="8dp"
+        />
+    <TextView
+        android:id="@+id/calcuText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calc Period"
+        android:textColor="#fff"
+        app:layout_constraintTop_toBottomOf="@id/coverAmountEdit"
+        android:layout_marginTop="16dp"
+        />
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/calcuWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        app:layout_constraintTop_toBottomOf="@id/calcuText"
+        android:layout_marginTop="8dp"
+        >
+        <Spinner
+            android:id="@+id/calcuSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:spinnerMode="dialog"
+            android:textAlignment="center"
+            >
+
+        </Spinner>
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/advancedOptionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Advanced Options"
+        android:textColor="#fff"
+        app:layout_constraintTop_toBottomOf="@id/calcuWrapper"
+        android:layout_marginTop="8dp"
+        />
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#fff"
+        app:layout_constraintTop_toBottomOf="@id/advancedOptionText"
+        android:layout_marginTop="8dp"
+        />
+
+    <TextView
+        android:id="@+id/loadingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading"
+        android:textColor="#fff"
+        app:layout_constraintTop_toBottomOf="@id/divider2"
+        android:layout_marginTop="16dp"
+        />
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/loadingWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        app:layout_constraintTop_toBottomOf="@id/loadingText"
+        android:layout_marginTop="8dp"
+        >
+        <Spinner
+            android:id="@+id/loadingSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:spinnerMode="dialog"
+            android:textAlignment="center"
+            >
+
+        </Spinner>
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/indexedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Indexed"
+        android:textColor="#fff"
+        app:layout_constraintTop_toBottomOf="@id/loadingWrapper"
+        android:layout_marginTop="16dp"
+        />
+
+    <Switch
+        android:id="@+id/indexedSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/indexedText"
+        app:layout_constraintBottom_toBottomOf="@id/indexedText"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        />
+    <TextView
+        android:id="@+id/FIText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Future Insurability"
+        android:textColor="#fff"
+        app:layout_constraintTop_toBottomOf="@id/indexedText"
+        android:layout_marginTop="16dp"
+        />
+
+    <Switch
+        android:id="@+id/FISwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/FIText"
+        app:layout_constraintBottom_toBottomOf="@id/FIText"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        />
+
+    <Button
+        android:id="@+id/lifeApplyButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background"
+        android:text="Apply Changes"
+        android:textAllCaps="false"
+        android:textColor="#fff"
+        app:layout_constraintTop_toBottomOf="@id/FIText"
+        android:layout_marginTop="16dp"
+        />
+</android.support.constraint.ConstraintLayout>
+</ScrollView>
