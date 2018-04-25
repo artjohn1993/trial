@@ -58,14 +58,14 @@ class BenefitsAdapter(activity: Activity) : RecyclerView.Adapter<BenefitsAdapter
 
     override fun onBindViewHolder(holder: BenefitsHolder, position: Int) {
 
-
+        println("============================================================")
         holder.icon.setImageResource(imageArray[position])
         holder.title.text = titleArray[position]
 
         if(selected.contains(position))
         {
-               holder.title.setTextColor(Color.parseColor("#3cbdd0"))
-               holder.icon.setColorFilter(Color.parseColor("#3cbdd0"))
+                holder.title.setTextColor(Color.parseColor("#3cbdd0"))
+                holder.icon.setColorFilter(Color.parseColor("#3cbdd0"))
         }
         else{
             holder.title.setTextColor(Color.parseColor("#010026"))
@@ -73,23 +73,17 @@ class BenefitsAdapter(activity: Activity) : RecyclerView.Adapter<BenefitsAdapter
         }
         holder.itemView.setOnClickListener {
 
-
-            if (!selected.contains(position))
-            {
-                selected.add(position)
-                if (position.equals(0))
+                if (position == 0)
                 {
-                    HealthDialog.show(activity)
+                        HealthDialog.show(activity)
+                        selected.add(position)
                 }
-                else if(position.equals(1))
+                else if(position == 1)
                 {
                     LifeDialog.show(activity)
+                    selected.add(position)
                 }
-            }
-            else{
-                selected.remove(position)
-            }
-            notifyDataSetChanged()
+
         }
 
     }

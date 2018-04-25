@@ -1,12 +1,19 @@
 package com.example.artjohn.blackfin
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcel
+import android.text.ParcelableSpan
 import android.view.View
 import android.view.WindowManager
 import android.widget.ArrayAdapter
 import com.example.artjohn.blackfin.api.BlackfinApi
 import com.example.artjohn.blackfin.model.Age
+import com.example.artjohn.blackfin.model.ClientInfo
+import com.example.artjohn.blackfin.model.Qoute
+import com.google.gson.Gson
+import com.squareup.moshi.Moshi
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.occupation_guide_layout.*
@@ -15,7 +22,7 @@ import org.jetbrains.anko.startActivity
 class MainActivity : AppCompatActivity() {
 
     var ageArray = arrayListOf<Int>()
-
+    var smokerChecker : Boolean = false
 
     private var disposable : Disposable? = null
     private val apiServer by lazy {
@@ -25,11 +32,35 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         title = "New Qoute"
-
         this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+
+        smokerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            smokerChecker = isChecked
+        }
+
         mainNextButton.setOnClickListener {
+            /*startActivity<BenefitsActivity>()*/
+
+
+            var age = ageSpinner.selectedItem.toString()
+            var gender =  IdentifyGender(genderSpinner.selectedItem.toString())
+            var occupation = occupationSpinner.selectedItemPosition
+            var status = statusSpinner.selectedItem.toString()
+
+
+
+            var array : ArrayList<Qoute.ClientsInformation> = ArrayList()
+            var qoute  = Qoute.ClientsInformation(nameEdit.text.toString(),true,"1",smokerChecker,age,gender,false,status,occupation)
+            array.add(qoute)
+
+            ClientInfo(array)
+
+           /* var intent = Intent(baseContext,BenefitsActivity::class.java)
+            intent.putParcelableArrayListExtra("client_info", Parcel.obtain())
+
+            startActivity(intent)*/
+
             startActivity<BenefitsActivity>()
         }
 
@@ -65,6 +96,16 @@ class MainActivity : AppCompatActivity() {
         val ageAdapter : ArrayAdapter<Int> = ArrayAdapter(this, android.R.layout.simple_list_item_1,age)
 
         return ageAdapter
+    }
+    fun IdentifyGender(gender : String) : String{
+        if(gender.equals("Male"))
+        {
+            return "M"
+        }
+        else
+        {
+            return "F"
+        }
     }
     fun login()
     {
