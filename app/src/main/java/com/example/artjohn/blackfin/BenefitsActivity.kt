@@ -8,6 +8,7 @@ import com.example.artjohn.blackfin.adapter.BenefitsAdapter
 import com.example.artjohn.blackfin.dialog.HealthDialog
 import com.example.artjohn.blackfin.dialog.LifeDialog
 import com.example.artjohn.blackfin.model.ClientInfo
+import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Qoute
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_benefits.*
@@ -24,7 +25,7 @@ class BenefitsActivity : AppCompatActivity() {
         println(ClientInfo.array)
 
         benefitsNextButton.setOnClickListener {
-
+            println(ConfigureBenefits.array)
         }
 
     }

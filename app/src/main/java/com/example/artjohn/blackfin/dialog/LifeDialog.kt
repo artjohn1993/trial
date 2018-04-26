@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.*
 import com.example.artjohn.blackfin.R
+import com.example.artjohn.blackfin.model.ConfigureBenefits
+import com.example.artjohn.blackfin.model.Qoute
 import org.jetbrains.anko.find
 
 class LifeDialog: AppCompatActivity() {
@@ -95,6 +97,55 @@ class LifeDialog: AppCompatActivity() {
             dialog?.show()
 
             return returnBol
+        }
+        fun configuredBenefits(excess : Int, ST : Boolean, GP : Boolean,DO : Boolean,loading : Double)
+        {
+            var dentalOptical : Boolean = DO
+            var specialistsTest : Boolean = ST
+            var benefitPeriod : Int = 0
+            var calcPeriod : Int = 1
+            var isAccelerated : Boolean = false
+            var gpPrescriptions : Boolean = GP
+            var frequency : Int = 12
+            var isLifeBuyback : Boolean = false
+            var isTpdAddon : Boolean = false
+            var benefitPeriodType : String = "Term"
+            var occupationType : String = "AnyOccupation"
+            var wopWeekWaitPeriod : Int = 0
+            var isFutureInsurability : Boolean = false
+            var booster : Boolean = false
+            var excess : Int = excess
+            var coverAmount : Double = 0.0
+            var loading : Double = loading
+            var isTraumaBuyback : Boolean = false
+
+            val data = Qoute.Benefits(dentalOptical,
+                    specialistsTest,
+                    benefitPeriod,
+                    calcPeriod,
+                    isAccelerated,
+                    gpPrescriptions,
+                    frequency,
+                    isLifeBuyback,
+                    isTpdAddon,
+                    benefitPeriodType,
+                    occupationType,
+                    wopWeekWaitPeriod,
+                    isFutureInsurability,
+                    booster,
+                    excess,
+                    coverAmount,
+                    loading,
+                    isTraumaBuyback
+            )
+            var array : ArrayList<Qoute.Inputs> = ArrayList()
+            var inputs = Qoute.Inputs(1,data)
+            array.add(inputs)
+
+
+
+            ConfigureBenefits(array)
+
         }
     }
 }

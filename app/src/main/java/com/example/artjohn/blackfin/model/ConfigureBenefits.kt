@@ -5,7 +5,7 @@ package com.example.artjohn.blackfin.model
  */
 class ConfigureBenefits {
 
-    var dentalOptical : Boolean? = null
+    /*var dentalOptical : Boolean? = null
     var specialistsTest : Boolean? = null
     var benefitPeriod : Int? = null
     var calcPeriod : Int? = null
@@ -22,5 +22,16 @@ class ConfigureBenefits {
     var excess : Int? = null
     var coverAmount : Double? = null
     var loading : Double? = null
-    var isTraumaBuyback : Boolean? = null
+    var isTraumaBuyback : Boolean? = null*/
+
+    companion object {
+        var array : ArrayList<Qoute.Inputs>? = null
+    }
+
+
+    constructor(array : ArrayList<Qoute.Inputs>)
+    {
+        ConfigureBenefits.array = array
+    }
+
 }

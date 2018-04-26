@@ -8,6 +8,8 @@ import android.widget.*
 import com.example.artjohn.blackfin.BenefitsActivity
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.BenefitsAdapter
+import com.example.artjohn.blackfin.model.ConfigureBenefits
+import com.example.artjohn.blackfin.model.Qoute
 import org.jetbrains.anko.find
 
 class HealthDialog : AppCompatActivity(){
@@ -58,7 +60,7 @@ class HealthDialog : AppCompatActivity(){
             dialog?.setContentView(R.layout.dialog_health_layout)
             dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT)
             dialog?.window?.setBackgroundDrawableResource(R.color.primaryTransparency)
-            dialog?.show()
+
 
             closeButton = dialog?.findViewById<ImageView>(R.id.closeButton)
             excess = dialog?.findViewById<Spinner>(R.id.excessSpinner)
@@ -99,16 +101,72 @@ class HealthDialog : AppCompatActivity(){
                 println(GPcheck)
                 println(DOcheck)
                 println(loading?.selectedItem.toString())*/
+                var excessVal = 0
+                if(!excess?.selectedItem.toString().substringBefore(" ").equals("Nil"))
+                {
+                    excessVal = excess?.selectedItem.toString().substringBefore(" ").toInt()
+                }
+                var loading = loading?.selectedItem.toString().substringBefore("%").toDouble()
+                configuredBenefits(excessVal, STcheck, GPcheck,DOcheck,loading)
+
                 returnBol = true
                 dialog?.hide()
 
 
             }
 
-
+            dialog?.show()
             return returnBol
         }
+        fun configuredBenefits(excess : Int, ST : Boolean, GP : Boolean,DO : Boolean,loading : Double)
+        {
+            var dentalOptical : Boolean = DO
+            var specialistsTest : Boolean = ST
+            var benefitPeriod : Int = 0
+            var calcPeriod : Int = 1
+            var isAccelerated : Boolean = false
+            var gpPrescriptions : Boolean = GP
+            var frequency : Int = 12
+            var isLifeBuyback : Boolean = false
+            var isTpdAddon : Boolean = false
+            var benefitPeriodType : String = "Term"
+            var occupationType : String = "AnyOccupation"
+            var wopWeekWaitPeriod : Int = 0
+            var isFutureInsurability : Boolean = false
+            var booster : Boolean = false
+            var excess : Int = excess
+            var coverAmount : Double = 0.0
+            var loading : Double = loading
+            var isTraumaBuyback : Boolean = false
 
+            val data = Qoute.Benefits(dentalOptical,
+                    specialistsTest,
+                    benefitPeriod,
+                    calcPeriod,
+                    isAccelerated,
+                    gpPrescriptions,
+                    frequency,
+                    isLifeBuyback,
+                    isTpdAddon,
+                    benefitPeriodType,
+                    occupationType,
+                    wopWeekWaitPeriod,
+                    isFutureInsurability,
+                    booster,
+                    excess,
+                    coverAmount,
+                    loading,
+                    isTraumaBuyback
+            )
+            var array : ArrayList<Qoute.Inputs> = ArrayList()
+            var inputs = Qoute.Inputs(1,data)
+            array.add(inputs)
+
+
+
+            ConfigureBenefits(array)
+
+        }
 
     }
 }
