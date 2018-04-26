@@ -9,12 +9,15 @@ import com.example.artjohn.blackfin.BenefitsActivity
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.BenefitsAdapter
 import com.example.artjohn.blackfin.model.ConfigureBenefits
+import com.example.artjohn.blackfin.model.LoadingPercentage
 import com.example.artjohn.blackfin.model.Qoute
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.find
 
 class HealthDialog : AppCompatActivity(){
 
     companion object {
+
         var dialog : Dialog? = null
         var closeButton : ImageView? = null
         var excess : Spinner? = null
@@ -26,7 +29,6 @@ class HealthDialog : AppCompatActivity(){
         var STcheck : Boolean = false
         var GPcheck : Boolean = false
         var DOcheck : Boolean = false
-        var returnBol : Boolean = false
 
 
         var excessArray = arrayOf(
@@ -43,7 +45,7 @@ class HealthDialog : AppCompatActivity(){
         var loadingArray = arrayOf(
                 "0%",
                 "50%",
-                "757%",
+                "75%",
                 "100%",
                 "125%",
                 "150%",
@@ -55,7 +57,7 @@ class HealthDialog : AppCompatActivity(){
                 "500%"
         )
 
-        fun show(activity: Activity) : Boolean{
+        fun show(activity: Activity) {
             dialog = Dialog(activity)
             dialog?.setContentView(R.layout.dialog_health_layout)
             dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT)
@@ -79,7 +81,6 @@ class HealthDialog : AppCompatActivity(){
 
             closeButton?.setOnClickListener {
                 dialog?.hide()
-                returnBol = false
                 var holder = BenefitsAdapter(activity)
                 holder.selected.remove(0)
                 holder.notifyDataSetChanged()
@@ -107,16 +108,17 @@ class HealthDialog : AppCompatActivity(){
                     excessVal = excess?.selectedItem.toString().substringBefore(" ").toInt()
                 }
                 var loading = loading?.selectedItem.toString().substringBefore("%").toDouble()
-                configuredBenefits(excessVal, STcheck, GPcheck,DOcheck,loading)
+                var calculated = LoadingPercentage(loading).calculate()
 
-                returnBol = true
+                configuredBenefits(excessVal, STcheck, GPcheck,DOcheck,calculated)
+
                 dialog?.hide()
 
 
             }
 
             dialog?.show()
-            return returnBol
+
         }
         fun configuredBenefits(excess : Int, ST : Boolean, GP : Boolean,DO : Boolean,loading : Double)
         {
@@ -158,13 +160,22 @@ class HealthDialog : AppCompatActivity(){
                     loading,
                     isTraumaBuyback
             )
-            var array : ArrayList<Qoute.Inputs> = ArrayList()
+
             var inputs = Qoute.Inputs(1,data)
-            array.add(inputs)
 
 
+            if(ConfigureBenefits.id.contains(1))
+            {
+                var index = ConfigureBenefits.id.indexOf(1)
+                ConfigureBenefits.array.set(index,inputs)
+            }
+            else
+            {
+                ConfigureBenefits(inputs)
+                ConfigureBenefits.id.add(1)
+                EventBus.getDefault().post(ConfigureBenefits(inputs))
+            }
 
-            ConfigureBenefits(array)
 
         }
 

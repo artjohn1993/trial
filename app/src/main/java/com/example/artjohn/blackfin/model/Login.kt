@@ -21,4 +21,8 @@ object Login{
             var fspr : String,
             var fullname : String
     )
+
+    data class Signout(
+            var message : String
+    )
 }

@@ -11,7 +11,11 @@ import java.util.*
 
 interface ApiServices {
 
-    @Headers("content-type: application/json; charset=utf-8")
+    @Headers("content-type: application/json")
     @POST("LogIn")
     fun login(@Body signIn : SignIn) : Observable<Login.Signup>
+
+    @POST("Logout")
+    fun Logout() : Observable<Login.Signout>
+
 }

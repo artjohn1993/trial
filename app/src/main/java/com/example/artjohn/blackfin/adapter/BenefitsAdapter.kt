@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.dialog.HealthDialog
 import com.example.artjohn.blackfin.dialog.LifeDialog
+import com.example.artjohn.blackfin.model.ConfigureBenefits
 import kotlinx.android.synthetic.main.benefits_layout.view.*
 import org.jetbrains.anko.textColor
 
@@ -58,11 +59,11 @@ class BenefitsAdapter(activity: Activity) : RecyclerView.Adapter<BenefitsAdapter
 
     override fun onBindViewHolder(holder: BenefitsHolder, position: Int) {
 
-        println("============================================================")
         holder.icon.setImageResource(imageArray[position])
         holder.title.text = titleArray[position]
 
-        if(selected.contains(position))
+
+        if(ConfigureBenefits.id.contains(position.plus(1)))
         {
                 holder.title.setTextColor(Color.parseColor("#3cbdd0"))
                 holder.icon.setColorFilter(Color.parseColor("#3cbdd0"))
@@ -76,12 +77,12 @@ class BenefitsAdapter(activity: Activity) : RecyclerView.Adapter<BenefitsAdapter
                 if (position == 0)
                 {
                         HealthDialog.show(activity)
-                        selected.add(position)
+
                 }
                 else if(position == 1)
                 {
                     LifeDialog.show(activity)
-                    selected.add(position)
+
                 }
 
         }

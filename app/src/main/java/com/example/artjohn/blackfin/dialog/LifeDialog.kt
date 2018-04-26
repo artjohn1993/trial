@@ -5,9 +5,13 @@ import android.app.Dialog
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.*
+import com.example.artjohn.blackfin.BenefitsActivity
 import com.example.artjohn.blackfin.R
+import com.example.artjohn.blackfin.adapter.BenefitsAdapter
 import com.example.artjohn.blackfin.model.ConfigureBenefits
+import com.example.artjohn.blackfin.model.LoadingPercentage
 import com.example.artjohn.blackfin.model.Qoute
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.find
 
 class LifeDialog: AppCompatActivity() {
@@ -24,8 +28,6 @@ class LifeDialog: AppCompatActivity() {
         var FI : Switch? = null
         var indexedcheck : Boolean = false
         var FIcheck : Boolean = false
-        var returnBol : Boolean = false
-
 
 
         var loadingArray = arrayOf(
@@ -53,7 +55,7 @@ class LifeDialog: AppCompatActivity() {
                 "Level (To Age 90)",
                 "Level (To Age 100)"
         )
-        fun show(activity: Activity) : Boolean {
+        fun show(activity: Activity)  {
             dialog = Dialog(activity)
             dialog?.setContentView(R.layout.dialog_life_layout)
             dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
@@ -75,7 +77,7 @@ class LifeDialog: AppCompatActivity() {
 
             closeButton?.setOnClickListener {
                 dialog?.hide()
-                returnBol = false
+
             }
 
             indexed?.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -86,36 +88,54 @@ class LifeDialog: AppCompatActivity() {
             }
 
             apply?.setOnClickListener {
-                println(amount?.text.toString())
+               /* println(amount?.text.toString())
                 println(calcuSpinner?.selectedItem.toString())
                 println(loading?.selectedItem.toString())
                 println(indexedcheck)
-                println(FIcheck)
-                returnBol = true
+                println(FIcheck)*/
+                dialog?.hide()
+
+                var cal : Int = 0
+                if(calcuSpinner?.selectedItemPosition != null)
+                {
+                    cal = calcuSpinner!!.selectedItemPosition
+                }
+                var loading = loading?.selectedItem.toString().substringBefore("%").toDouble()
+                var amountVal : Double = 0.0
+                try {
+                    amountVal = amount?.text.toString().toDouble()
+                }catch (e : Exception)
+                {
+                    amountVal = 0.0
+                }
+                var calculated = LoadingPercentage(loading).calculate()
+
+                configuredBenefits(amountVal, cal, indexedcheck,FIcheck,loading)
+
+
             }
 
             dialog?.show()
 
-            return returnBol
         }
-        fun configuredBenefits(excess : Int, ST : Boolean, GP : Boolean,DO : Boolean,loading : Double)
+        fun configuredBenefits(amount : Double, cal : Int, indexed : Boolean,FI : Boolean,loading : Double)
         {
-            var dentalOptical : Boolean = DO
-            var specialistsTest : Boolean = ST
+            var dentalOptical : Boolean = false
+            var specialistsTest : Boolean = false
             var benefitPeriod : Int = 0
-            var calcPeriod : Int = 1
+            var calcPeriod : Int = cal
             var isAccelerated : Boolean = false
-            var gpPrescriptions : Boolean = GP
+            var gpPrescriptions : Boolean = false
             var frequency : Int = 12
             var isLifeBuyback : Boolean = false
             var isTpdAddon : Boolean = false
             var benefitPeriodType : String = "Term"
             var occupationType : String = "AnyOccupation"
             var wopWeekWaitPeriod : Int = 0
-            var isFutureInsurability : Boolean = false
+            var isFutureInsurability : Boolean = FI
             var booster : Boolean = false
-            var excess : Int = excess
-            var coverAmount : Double = 0.0
+            var excess : Int = 0
+            var coverAmount : Double = amount
             var loading : Double = loading
             var isTraumaBuyback : Boolean = false
 
@@ -138,13 +158,22 @@ class LifeDialog: AppCompatActivity() {
                     loading,
                     isTraumaBuyback
             )
-            var array : ArrayList<Qoute.Inputs> = ArrayList()
             var inputs = Qoute.Inputs(1,data)
-            array.add(inputs)
 
 
+            if(ConfigureBenefits.id.contains(2))
+            {
+                var index = ConfigureBenefits.id.indexOf(2)
+                ConfigureBenefits.array.set(index,inputs)
+            }
+            else
+            {
+                EventBus.getDefault().post(ConfigureBenefits(inputs))
+                ConfigureBenefits.id.add(2)
 
-            ConfigureBenefits(array)
+            }
+
+
 
         }
     }
