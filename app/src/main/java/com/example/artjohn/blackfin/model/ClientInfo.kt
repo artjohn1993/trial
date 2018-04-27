@@ -7,13 +7,13 @@ class ClientInfo {
 
 
     companion object {
-        var array : ArrayList<Qoute.ClientsInformation>? = null
+        var array : ArrayList<ClientsInformation> = ArrayList()
     }
 
 
-    constructor(array : ArrayList<Qoute.ClientsInformation>)
+    constructor(array : ClientsInformation)
     {
-        ClientInfo.array = array
+        ClientInfo.array.add(array)
     }
 
 

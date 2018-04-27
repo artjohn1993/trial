@@ -1,8 +1,9 @@
 package com.example.artjohn.blackfin.services
 
-import com.example.artjohn.blackfin.model.Login
-import com.example.artjohn.blackfin.model.SignIn
+import com.example.artjohn.blackfin.model.*
+import com.squareup.moshi.Json
 import io.reactivex.Observable
+import org.json.JSONObject
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -18,4 +19,13 @@ interface ApiServices {
     @POST("Logout")
     fun Logout() : Observable<Login.Signout>
 
+    @GET("product")
+    fun getProduct() : Observable<Product.List>
+
+    @GET("provider")
+    fun getProvider() : Observable<Provider.Result>
+
+
+    @POST("quote/request-quote")
+    fun requestQoutes(@Body request : Client) : Observable<QouteRequest.Result>
 }

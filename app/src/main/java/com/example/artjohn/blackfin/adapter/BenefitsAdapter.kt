@@ -13,15 +13,18 @@ import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.dialog.HealthDialog
 import com.example.artjohn.blackfin.dialog.LifeDialog
 import com.example.artjohn.blackfin.model.ConfigureBenefits
+import com.example.artjohn.blackfin.model.Product
+import com.example.artjohn.blackfin.model.Provider
 import kotlinx.android.synthetic.main.benefits_layout.view.*
 import org.jetbrains.anko.textColor
 
-class BenefitsAdapter(activity: Activity) : RecyclerView.Adapter<BenefitsAdapter.BenefitsHolder>()
+class BenefitsAdapter(activity: Activity,product : Product.List?,provider : Provider.Result?) : RecyclerView.Adapter<BenefitsAdapter.BenefitsHolder>()
 {
     var activity = activity
     var mposition : Int? = null
     var selected : ArrayList<Int> = arrayListOf()
-
+    var product = product
+    var provider = provider
 
 
     var titleArray  = arrayOf(
@@ -76,12 +79,13 @@ class BenefitsAdapter(activity: Activity) : RecyclerView.Adapter<BenefitsAdapter
 
                 if (position == 0)
                 {
-                        HealthDialog.show(activity)
+                        HealthDialog.show(activity,product,provider)
+
 
                 }
                 else if(position == 1)
                 {
-                    LifeDialog.show(activity)
+                    LifeDialog.show(activity,product,provider)
 
                 }
 

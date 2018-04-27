@@ -25,4 +25,5 @@ object Login{
     data class Signout(
             var message : String
     )
+
 }

@@ -8,9 +8,7 @@ import android.widget.*
 import com.example.artjohn.blackfin.BenefitsActivity
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.BenefitsAdapter
-import com.example.artjohn.blackfin.model.ConfigureBenefits
-import com.example.artjohn.blackfin.model.LoadingPercentage
-import com.example.artjohn.blackfin.model.Qoute
+import com.example.artjohn.blackfin.model.*
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.find
 
@@ -57,7 +55,12 @@ class HealthDialog : AppCompatActivity(){
                 "500%"
         )
 
-        fun show(activity: Activity) {
+        fun show(activity: Activity,product : Product.List?,provider : Provider.Result?) {
+            var productPass = product
+            var providerPass = provider
+
+            println("======-----open dialog-----========")
+            println(productPass)
             dialog = Dialog(activity)
             dialog?.setContentView(R.layout.dialog_health_layout)
             dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.MATCH_PARENT)
@@ -81,9 +84,6 @@ class HealthDialog : AppCompatActivity(){
 
             closeButton?.setOnClickListener {
                 dialog?.hide()
-                var holder = BenefitsAdapter(activity)
-                holder.selected.remove(0)
-                holder.notifyDataSetChanged()
             }
             ST?.setOnCheckedChangeListener { buttonView, isChecked ->
                 STcheck = isChecked
@@ -109,8 +109,10 @@ class HealthDialog : AppCompatActivity(){
                 }
                 var loading = loading?.selectedItem.toString().substringBefore("%").toDouble()
                 var calculated = LoadingPercentage(loading).calculate()
+                var benefitsProduct = ProcessProduct().getListProduct(productPass ,providerPass,1)
 
-                configuredBenefits(excessVal, STcheck, GPcheck,DOcheck,calculated)
+                println(benefitsProduct.size)
+                configuredBenefits(excessVal, STcheck, GPcheck,DOcheck,calculated,benefitsProduct)
 
                 dialog?.hide()
 
@@ -120,8 +122,9 @@ class HealthDialog : AppCompatActivity(){
             dialog?.show()
 
         }
-        fun configuredBenefits(excess : Int, ST : Boolean, GP : Boolean,DO : Boolean,loading : Double)
+        fun configuredBenefits(excess : Int, ST : Boolean, GP : Boolean,DO : Boolean,loading : Double,benefitsProduct : List<BenefitsProductList>)
         {
+
             var dentalOptical : Boolean = DO
             var specialistsTest : Boolean = ST
             var benefitPeriod : Int = 0
@@ -140,8 +143,11 @@ class HealthDialog : AppCompatActivity(){
             var coverAmount : Double = 0.0
             var loading : Double = loading
             var isTraumaBuyback : Boolean = false
+            var benefitsProduct = benefitsProduct
 
-            val data = Qoute.Benefits(dentalOptical,
+
+
+            val data = Benefits(dentalOptical,
                     specialistsTest,
                     benefitPeriod,
                     calcPeriod,
@@ -158,10 +164,11 @@ class HealthDialog : AppCompatActivity(){
                     excess,
                     coverAmount,
                     loading,
-                    isTraumaBuyback
+                    isTraumaBuyback,
+                    benefitsProduct
             )
 
-            var inputs = Qoute.Inputs(1,data)
+            var inputs = Inputs(1,data)
 
 
             if(ConfigureBenefits.id.contains(1))
@@ -171,7 +178,7 @@ class HealthDialog : AppCompatActivity(){
             }
             else
             {
-                ConfigureBenefits(inputs)
+
                 ConfigureBenefits.id.add(1)
                 EventBus.getDefault().post(ConfigureBenefits(inputs))
             }

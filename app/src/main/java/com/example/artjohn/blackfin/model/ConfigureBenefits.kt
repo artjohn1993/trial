@@ -6,12 +6,12 @@ package com.example.artjohn.blackfin.model
 class ConfigureBenefits {
 
     companion object {
-        var array : ArrayList<Qoute.Inputs> = ArrayList()
+        var array : ArrayList<Inputs> = ArrayList()
         var id : ArrayList<Int> = ArrayList()
     }
 
 
-    constructor(array : Qoute.Inputs)
+    constructor(array : Inputs)
     {
         ConfigureBenefits.array.add(array)
     }

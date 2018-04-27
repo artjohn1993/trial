@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Parcel
 import android.text.ParcelableSpan
 import android.view.View
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import com.example.artjohn.blackfin.api.BlackfinApi
 import com.example.artjohn.blackfin.model.*
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     var smokerChecker : Boolean = false
 
     private var disposable : Disposable? = null
-    private var compositeDisposable : CompositeDisposable? = CompositeDisposable()
+    private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     private val apiServer by lazy {
         BlackfinApi.create(this)
     }
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         title = "New Qoute"
-        /*this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)*/
+        this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
 
         smokerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -49,21 +50,8 @@ class MainActivity : AppCompatActivity() {
 
         mainNextButton.setOnClickListener {
             //EventBus.getDefault().post(SignIn("droid1-qatest@mail.com","firebrand",true))
-            println("================onSignIn===================")
-            var data = SignIn("droid1-qatest@mail.com","firebrand",true)
-            compositeDisposable?.add(
-                    apiServer.login(data)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.newThread())
-                            .subscribe({result ->
-                                    UserInformation(result.data.authorization.token,result.data.user.id)
-                            },{
-                                error ->
-                                print(error.toString())
-                            })
-            )
 
-            println("================End of Sign in===================")
+
 
             saveClientInfo()
             startActivity<BenefitsActivity>()
@@ -117,14 +105,13 @@ class MainActivity : AppCompatActivity() {
 
         var age = ageSpinner.selectedItem.toString()
         var gender =  IdentifyGender(genderSpinner.selectedItem.toString())
-        var occupation = occupationSpinner.selectedItemPosition
+        var occupation = occupationSpinner.selectedItemPosition + 1
         var status = statusSpinner.selectedItem.toString()
 
 
-        var array : ArrayList<Qoute.ClientsInformation> = ArrayList()
-        var qoute  = Qoute.ClientsInformation(nameEdit.text.toString(),true,"1",smokerChecker,age,gender,false,status,occupation)
-        array.add(qoute)
-        ClientInfo(array)
+        var qoute  = ClientsInformation(nameEdit.text.toString(),true,"1",smokerChecker,age,gender,false,status,occupation)
+
+        ClientInfo(qoute)
     }
 
 
@@ -162,6 +149,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-       compositeDisposable?.clear()
+       compositeDisposable.clear()
     }
 }

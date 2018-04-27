@@ -8,9 +8,7 @@ import android.widget.*
 import com.example.artjohn.blackfin.BenefitsActivity
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.BenefitsAdapter
-import com.example.artjohn.blackfin.model.ConfigureBenefits
-import com.example.artjohn.blackfin.model.LoadingPercentage
-import com.example.artjohn.blackfin.model.Qoute
+import com.example.artjohn.blackfin.model.*
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.find
 
@@ -55,7 +53,9 @@ class LifeDialog: AppCompatActivity() {
                 "Level (To Age 90)",
                 "Level (To Age 100)"
         )
-        fun show(activity: Activity)  {
+        fun show(activity: Activity, product : Product.List?, provider : Provider.Result?)  {
+            var productPass = product
+            var providerPass = provider
             dialog = Dialog(activity)
             dialog?.setContentView(R.layout.dialog_life_layout)
             dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
@@ -109,8 +109,8 @@ class LifeDialog: AppCompatActivity() {
                     amountVal = 0.0
                 }
                 var calculated = LoadingPercentage(loading).calculate()
-
-                configuredBenefits(amountVal, cal, indexedcheck,FIcheck,loading)
+                var benefitsProduct = ProcessProduct().getListProduct(productPass ,providerPass,2)
+                configuredBenefits(amountVal, cal, indexedcheck,FIcheck,loading,benefitsProduct)
 
 
             }
@@ -118,28 +118,29 @@ class LifeDialog: AppCompatActivity() {
             dialog?.show()
 
         }
-        fun configuredBenefits(amount : Double, cal : Int, indexed : Boolean,FI : Boolean,loading : Double)
+        fun configuredBenefits(amount : Double, cal : Int, indexed : Boolean,FI : Boolean,loading : Double, benefitsProduct : List<BenefitsProductList>)
         {
-            var dentalOptical : Boolean = false
-            var specialistsTest : Boolean = false
-            var benefitPeriod : Int = 0
-            var calcPeriod : Int = cal
-            var isAccelerated : Boolean = false
-            var gpPrescriptions : Boolean = false
-            var frequency : Int = 12
-            var isLifeBuyback : Boolean = false
-            var isTpdAddon : Boolean = false
-            var benefitPeriodType : String = "Term"
-            var occupationType : String = "AnyOccupation"
-            var wopWeekWaitPeriod : Int = 0
-            var isFutureInsurability : Boolean = FI
-            var booster : Boolean = false
-            var excess : Int = 0
-            var coverAmount : Double = amount
-            var loading : Double = loading
-            var isTraumaBuyback : Boolean = false
+            val dentalOptical : Boolean = false
+            val specialistsTest : Boolean = false
+            val benefitPeriod : Int = 0
+            val calcPeriod : Int = cal
+            val isAccelerated : Boolean = false
+            val gpPrescriptions : Boolean = false
+            val frequency : Int = 12
+            val isLifeBuyback : Boolean = false
+            val isTpdAddon : Boolean = false
+            val benefitPeriodType : String = "Term"
+            val occupationType : String = "AnyOccupation"
+            val wopWeekWaitPeriod : Int = 0
+            val isFutureInsurability : Boolean = FI
+            val booster : Boolean = false
+            val excess : Int = 0
+            val coverAmount : Double = amount
+            val loading : Double = loading
+            val isTraumaBuyback : Boolean = false
+            val benefitsProduct = benefitsProduct
 
-            val data = Qoute.Benefits(dentalOptical,
+            val data = Benefits(dentalOptical,
                     specialistsTest,
                     benefitPeriod,
                     calcPeriod,
@@ -156,9 +157,10 @@ class LifeDialog: AppCompatActivity() {
                     excess,
                     coverAmount,
                     loading,
-                    isTraumaBuyback
+                    isTraumaBuyback,
+                    benefitsProduct
             )
-            var inputs = Qoute.Inputs(1,data)
+            var inputs = Inputs(1,data)
 
 
             if(ConfigureBenefits.id.contains(2))
@@ -174,7 +176,7 @@ class LifeDialog: AppCompatActivity() {
             }
 
 
-
         }
+
     }
 }

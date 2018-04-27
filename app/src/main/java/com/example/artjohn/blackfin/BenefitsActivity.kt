@@ -4,60 +4,87 @@ import android.app.Dialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.view.View
 import android.widget.GridLayout
 import com.example.artjohn.blackfin.adapter.BenefitsAdapter
 import com.example.artjohn.blackfin.api.BlackfinApi
+import com.example.artjohn.blackfin.api.CustomHttp
 import com.example.artjohn.blackfin.dialog.HealthDialog
 import com.example.artjohn.blackfin.dialog.LifeDialog
-import com.example.artjohn.blackfin.model.ClientInfo
-import com.example.artjohn.blackfin.model.ConfigureBenefits
-import com.example.artjohn.blackfin.model.Qoute
-import com.example.artjohn.blackfin.model.SignIn
+import com.example.artjohn.blackfin.model.*
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_benefits.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.greenrobot.eventbus.EventBus
-
+import org.jetbrains.anko.startActivity
 
 
 class BenefitsActivity : AppCompatActivity() {
 
-    private var disposable : Disposable? = null
+    private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     private val apiServer by lazy {
         BlackfinApi.create(this)
     }
+    var product : Product.List? = null
+    var provider : Provider.Result? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_benefits)
         title = "Benefits"
-        benefitsRecyclerView.layoutManager = GridLayoutManager(this,2)
-        benefitsRecyclerView.adapter = BenefitsAdapter(this)
+        getProduct()
 
-        println(ClientInfo.array)
+        benefitsRecyclerView.layoutManager = GridLayoutManager(this,2)
+
+
 
         benefitsNextButton.setOnClickListener {
-
+                startActivity<SummaryActivity>()
         }
 
+    }
 
-        println("============================BEFORE CALLING THE API===============================")
-        var signin = SignIn("droid1-qatest@mail.com","firebrand",true)
-        disposable = apiServer.login(signin)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({result ->
-                    println(result.data.user.id)
-                    println(result.data.authorization.token)
-                },{
-                    error ->
-                    print(error.toString())
-                })
-        println("============================AFTER CALLING THE API===============================")
+
+    fun getProduct()
+    {
+
+        compositeDisposable?.add(
+                apiServer.getProduct()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({result ->
+                            println(result)
+                            getProvider(result)
+                        },{
+                            error ->
+                            print(error.toString())
+                        })
+        )
+
+    }
+
+    fun getProvider(value : Product.List)
+    {
+
+        compositeDisposable?.add(
+                apiServer.getProvider()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({result ->
+                            println(result)
+                            benefitsProgressbar.visibility = View.GONE
+                            benefitsRecyclerView.adapter = BenefitsAdapter(this,value,result)
+                        },{
+                            error ->
+                            benefitsProgressbar.visibility = View.GONE
+                            print(error.toString())
+                        })
+        )
 
     }
 
@@ -80,10 +107,9 @@ class BenefitsActivity : AppCompatActivity() {
         super.onStop()
         EventBus.getDefault().unregister(this)
     }
-
     override fun onPause() {
         super.onPause()
-        disposable?.dispose()
+        compositeDisposable.clear()
 
     }
 }

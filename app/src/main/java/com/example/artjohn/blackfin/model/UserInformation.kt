@@ -4,22 +4,16 @@ package com.example.artjohn.blackfin.model
  * Created by User on 26/04/2018.
  */
 class UserInformation {
-    var token : String = ""
-    var id : String = ""
+    companion object {
+        var array : ArrayList<Login.Signup> = ArrayList()
+    }
 
-    constructor(token : String,id : String)
+
+    constructor(array : Login.Signup)
     {
-        this.id = id
-        this.token = token
+        UserInformation.array.add(array)
     }
 
-    constructor()
 
-    fun returnToken() : String {
-        return this.token
-    }
-    fun returnId() : String{
-        return this.id
-    }
 
 }

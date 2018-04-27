@@ -3,7 +3,7 @@
     package="com.example.artjohn.blackfin">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -24,17 +24,16 @@
             android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"
-                />
+                android:value=".MainActivity" />
         </activity>
-        <activity android:name=".BenefitsActivity"
-            android:launchMode="singleTop"
-            >
+        <activity
+            android:name=".BenefitsActivity"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"
-                />
+                android:value=".MainActivity" />
         </activity>
+        <activity android:name=".SummaryActivity"></activity>
     </application>
 
 </manifest>
