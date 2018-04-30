@@ -25,7 +25,7 @@ interface ApiServices {
     @GET("provider")
     fun getProvider() : Observable<Provider.Result>
 
-
+    @Headers("content-type: application/json")
     @POST("quote/request-quote")
-    fun requestQoutes(@Body request : Client) : Observable<QouteRequest.Result>
+    fun requestQoutes(@Body client : Client) : Observable<QouteRequest.Result>
 }

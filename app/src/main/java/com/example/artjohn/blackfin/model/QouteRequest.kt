@@ -11,11 +11,47 @@ object QouteRequest {
     )
 
     data class Data(
-            var response : Response
+            var userId : String,
+            var quoteId : Int,
+            var data : DataResult
     )
-
-    data class Response(
-            var status : String
+    data class DataResult(
+            var result : ProviderResut,
+            var crunchTimeQuoteEngine : Double,
+            var crunchTimeFidelity : Double,
+            var apiLastUpdated : String
+    )
+    data class ProviderResut(
+            var providers : List<ProviderList>
+    )
+    data class ProviderList(
+        var providerId : Int,
+        var providerName : String,
+        var clientBreakdown : List<ClientBreakDown>,
+        var policyFee : Double,
+        var totalPremium : Double,
+        var errorSummary : List<ErrorSummary>
+    )
+    data class ErrorSummary(
+            var errorId : Int,
+            var errorMessage: String
+    )
+    data class ClientBreakDown(
+            var clientId : String,
+            var productPremiums : List<ProductPremium>
+    )
+    data class ProductPremium(
+            var benefitId : Int,
+            var benefitName : String,
+            var productId : Int,
+            var productGroupId : Int,
+            var productName : String,
+            var premium : Double,
+            var hasPremium : Boolean,
+            var hasWopCover : Boolean,
+            var coverDetail : String,
+            var description : String,
+            var errorId : Int
     )
 }
 

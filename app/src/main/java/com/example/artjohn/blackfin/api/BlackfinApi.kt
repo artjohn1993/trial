@@ -9,6 +9,7 @@ import okhttp3.Protocol
 import okhttp3.Request
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
 
@@ -29,7 +30,7 @@ class CustomHttp{
 
                 request = chain?.request()?.newBuilder()
                         ?.addHeader("Authorization", "Bearer $token")
-                        ?.addHeader("content-type","application/json")
+                            ?.addHeader("Content-Type","application/json")
                         ?.build()
 
                 chain.proceed(request)

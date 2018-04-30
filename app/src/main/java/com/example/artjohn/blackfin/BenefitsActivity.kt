@@ -78,6 +78,7 @@ class BenefitsActivity : AppCompatActivity() {
                         .subscribe({result ->
                             println(result)
                             benefitsProgressbar.visibility = View.GONE
+                            benefitsNextButton.visibility = View.VISIBLE
                             benefitsRecyclerView.adapter = BenefitsAdapter(this,value,result)
                         },{
                             error ->

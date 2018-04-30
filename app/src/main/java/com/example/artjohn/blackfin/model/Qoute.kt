@@ -9,10 +9,11 @@ package com.example.artjohn.blackfin.model
     {
         var clients : List<ClientsInformation>
         var userId : String
-        var quoteId : Int
         var inputs : List<Inputs>
+        var quoteId : Int
 
-        constructor(clients : List<ClientsInformation>, userId : String, quoteId : Int, inputs : List<Inputs>)
+
+        constructor(clients : List<ClientsInformation>, userId : String, inputs : List<Inputs>, quoteId : Int)
         {
             this.clients  = clients
             this.userId = userId

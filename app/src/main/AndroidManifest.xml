@@ -33,7 +33,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".SummaryActivity"></activity>
+        <activity android:name=".SummaryActivity"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BenefitsActivity" />
+        </activity>
     </application>
 
 </manifest>

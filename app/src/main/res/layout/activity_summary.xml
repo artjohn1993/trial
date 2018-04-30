@@ -1,9 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.artjohn.blackfin.SummaryActivity">
+    tools:context="com.example.artjohn.blackfin.SummaryActivity"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    >
 
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/monthlyWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ccc"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        >
+        <Spinner
+            android:id="@+id/monthlySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"></Spinner>
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/summaryTotalText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="3 Result"
+        android:textColor="#000"
+        app:layout_constraintTop_toBottomOf="@id/monthlyWrapper"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/summaryRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/summaryTotalText"
+        android:nestedScrollingEnabled="false"
+        android:clipToPadding="true"
+
+        >
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/summaryNotAvailableText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/summaryRecyclerView"
+        android:layout_marginTop="8dp"
+        android:textColor="#000"
+        android:text="Not Available"
+        android:visibility="gone"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/summaryNotAvailableRecylerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/summaryNotAvailableText"
+        android:nestedScrollingEnabled="false"
+        android:clipToPadding="true"
+        android:paddingTop="8dp"
+        >
+
+    </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:id="@+id/summarySaveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background"
+        android:text="Save"
+        android:textAllCaps="false"
+        android:textColor="#fff"
+        app:layout_constraintTop_toBottomOf="@id/summaryNotAvailableRecylerView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        />
+
+    <ProgressBar
+        android:id="@+id/summaryProgressBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+    
 </android.support.constraint.ConstraintLayout>
+</ScrollView>

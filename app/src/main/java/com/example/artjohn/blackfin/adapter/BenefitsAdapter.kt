@@ -21,8 +21,6 @@ import org.jetbrains.anko.textColor
 class BenefitsAdapter(activity: Activity,product : Product.List?,provider : Provider.Result?) : RecyclerView.Adapter<BenefitsAdapter.BenefitsHolder>()
 {
     var activity = activity
-    var mposition : Int? = null
-    var selected : ArrayList<Int> = arrayListOf()
     var product = product
     var provider = provider
 
@@ -57,6 +55,7 @@ class BenefitsAdapter(activity: Activity,product : Product.List?,provider : Prov
     }
 
     override fun getItemCount(): Int {
+
         return titleArray.size
     }
 
@@ -65,7 +64,7 @@ class BenefitsAdapter(activity: Activity,product : Product.List?,provider : Prov
         holder.icon.setImageResource(imageArray[position])
         holder.title.text = titleArray[position]
 
-
+        println(position)
         if(ConfigureBenefits.id.contains(position.plus(1)))
         {
                 holder.title.setTextColor(Color.parseColor("#3cbdd0"))
@@ -75,18 +74,16 @@ class BenefitsAdapter(activity: Activity,product : Product.List?,provider : Prov
             holder.title.setTextColor(Color.parseColor("#010026"))
             holder.icon.setColorFilter(Color.parseColor("#010026"))
         }
+
         holder.itemView.setOnClickListener {
 
                 if (position == 0)
                 {
                         HealthDialog.show(activity,product,provider)
-
-
                 }
                 else if(position == 1)
                 {
                     LifeDialog.show(activity,product,provider)
-
                 }
 
         }
