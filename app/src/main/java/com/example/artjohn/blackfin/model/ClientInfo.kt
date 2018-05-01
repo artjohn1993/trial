@@ -13,7 +13,13 @@ class ClientInfo {
 
     constructor(array : ClientsInformation)
     {
-        ClientInfo.array.add(array)
+        if(ClientInfo.array.isEmpty()){
+            ClientInfo.array.add(array)
+        }
+        else{
+            ClientInfo.array.set(0,array)
+        }
+
     }
 
 

@@ -1,0 +1,12 @@
+package com.example.artjohn.blackfin.model
+
+/**
+ * Created by User on 01/05/2018.
+ */
+class ErrorEvent {
+    var message : String
+    constructor(content : String)
+    {
+        this.message = content
+    }
+}

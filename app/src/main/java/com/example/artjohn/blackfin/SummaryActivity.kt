@@ -1,5 +1,6 @@
 package com.example.artjohn.blackfin
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -22,8 +23,11 @@ import kotlinx.android.synthetic.main.activity_summary.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.startActivity
 import org.json.JSONObject
 import org.xml.sax.Parser
+import java.util.*
 
 class SummaryActivity : AppCompatActivity() {
 
@@ -39,16 +43,21 @@ class SummaryActivity : AppCompatActivity() {
         title = "Result"
         summaryRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL,false)
         summaryNotAvailableRecylerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL,false)
+        summaryNotAvailableText.text = ""
+        summaryTotalText.text = ""
 
        var data = Client(ClientInfo.array,"f11f217f-f500-4c36-96bd-a361df4009ac",ConfigureBenefits.array,0)
-        request(data)
-    println(Gson().toJson(data))
+       request(data)
+
     }
 
     override fun onResume() {
         super.onResume()
+        summaryNotAvailableText.text = ""
+        summaryTotalText.text = ""
         var data = Client(ClientInfo.array,"f11f217f-f500-4c36-96bd-a361df4009ac",ConfigureBenefits.array,0)
         request(data)
+
     }
 
 
@@ -61,27 +70,30 @@ class SummaryActivity : AppCompatActivity() {
                     .subscribeOn(Schedulers.newThread())
                     .subscribe({
                         result ->
-                    println("---------------------==============REQUEST RESULT==================----------------------------")
-
                         println(Gson().toJson(result))
                         showVisibility()
                         summaryRecyclerView.adapter = SummaryAdapter(result)
+
+                        Collections.sort(result.data.data.result.providers, object : Comparator<QouteRequest.ProviderList> {
+                            override fun compare(obj1: QouteRequest.ProviderList, obj2: QouteRequest.ProviderList): Int {
+                                return obj1.errorSummary.size.compareTo(obj2.errorSummary.size)
+                            }
+                        })
                         summaryNotAvailableRecylerView.adapter = SummaryAdapterTwo(result)
                     },{
                         error ->
                         print(error.message)
-                        print(error.stackTrace)
                         summaryProgressBar.visibility = View.GONE
                     })
     )
 
     }
+
+
     fun showVisibility(){
         summaryProgressBar.visibility = View.GONE
         summarySaveButton.visibility = View.VISIBLE
         monthlyWrapper.visibility =  View.VISIBLE
-        summaryTotalText.visibility = View.VISIBLE
-        summaryNotAvailableText.visibility = View.VISIBLE
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -90,7 +102,36 @@ class SummaryActivity : AppCompatActivity() {
         summaryTotalText.text =  event.totalProvider.toString() + " Results. " + "$" + event.min + " - " + "$" + event.max
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onSummaryNotAvailable(event : SummaryNotAvailable)
+    {
+            println("not available")
+            summaryNotAvailableRecylerView.visibility = View.VISIBLE
+            summaryNotAvailableText.text = "No Result Available:"
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onSummaryAvailable(event : SummaryAvailable)
+    {
+            summaryRecyclerView.visibility = View.VISIBLE
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onErrorEvent(event : ErrorEvent)
+    {
+        alert(event.message){  }.show()
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onProductPremium(event : ProductPremium)
+    {
+
+        var intent = Intent(this,BreakdownActivity::class.java)
+        intent.putExtra("clientInfo", event.clientInfo)
+        intent.putExtra("qoute",event.qoute)
+        intent.putExtra("position",event.position)
+        startActivity(intent)
+    }
 
 
     public override fun onStart() {

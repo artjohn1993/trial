@@ -69,6 +69,7 @@ class BenefitsAdapter(activity: Activity,product : Product.List?,provider : Prov
         {
                 holder.title.setTextColor(Color.parseColor("#3cbdd0"))
                 holder.icon.setColorFilter(Color.parseColor("#3cbdd0"))
+                holder.wrapper.setBackgroundResource(R.drawable.summary_color_provider)
         }
         else{
             holder.title.setTextColor(Color.parseColor("#010026"))
@@ -95,6 +96,7 @@ class BenefitsAdapter(activity: Activity,product : Product.List?,provider : Prov
     {
         var icon : ImageView = itemView.findViewById(R.id.iconImage)
         var title  : TextView = itemView.findViewById(R.id.benefitsTitleText)
+        var wrapper : android.support.constraint.ConstraintLayout = itemView.findViewById(R.id.benefitsWrapper)
     }
 
 

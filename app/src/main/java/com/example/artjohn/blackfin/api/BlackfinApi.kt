@@ -30,7 +30,7 @@ class CustomHttp{
 
                 request = chain?.request()?.newBuilder()
                         ?.addHeader("Authorization", "Bearer $token")
-                            ?.addHeader("Content-Type","application/json")
+                        ?.addHeader("Content-Type","application/json")
                         ?.build()
 
                 chain.proceed(request)

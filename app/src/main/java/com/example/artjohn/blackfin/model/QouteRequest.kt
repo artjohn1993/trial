@@ -22,15 +22,16 @@ object QouteRequest {
             var apiLastUpdated : String
     )
     data class ProviderResut(
-            var providers : List<ProviderList>
+            var providers : MutableList<ProviderList>
     )
     data class ProviderList(
         var providerId : Int,
         var providerName : String,
-        var clientBreakdown : List<ClientBreakDown>,
+        var clientBreakdown : MutableList<ClientBreakDown>,
         var policyFee : Double,
         var totalPremium : Double,
-        var errorSummary : List<ErrorSummary>
+        var errorSummary : MutableList<ErrorSummary>,
+        var containsError : Boolean
     )
     data class ErrorSummary(
             var errorId : Int,
@@ -38,7 +39,7 @@ object QouteRequest {
     )
     data class ClientBreakDown(
             var clientId : String,
-            var productPremiums : List<ProductPremium>
+            var productPremiums : MutableList<ProductPremium>
     )
     data class ProductPremium(
             var benefitId : Int,
@@ -51,7 +52,8 @@ object QouteRequest {
             var hasWopCover : Boolean,
             var coverDetail : String,
             var description : String,
-            var errorId : Int
+            var errorId : Int,
+            var errorMessage : String
     )
 }
 

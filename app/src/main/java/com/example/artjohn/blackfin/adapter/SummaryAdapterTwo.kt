@@ -6,15 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.artjohn.blackfin.R
-import com.example.artjohn.blackfin.model.PremiumRange
-import com.example.artjohn.blackfin.model.QouteRequest
+import com.example.artjohn.blackfin.model.*
+import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.margin
+import java.util.*
 
 class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryAdapterTwo.SummaryViewHolder>() {
     var qoute = data
+
+
 
     var imageArray : Array<Int> = arrayOf(
             R.drawable.ic_accuro,
@@ -60,16 +65,37 @@ class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<Summa
     override fun onBindViewHolder(holder: SummaryViewHolder, position: Int) {
 
 
-        if (qoute.data.data.result.providers[position].errorSummary.isNotEmpty()) {
+        if (qoute.data.data.result.providers[position].containsError) {
+            EventBus.getDefault().post(SummaryNotAvailable(true))
             holder.title.text = qoute.data.data.result.providers[position].providerName
             holder.price.text = "$" + qoute.data.data.result.providers[position].totalPremium.toString()
             var id = qoute.data.data.result.providers[position].providerId
             holder.logo.setImageResource(imageArray[id-1])
             holder.color.backgroundColor = Color.parseColor(colorArray[id-1])
+
+            if(qoute.data.data.result.providers[position].errorSummary.isNotEmpty())
+            {
+                holder.container.alpha = .5f
+            }
         }
         else
         {
             holder.container.visibility = View.GONE
+        }
+
+        holder.itemView.setOnClickListener {
+            if(qoute.data.data.result.providers[position].errorSummary.isNotEmpty())
+            {
+                var  message = qoute.data.data.result.providers[position].errorSummary[0].errorMessage
+                EventBus.getDefault().post(ErrorEvent(message))
+            }
+            else
+            {
+                var clientInfoJson = Gson().toJson(ClientInfo.array)
+                var qouteJson = Gson().toJson(qoute)
+                EventBus.getDefault().post(ProductPremium(clientInfoJson,qouteJson,position))
+            }
+
         }
     }
 

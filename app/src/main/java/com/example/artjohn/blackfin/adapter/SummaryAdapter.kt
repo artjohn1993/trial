@@ -9,9 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.artjohn.blackfin.R
-import com.example.artjohn.blackfin.model.ConfigureBenefits
-import com.example.artjohn.blackfin.model.PremiumRange
-import com.example.artjohn.blackfin.model.QouteRequest
+import com.example.artjohn.blackfin.model.*
+import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.backgroundColor
 import java.util.zip.Inflater
@@ -21,6 +20,7 @@ class SummaryAdapter(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryA
     var max : Double = 0.0
     var min : Double = 0.0
     var totalProvider : Int = 0
+
     var imageArray : Array<Int> = arrayOf(
             R.drawable.ic_accuro,
             R.drawable.ic_aia,
@@ -57,25 +57,34 @@ class SummaryAdapter(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryA
     }
 
     override fun getItemCount(): Int {
-        println(qoute.data.data.result.providers.size)
+
         return qoute.data.data.result.providers.size
     }
 
     override fun onBindViewHolder(holder: SummaryViewHolder, position: Int) {
 
 
-            if (qoute.data.data.result.providers[position].errorSummary.isEmpty()) {
+            if (!qoute.data.data.result.providers[position].containsError) {
+                EventBus.getDefault().post(SummaryAvailable(true))
                 holder.title.text = qoute.data.data.result.providers[position].providerName
                 holder.price.text = "$" + qoute.data.data.result.providers[position].totalPremium.toString()
                 var id = qoute.data.data.result.providers[position].providerId
                 holder.logo.setImageResource(imageArray[id-1])
                 holder.color.backgroundColor = Color.parseColor(colorArray[id-1])
                 calculateRange(qoute.data.data.result.providers[position].totalPremium)
+
             }
              else
             {
                 holder.container.visibility = View.GONE
             }
+
+    holder.itemView.setOnClickListener {
+        var clientInfoJson = Gson().toJson(ClientInfo.array)
+        var qouteJson = Gson().toJson(qoute)
+        EventBus.getDefault().post(ProductPremium(clientInfoJson,qouteJson,position))
+    }
+
     }
 
 
@@ -89,19 +98,32 @@ class SummaryAdapter(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryA
     }
     fun calculateRange(number : Double)
     {
-        if (min == 0.0)
+        if (min == 0.0 && max == 0.0)
         {
-            min = number
+                max= number
         }
         else if(min>number)
         {
+
             min = number
         }
         else
         {
             if(max<number)
             {
-                max = number
+                if (min == 0.0)
+                {
+                    min = max
+                    max = number
+                }
+                else{
+                    max = number
+                }
+
+            }
+            else
+            {
+                min = number
             }
         }
         totalProvider = totalProvider.plus(1)

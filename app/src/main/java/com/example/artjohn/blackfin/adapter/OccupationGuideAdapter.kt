@@ -15,14 +15,16 @@ class OccupationGuideAdapter(context: Context) : RecyclerView.Adapter<Occupation
     var context : Context = context
 
     var array = arrayOf(
-            "samle",
-            "saasdasdad",
-            "asdasdasdasd"
+            "Professionals (usually tertiary qualified) typically earning over $80,000 per annum",
+            "Office workers who do not perform any manual labor",
+            "Skilled trades people(for example a qualified builder) or non-desk based workers (for example technician, shopkeeper, etc)",
+            "Skilled or semi-skilled manual workers and heavy machinery operators who are not exposed to health hazards",
+            "Housewife / Househusband / Student"
             )
 
     override fun onBindViewHolder(holder: OccupationGuideHolder, position: Int) {
-        holder.title.text = "Occupation Class " + position.toString()
-        holder.content.text = "sample text"
+        holder.title.text = "Occupation Class " + (position.plus(1)).toString()
+        holder.content.text = array[position]
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OccupationGuideAdapter.OccupationGuideHolder {
@@ -34,7 +36,7 @@ class OccupationGuideAdapter(context: Context) : RecyclerView.Adapter<Occupation
     }
 
     override fun getItemCount(): Int {
-        return 10
+        return array.size
     }
 
 

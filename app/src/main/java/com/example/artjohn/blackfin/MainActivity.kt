@@ -112,6 +112,7 @@ class MainActivity : AppCompatActivity() {
         var qoute  = ClientsInformation(nameEdit.text.toString(),true,"1",smokerChecker,age,gender,false,status,occupation)
 
         ClientInfo(qoute)
+
     }
 
 
