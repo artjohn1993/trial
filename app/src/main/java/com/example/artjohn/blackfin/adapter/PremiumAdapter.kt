@@ -4,13 +4,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.artjohn.blackfin.R
-import com.example.artjohn.blackfin.model.ProductPremium
 import com.example.artjohn.blackfin.model.QouteRequest
-import com.example.artjohn.blackfin.model.TotalPremium
+import com.example.artjohn.blackfin.event.TotalPremium
 import org.greenrobot.eventbus.EventBus
 
 /**

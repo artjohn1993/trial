@@ -1,4 +1,4 @@
-package com.example.artjohn.blackfin.model
+package com.example.artjohn.blackfin.event
 
 class PremiumRange {
     var min : Double

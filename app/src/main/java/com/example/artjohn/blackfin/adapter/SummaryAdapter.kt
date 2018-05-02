@@ -1,7 +1,6 @@
 package com.example.artjohn.blackfin.adapter
 
 import android.graphics.Color
-import android.support.constraint.Constraints
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.artjohn.blackfin.R
+import com.example.artjohn.blackfin.event.PremiumRange
+import com.example.artjohn.blackfin.event.ProductPremium
+import com.example.artjohn.blackfin.event.SummaryAvailable
 import com.example.artjohn.blackfin.model.*
 import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.backgroundColor
-import java.util.zip.Inflater
 
 class SummaryAdapter(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryAdapter.SummaryViewHolder>() {
     var qoute = data
@@ -82,7 +83,7 @@ class SummaryAdapter(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryA
     holder.itemView.setOnClickListener {
         var clientInfoJson = Gson().toJson(ClientInfo.array)
         var qouteJson = Gson().toJson(qoute)
-        EventBus.getDefault().post(ProductPremium(clientInfoJson,qouteJson,position))
+        EventBus.getDefault().post(ProductPremium(clientInfoJson, qouteJson, position))
     }
 
     }
@@ -127,6 +128,6 @@ class SummaryAdapter(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryA
             }
         }
         totalProvider = totalProvider.plus(1)
-        EventBus.getDefault().post(PremiumRange(min,max,totalProvider))
+        EventBus.getDefault().post(PremiumRange(min, max, totalProvider))
     }
 }

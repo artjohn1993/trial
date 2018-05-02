@@ -1,4 +1,4 @@
-package com.example.artjohn.blackfin.model
+package com.example.artjohn.blackfin.event
 
 /**
  * Created by User on 26/04/2018.

@@ -1,23 +1,20 @@
 package com.example.artjohn.blackfin
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout
 import com.example.artjohn.blackfin.adapter.PremiumAdapter
 import com.example.artjohn.blackfin.model.ClientInfo
-import com.example.artjohn.blackfin.model.ProductPremium
 
 import com.example.artjohn.blackfin.model.QouteRequest
-import com.example.artjohn.blackfin.model.TotalPremium
+import com.example.artjohn.blackfin.event.TotalPremium
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_breakdown.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.lang.Math.round
 import java.math.RoundingMode
 import java.text.DecimalFormat
 

@@ -1,4 +1,8 @@
-package com.example.artjohn.blackfin.model
+package com.example.artjohn.blackfin.event
+
+import com.example.artjohn.blackfin.model.BenefitsProductList
+import com.example.artjohn.blackfin.model.Product
+import com.example.artjohn.blackfin.model.Provider
 
 /**
  * Created by User on 27/04/2018.
@@ -9,7 +13,7 @@ class ProcessProduct {
     var providerID : Int = 0
     var providerName : String = ""
 
-    fun getListProduct(product : Product.List?,provider : Provider.Result?,benefitID: Int) : List<BenefitsProductList>
+    fun getListProduct(product : Product.List?, provider : Provider.Result?, benefitID: Int) : List<BenefitsProductList>
     {
             var  array : ArrayList<BenefitsProductList> = ArrayList()
 
@@ -39,7 +43,7 @@ class ProcessProduct {
                     println(productName)
                     println(providerID)
                     println(providerName)
-                    array.add(BenefitsProductList(benefitID,productName,providerID,providerName,0,productGroupId))
+                    array.add(BenefitsProductList(benefitID, productName, providerID, providerName, 0, productGroupId))
                 }
 
 

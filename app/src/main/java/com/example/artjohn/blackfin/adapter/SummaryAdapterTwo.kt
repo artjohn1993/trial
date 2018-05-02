@@ -6,15 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.artjohn.blackfin.R
+import com.example.artjohn.blackfin.event.ErrorEvent
+import com.example.artjohn.blackfin.event.ProductPremium
+import com.example.artjohn.blackfin.event.SummaryNotAvailable
 import com.example.artjohn.blackfin.model.*
 import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.backgroundColor
-import org.jetbrains.anko.margin
-import java.util.*
 
 class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryAdapterTwo.SummaryViewHolder>() {
     var qoute = data
@@ -93,7 +93,7 @@ class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<Summa
             {
                 var clientInfoJson = Gson().toJson(ClientInfo.array)
                 var qouteJson = Gson().toJson(qoute)
-                EventBus.getDefault().post(ProductPremium(clientInfoJson,qouteJson,position))
+                EventBus.getDefault().post(ProductPremium(clientInfoJson, qouteJson, position))
             }
 
         }

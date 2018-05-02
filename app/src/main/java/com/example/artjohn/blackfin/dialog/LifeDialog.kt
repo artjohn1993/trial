@@ -5,12 +5,11 @@ import android.app.Dialog
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.*
-import com.example.artjohn.blackfin.BenefitsActivity
 import com.example.artjohn.blackfin.R
-import com.example.artjohn.blackfin.adapter.BenefitsAdapter
+import com.example.artjohn.blackfin.event.LoadingPercentage
+import com.example.artjohn.blackfin.event.ProcessProduct
 import com.example.artjohn.blackfin.model.*
 import org.greenrobot.eventbus.EventBus
-import org.jetbrains.anko.find
 
 class LifeDialog: AppCompatActivity() {
 

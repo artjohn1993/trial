@@ -61,6 +61,8 @@ class MainActivity : AppCompatActivity() {
             startActivity<OccupationGuideActivity>()
         }
         setSpinner()
+
+
     }
 
 

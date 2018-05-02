@@ -9,24 +9,17 @@ import android.widget.LinearLayout
 import com.example.artjohn.blackfin.adapter.SummaryAdapter
 import com.example.artjohn.blackfin.adapter.SummaryAdapterTwo
 import com.example.artjohn.blackfin.api.BlackfinApi
-import com.example.artjohn.blackfin.api.CustomHttp
+import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.*
 import com.google.gson.Gson
-import com.squareup.moshi.Json
-import com.squareup.moshi.Moshi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_benefits.*
 import kotlinx.android.synthetic.main.activity_summary.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.alert
-import org.jetbrains.anko.startActivity
-import org.json.JSONObject
-import org.xml.sax.Parser
 import java.util.*
 
 class SummaryActivity : AppCompatActivity() {
