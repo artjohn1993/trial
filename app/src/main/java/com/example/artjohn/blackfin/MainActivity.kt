@@ -25,7 +25,7 @@ import org.greenrobot.eventbus.Subscribe
 
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     var ageArray = arrayListOf<Int>()
     var smokerChecker : Boolean = false
@@ -45,14 +45,9 @@ class MainActivity : AppCompatActivity() {
 
         smokerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             smokerChecker = isChecked
-
         }
 
         mainNextButton.setOnClickListener {
-            //EventBus.getDefault().post(SignIn("droid1-qatest@mail.com","firebrand",true))
-
-
-
             saveClientInfo()
             startActivity<BenefitsActivity>()
         }
@@ -92,7 +87,7 @@ class MainActivity : AppCompatActivity() {
 
         return ageAdapter
     }
-    fun IdentifyGender(gender : String) : String{
+    fun IdentifyGender(gender : String) : String {
         if(gender.equals("Male"))
         {
             return "M"
@@ -117,38 +112,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onSignIn(event: SignIn)
-    {
-        println("================onSignIn===================")
-        compositeDisposable?.add(
-                apiServer.Logout()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe({result ->
-                    result.message
-                },{
-                    error ->
-                    print(error.toString())
-                })
-        )
-
-
-
-        println("================End of Sign in===================")
-    }
-
-    public override fun onStart() {
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
-
-    public override fun onStop() {
-        super.onStop()
-        compositeDisposable?.clear()
-        EventBus.getDefault().unregister(this)
-    }
 
     override fun onPause() {
         super.onPause()

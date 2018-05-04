@@ -143,8 +143,7 @@ class HealthDialog : AppCompatActivity(){
             var loading : Double = loading
             var isTraumaBuyback : Boolean = false
             var benefitsProduct = benefitsProduct
-
-
+            
 
             val data = Benefits(dentalOptical,
                     specialistsTest,

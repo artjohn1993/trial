@@ -11,6 +11,7 @@ import com.example.artjohn.blackfin.api.BlackfinApi
 import com.example.artjohn.blackfin.api.CustomHttp
 import com.example.artjohn.blackfin.dialog.HealthDialog
 import com.example.artjohn.blackfin.dialog.LifeDialog
+import com.example.artjohn.blackfin.event.CheckRecyclerView
 import com.example.artjohn.blackfin.model.*
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -24,7 +25,7 @@ import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 
 
-class BenefitsActivity : AppCompatActivity() {
+class BenefitsActivity : BaseActivity() {
 
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     private val apiServer by lazy {
@@ -40,9 +41,6 @@ class BenefitsActivity : AppCompatActivity() {
         getProduct()
 
         benefitsRecyclerView.layoutManager = GridLayoutManager(this,2)
-
-
-
         benefitsNextButton.setOnClickListener {
                 startActivity<SummaryActivity>()
         }
@@ -52,20 +50,18 @@ class BenefitsActivity : AppCompatActivity() {
 
     fun getProduct()
     {
-
         compositeDisposable?.add(
                 apiServer.getProduct()
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({result ->
-                            println(result)
                             getProvider(result)
                         },{
                             error ->
+                            benefitsProgressbar.visibility = View.GONE
                             print(error.toString())
                         })
         )
-
     }
 
     fun getProvider(value : Product.List)
@@ -76,7 +72,6 @@ class BenefitsActivity : AppCompatActivity() {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({result ->
-                            println(result)
                             benefitsProgressbar.visibility = View.GONE
                             benefitsNextButton.visibility = View.VISIBLE
                             benefitsRecyclerView.adapter = BenefitsAdapter(this,value,result)
@@ -96,8 +91,17 @@ class BenefitsActivity : AppCompatActivity() {
         benefitsRecyclerView.adapter.notifyDataSetChanged()
     }
 
-
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onCheckRecyclerView(event : CheckRecyclerView)
+    {
+        try {
+            benefitsRecyclerView.adapter.itemCount
+        }catch (e : Exception)
+        {
+            benefitsProgressbar.visibility = View.VISIBLE
+            getProduct()
+        }
+    }
 
     public override fun onStart() {
         super.onStart()

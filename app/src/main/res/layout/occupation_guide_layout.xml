@@ -22,8 +22,9 @@
         android:layout_marginTop="30dp"
         app:layout_constraintTop_toTopOf="parent"
         android:background="#ccc"
-        />
 
+
+        />
     <TextView
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
@@ -40,6 +41,6 @@
         app:layout_constraintBottom_toTopOf="@id/contentText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
         />
+
 </android.support.constraint.ConstraintLayout>

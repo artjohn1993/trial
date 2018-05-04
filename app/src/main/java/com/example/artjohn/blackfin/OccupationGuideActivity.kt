@@ -7,7 +7,7 @@ import android.widget.LinearLayout
 import com.example.artjohn.blackfin.adapter.OccupationGuideAdapter
 import kotlinx.android.synthetic.main.activity_occupation_guide.*
 
-class OccupationGuideActivity : AppCompatActivity() {
+class OccupationGuideActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
