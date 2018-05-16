@@ -7,7 +7,8 @@ import com.example.artjohn.blackfin.model.Provider
 /**
  * Created by User on 27/04/2018.
  */
-class ProcessProduct {
+class ProcessProduct
+{
     var productGroupId  : Int = 0
     var productName : String = ""
     var providerID : Int = 0
@@ -17,7 +18,8 @@ class ProcessProduct {
     {
             var  array : ArrayList<BenefitsProductList> = ArrayList()
 
-        if (product != null) {
+        if (product != null)
+        {
             for(index in 0..product.data.products.size - 1)
             {
                 if(product.data.products[index].benefitId == benefitID)
@@ -25,7 +27,8 @@ class ProcessProduct {
                     productGroupId = product.data.products[index].productGroupId
                     productName = product.data.products[index].productName
 
-                    if (provider != null) {
+                    if (provider != null)
+                    {
 
                         for(index2 in 0..provider.data.providers.size - 1)
                         {
@@ -51,7 +54,8 @@ class ProcessProduct {
         println(array)
             return array
         }
-        else{
+        else
+        {
             println("you pass  null")
             return array
         }

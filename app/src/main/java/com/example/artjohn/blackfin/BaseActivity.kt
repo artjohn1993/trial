@@ -18,11 +18,13 @@ import org.jetbrains.anko.linearLayout
 /**
  * Created by User on 02/05/2018.
  */
-open class BaseActivity : AppCompatActivity(),ConnectivityReceiver.ConnectivityReceiverListener {
+open class BaseActivity : AppCompatActivity(),ConnectivityReceiver.ConnectivityReceiverListener
+{
     private var dialog : Dialog? = null
     private  var snackBar : Snackbar? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         dialog = Dialog(this)
         dialog?.setContentView(R.layout.layout_noconnection)
@@ -35,13 +37,10 @@ open class BaseActivity : AppCompatActivity(),ConnectivityReceiver.ConnectivityR
     {
         if(!isConnected)
         {
-
             val messageToUser = "You are offline now." //TODO
-
             snackBar = Snackbar.make(window.decorView.rootView, messageToUser, Snackbar.LENGTH_LONG) //Assume "rootLayout" as the root layout of every activity.
             snackBar?.duration = Snackbar.LENGTH_INDEFINITE
             snackBar?.show()
-
         }
         else
         {
@@ -50,12 +49,14 @@ open class BaseActivity : AppCompatActivity(),ConnectivityReceiver.ConnectivityR
         }
     }
 
-    override fun onResume() {
+    override fun onResume()
+    {
         super.onResume()
-
         ConnectivityReceiver.connectivityReceiverListener = this
     }
-    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+    override fun onNetworkConnectionChanged(isConnected: Boolean)
+    {
         showMessage(isConnected)
     }
+
 }

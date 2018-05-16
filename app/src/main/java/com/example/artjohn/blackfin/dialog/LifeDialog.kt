@@ -11,9 +11,11 @@ import com.example.artjohn.blackfin.event.ProcessProduct
 import com.example.artjohn.blackfin.model.*
 import org.greenrobot.eventbus.EventBus
 
-class LifeDialog: AppCompatActivity() {
+class LifeDialog: AppCompatActivity()
+{
 
-    companion object {
+    companion object
+    {
 
         var dialog : Dialog? = null
         var closeButton : ImageView? = null
@@ -52,7 +54,8 @@ class LifeDialog: AppCompatActivity() {
                 "Level (To Age 90)",
                 "Level (To Age 100)"
         )
-        fun show(activity: Activity, product : Product.List?, provider : Provider.Result?)  {
+        fun show(activity: Activity, product : Product.List?, provider : Provider.Result?)
+        {
             var productPass = product
             var providerPass = provider
             dialog = Dialog(activity)
@@ -101,7 +104,8 @@ class LifeDialog: AppCompatActivity() {
                 }
                 var loading = loading?.selectedItem.toString().substringBefore("%").toDouble()
                 var amountVal : Double = 0.0
-                try {
+                try
+                {
                     amountVal = amount?.text.toString().toDouble()
                 }catch (e : Exception)
                 {

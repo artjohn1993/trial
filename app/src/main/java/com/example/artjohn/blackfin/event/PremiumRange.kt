@@ -1,6 +1,7 @@
 package com.example.artjohn.blackfin.event
 
-class PremiumRange {
+class PremiumRange
+{
     var min : Double
     var max : Double
     var totalProvider : Int

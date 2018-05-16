@@ -5,26 +5,32 @@ import okhttp3.Response
 /**
  * Created by User on 27/04/2018.
  */
-object QouteRequest {
-    data class Result(
+object QouteRequest
+{
+    data class Result
+    (
             var data : Data
     )
 
-    data class Data(
+    data class Data
+    (
             var userId : String,
             var quoteId : Int,
             var data : DataResult
     )
-    data class DataResult(
+    data class DataResult
+    (
             var result : ProviderResut,
             var crunchTimeQuoteEngine : Double,
             var crunchTimeFidelity : Double,
             var apiLastUpdated : String
     )
-    data class ProviderResut(
+    data class ProviderResut
+    (
             var providers : MutableList<ProviderList>
     )
-    data class ProviderList(
+    data class ProviderList
+    (
         var providerId : Int,
         var providerName : String,
         var clientBreakdown : MutableList<ClientBreakDown>,
@@ -33,15 +39,18 @@ object QouteRequest {
         var errorSummary : MutableList<ErrorSummary>,
         var containsError : Boolean
     )
-    data class ErrorSummary(
+    data class ErrorSummary
+    (
             var errorId : Int,
             var errorMessage: String
     )
-    data class ClientBreakDown(
+    data class ClientBreakDown
+    (
             var clientId : String,
             var productPremiums : MutableList<ProductPremium>
     )
-    data class ProductPremium(
+    data class ProductPremium
+    (
             var benefitId : Int,
             var benefitName : String,
             var productId : Int,

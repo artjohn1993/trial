@@ -1,6 +1,7 @@
 package com.example.artjohn.blackfin.model
 
-class SignIn {
+class SignIn
+{
 
     var email : String
     var password : String

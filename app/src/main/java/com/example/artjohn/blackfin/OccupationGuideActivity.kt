@@ -7,9 +7,11 @@ import android.widget.LinearLayout
 import com.example.artjohn.blackfin.adapter.OccupationGuideAdapter
 import kotlinx.android.synthetic.main.activity_occupation_guide.*
 
-class OccupationGuideActivity : BaseActivity() {
+class OccupationGuideActivity : BaseActivity()
+{
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_occupation_guide)
         occupationGuideRecycleView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL,false)

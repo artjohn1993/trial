@@ -16,7 +16,8 @@ import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.backgroundColor
 
-class SummaryAdapter(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryAdapter.SummaryViewHolder>() {
+class SummaryAdapter(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryAdapter.SummaryViewHolder>()
+{
     var qoute = data
     var max : Double = 0.0
     var min : Double = 0.0
@@ -50,22 +51,30 @@ class SummaryAdapter(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryA
             "#1e384b",
             "#009261"
     )
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SummaryViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SummaryViewHolder
+    {
         val inflater = LayoutInflater.from(parent?.context)
         val layout = inflater.inflate(R.layout.layout_summary,parent,false)
 
         return SummaryViewHolder(layout)
     }
 
-    override fun getItemCount(): Int {
+    override fun getItemCount(): Int
+    {
 
         return qoute.data.data.result.providers.size
     }
 
-    override fun onBindViewHolder(holder: SummaryViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SummaryViewHolder, position: Int)
+    {
 
 
-            if (!qoute.data.data.result.providers[position].containsError) {
+            if (qoute.data.data.result.providers[position].containsError)
+            {
+                holder.container.visibility = View.GONE
+            }
+             else
+            {
                 EventBus.getDefault().post(SummaryAvailable(true))
                 holder.title.text = qoute.data.data.result.providers[position].providerName
                 holder.price.text = "$" + qoute.data.data.result.providers[position].totalPremium.toString()
@@ -73,11 +82,6 @@ class SummaryAdapter(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryA
                 holder.logo.setImageResource(imageArray[id-1])
                 holder.color.backgroundColor = Color.parseColor(colorArray[id-1])
                 calculateRange(qoute.data.data.result.providers[position].totalPremium)
-
-            }
-             else
-            {
-                holder.container.visibility = View.GONE
             }
 
     holder.itemView.setOnClickListener {

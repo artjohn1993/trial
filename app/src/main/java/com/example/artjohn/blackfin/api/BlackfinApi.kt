@@ -14,10 +14,13 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
 
 
-class CustomHttp{
-    companion object {
+class CustomHttp
+{
+    companion object
+    {
         var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkcm9pZDEtcWF0ZXN0QG1haWwuY29tIiwianRpIjoiZTczYTEwMzctZjlkMS00NDJlLTg4NjgtNTNjNmRjZjMzYjJhIiwiZXhwIjoxNTI3NDE2OTIzLCJpc3MiOiJodHRwOi8vYmxhY2tmaW4udGVjaG5vbG9neSIsImF1ZCI6Imh0dHA6Ly9ibGFja2Zpbi50ZWNobm9sb2d5In0.kvAgh3cLejmjLb7066G-reHjNvxOcwi27CIFde-DR70"
-        fun createOkhttp() : OkHttpClient{
+        fun createOkhttp() : OkHttpClient
+        {
             val okhttp = OkHttpClient.Builder()
 
             val interceptor = Interceptor { chain ->
@@ -42,10 +45,13 @@ class CustomHttp{
     }
 }
 
-class BlackfinApi {
+class BlackfinApi
+{
 
-    companion object {
-        fun create(context: Context) : ApiServices{
+    companion object
+    {
+        fun create(context: Context) : ApiServices
+        {
             val retrofit = Retrofit.Builder()
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(MoshiConverterFactory.create())

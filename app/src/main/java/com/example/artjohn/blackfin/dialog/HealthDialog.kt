@@ -11,9 +11,11 @@ import com.example.artjohn.blackfin.event.ProcessProduct
 import com.example.artjohn.blackfin.model.*
 import org.greenrobot.eventbus.EventBus
 
-class HealthDialog : AppCompatActivity(){
+class HealthDialog : AppCompatActivity()
+{
 
-    companion object {
+    companion object
+    {
 
         var dialog : Dialog? = null
         var closeButton : ImageView? = null
@@ -54,7 +56,8 @@ class HealthDialog : AppCompatActivity(){
                 "500%"
         )
 
-        fun show(activity: Activity,product : Product.List?,provider : Provider.Result?) {
+        fun show(activity: Activity,product : Product.List?,provider : Provider.Result?)
+        {
             var productPass = product
             var providerPass = provider
 
@@ -143,7 +146,7 @@ class HealthDialog : AppCompatActivity(){
             var loading : Double = loading
             var isTraumaBuyback : Boolean = false
             var benefitsProduct = benefitsProduct
-            
+
 
             val data = Benefits(dentalOptical,
                     specialistsTest,

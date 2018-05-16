@@ -16,7 +16,8 @@ import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.backgroundColor
 
-class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryAdapterTwo.SummaryViewHolder>() {
+class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryAdapterTwo.SummaryViewHolder>()
+{
     var qoute = data
 
 
@@ -50,22 +51,26 @@ class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<Summa
             "#1e384b",
             "#009261"
     )
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SummaryViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SummaryViewHolder
+    {
         val inflater = LayoutInflater.from(parent?.context)
         val layout = inflater.inflate(R.layout.layout_summary_two,parent,false)
 
         return SummaryViewHolder(layout)
     }
 
-    override fun getItemCount(): Int {
+    override fun getItemCount(): Int
+    {
 
         return qoute.data.data.result.providers.size
     }
 
-    override fun onBindViewHolder(holder: SummaryViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SummaryViewHolder, position: Int)
+    {
 
 
-        if (qoute.data.data.result.providers[position].containsError) {
+        if (qoute.data.data.result.providers[position].containsError)
+        {
             EventBus.getDefault().post(SummaryNotAvailable(true))
             holder.title.text = qoute.data.data.result.providers[position].providerName
             holder.price.text = "$" + qoute.data.data.result.providers[position].totalPremium.toString()
@@ -95,7 +100,6 @@ class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<Summa
                 var qouteJson = Gson().toJson(qoute)
                 EventBus.getDefault().post(ProductPremium(clientInfoJson, qouteJson, position))
             }
-
         }
     }
 

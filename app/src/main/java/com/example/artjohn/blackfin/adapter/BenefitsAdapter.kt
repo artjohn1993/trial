@@ -47,19 +47,22 @@ class BenefitsAdapter(activity: Activity,product : Product.List?,provider : Prov
             R.drawable.ic_08_redundancy,
             R.drawable.ic_09_waiver_of_premium
     )
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BenefitsHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BenefitsHolder
+    {
         val inflater = LayoutInflater.from(parent?.context)
         val layout = inflater.inflate(R.layout.benefits_layout,parent,false)
 
         return BenefitsHolder(layout)
     }
 
-    override fun getItemCount(): Int {
+    override fun getItemCount(): Int
+    {
 
         return titleArray.size
     }
 
-    override fun onBindViewHolder(holder: BenefitsHolder, position: Int) {
+    override fun onBindViewHolder(holder: BenefitsHolder, position: Int)
+    {
 
         holder.icon.setImageResource(imageArray[position])
         holder.title.text = titleArray[position]
@@ -71,7 +74,8 @@ class BenefitsAdapter(activity: Activity,product : Product.List?,provider : Prov
                 holder.icon.setColorFilter(Color.parseColor("#3cbdd0"))
                 holder.wrapper.setBackgroundResource(R.drawable.summary_color_provider)
         }
-        else{
+        else
+        {
             holder.title.setTextColor(Color.parseColor("#010026"))
             holder.icon.setColorFilter(Color.parseColor("#010026"))
         }
@@ -91,13 +95,11 @@ class BenefitsAdapter(activity: Activity,product : Product.List?,provider : Prov
 
     }
 
-
     class BenefitsHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     {
         var icon : ImageView = itemView.findViewById(R.id.iconImage)
         var title  : TextView = itemView.findViewById(R.id.benefitsTitleText)
         var wrapper : android.support.constraint.ConstraintLayout = itemView.findViewById(R.id.benefitsWrapper)
     }
-
 
 }

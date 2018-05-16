@@ -10,6 +10,8 @@ import com.example.artjohn.blackfin.model.ClientInfo
 
 import com.example.artjohn.blackfin.model.QouteRequest
 import com.example.artjohn.blackfin.event.TotalPremium
+import com.example.artjohn.blackfin.presenter.breakdown.BreakDownMVP
+import com.example.artjohn.blackfin.presenter.breakdown.BreakDownPresenter
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_breakdown.*
 import org.greenrobot.eventbus.EventBus
@@ -19,33 +21,19 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 
 
-class BreakdownActivity : AppCompatActivity() {
-    var imageArray : Array<Int> = arrayOf(
-            R.drawable.ic_accuro,
-            R.drawable.ic_aia,
-            R.drawable.ic_amp,
-            R.drawable.ic_amprpp,
-            R.drawable.ic_asteron,
-            R.drawable.ic_fidelity,
-            R.drawable.ic_nib,
-            R.drawable.ic_onepath,
-            R.drawable.ic_partnerslife,
-            R.drawable.ic_southerncross,
-            R.drawable.ic_sovereign,
-            R.drawable.ic_fidelity
-    )
+class BreakdownActivity : AppCompatActivity(),BreakDownMVP.View
+{
+
+
+
     lateinit var qoute : QouteRequest.Result
     var index : Int = 0
     var id  : Int = 0
     var totalPremium : Double = 0.0
+    val presenter = BreakDownPresenter(this)
 
-    var age : Int = 0
-    var gender : String = ""
-    var smoker : String = ""
-    var clientClass : String = ""
-    var currentStatus : String = ""
-
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_breakdown)
         title = "Breakdown"
@@ -57,89 +45,56 @@ class BreakdownActivity : AppCompatActivity() {
         producPremiumRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL,false)
         producPremiumRecyclerView.adapter = PremiumAdapter(qoute,index)
     }
-    fun bind(){
-        setLogo()
-        setprofile()
-        setPT()
-        setDetails()
-    }
-    fun setPT()
+    fun bind()
     {
-        policyPriceText.text = "$" + qoute.data.data.result.providers[index].policyFee
-        totalPremium += qoute.data.data.result.providers[index].policyFee
-    }
-    fun setLogo()
-    {
-        logo.setImageResource(imageArray[id-1])
-        nameText.text = ClientInfo.array[0].name
-    }
-    fun setprofile()
-    {
-        var gender = ClientInfo.array[0].gender
-        var age = ClientInfo.array[0].age.toInt()
-
-        if(gender.equals("M"))
-        {
-
-                if (age>18)
-                {
-                    profile.setImageResource(R.drawable.icon_male)
-                }
-                else
-                {
-                    profile.setImageResource(R.drawable.icon_boy)
-                }
-        }
-        else
-        {
-
-            if (age>18)
-            {
-                profile.setImageResource(R.drawable.icon_female)
-            }
-            else
-            {
-                profile.setImageResource(R.drawable.icon_girl)
-            }
-        }
-    }
-    fun setDetails()
-    {
-        age = ClientInfo.array[0].age.toInt()
-        var status = arrayOf("Class 1","Class 2","Class 3","Class 4","Class 5")
-        clientClass = status[ClientInfo.array[0].occupationId - 1]
-        currentStatus = ClientInfo.array[0].employedStatus
-        if(ClientInfo.array[0].isChild){smoker = "Smoker"}
-        else {smoker = "Not Smoker"}
-        if(ClientInfo.array[0].gender == "M"){gender = "Male"}
-        else{gender = "Female"}
-
-        detailsText.text = "$age, $gender, $smoker, $clientClass, $currentStatus"
+        presenter.processLogo(id)
+        presenter.processProfile()
+        presenter.processPT(qoute,index)
+        presenter.processDetails()
     }
 
-    @SuppressLint("SetTextI18n")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onProductPremium(event : TotalPremium)
     {
-        val df = DecimalFormat("#.###")
-        df.roundingMode = RoundingMode.CEILING
         totalPremium += event.total
-
-        //totalPremium = (totalPremium*100.0)/100.0
-        premiumPriceText.text = "$" + df.format(totalPremium)
+        presenter.processPremiumPrice(totalPremium)
     }
 
-
-    public override fun onStart() {
+    public override fun onStart()
+    {
         super.onStart()
         EventBus.getDefault().register(this)
     }
 
-    public override fun onStop() {
+    public override fun onStop()
+    {
         super.onStop()
         EventBus.getDefault().unregister(this)
     }
 
+    override fun setProfile(profileID : Int)
+    {
+        profile.setImageResource(profileID)
+    }
 
+    override fun setLogo(image :  Int)
+    {
+        logo.setImageResource(image)
+    }
+
+    override fun setDetails(name : String, age : Int,gender : String,smoker : String,clientClass : String, status : String)
+    {
+        nameText.text = name
+        detailsText.text = "$age, $gender, $smoker, $clientClass, $status"
+    }
+    override fun setPremiumPrice(price: String)
+    {
+        premiumPriceText.text = "$" + price
+    }
+    override fun setPT(fee: Double)
+    {
+        policyPriceText.text = "$" + fee
+        totalPremium += fee
+    }
 }
 

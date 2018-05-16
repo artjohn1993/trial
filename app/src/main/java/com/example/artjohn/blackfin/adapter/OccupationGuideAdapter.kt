@@ -22,12 +22,14 @@ class OccupationGuideAdapter(context: Context) : RecyclerView.Adapter<Occupation
             "Housewife / Househusband / Student"
             )
 
-    override fun onBindViewHolder(holder: OccupationGuideHolder, position: Int) {
+    override fun onBindViewHolder(holder: OccupationGuideHolder, position: Int)
+    {
         holder.title.text = "Occupation Class " + (position.plus(1)).toString()
         holder.content.text = array[position]
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OccupationGuideAdapter.OccupationGuideHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OccupationGuideAdapter.OccupationGuideHolder
+    {
 
         val inflater = LayoutInflater.from(parent?.context)
         val layout = inflater.inflate(R.layout.occupation_guide_layout,parent,false)
@@ -35,13 +37,15 @@ class OccupationGuideAdapter(context: Context) : RecyclerView.Adapter<Occupation
         return OccupationGuideHolder(layout)
     }
 
-    override fun getItemCount(): Int {
+    override fun getItemCount(): Int
+    {
         return array.size
     }
 
 
 
-    class OccupationGuideHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class OccupationGuideHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    {
 
         var content : TextView = itemView.findViewById(R.id.contentText)
         var title : TextView = itemView.findViewById(R.id.titleText)

@@ -8,9 +8,11 @@ import android.net.ConnectivityManager
 /**
  * Created by User on 02/05/2018.
  */
-class ConnectivityReceiver : BroadcastReceiver() {
+class ConnectivityReceiver : BroadcastReceiver()
+{
 
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(context: Context, intent: Intent)
+    {
 
         if (connectivityReceiverListener != null)
         {
@@ -24,11 +26,13 @@ class ConnectivityReceiver : BroadcastReceiver() {
         var networkInfo = cm.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnectedOrConnecting
     }
-    interface ConnectivityReceiverListener {
+    interface ConnectivityReceiverListener
+    {
         fun onNetworkConnectionChanged(isConnected: Boolean)
     }
 
-    companion object {
+    companion object
+    {
         var connectivityReceiverListener: ConnectivityReceiverListener? = null
     }
 }
