@@ -16,6 +16,7 @@ import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.*
 import com.example.artjohn.blackfin.presenter.summary.SummaryMVP
 import com.example.artjohn.blackfin.presenter.summary.SummaryPresenter
+import com.example.artjohn.blackfin.presenter.summary.SummaryPresenterView
 import com.google.gson.Gson
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -28,92 +29,115 @@ import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.alert
 import java.util.*
 
-class SummaryActivity : BaseActivity(),SummaryMVP.View
-{
+class SummaryActivity : BaseActivity(), SummaryPresenterView {
 
-
+    // region - Variables
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     private val apiServer by lazy {
         BlackfinApi.create(this)
     }
-    val presenter : SummaryPresenter = SummaryPresenter(this,apiServer)
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
+    val presenter : SummaryPresenter = SummaryPresenter(this,apiServer)
+    // endregion
+
+    // region - Lifecycle methods
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_summary)
         title = "Result"
-        summaryRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL,false)
-        summaryNotAvailableRecylerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL,false)
+        this.initRecyclerViews()
     }
 
-    private fun getClient() : Client
-    {
-        var data = Client(ClientInfo.array,"f11f217f-f500-4c36-96bd-a361df4009ac",ConfigureBenefits.array,0)
+    public override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        compositeDisposable.clear()
+    }
+
+    public override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+    // endregion
+
+    // region - Public/Open methods
+    // endregion
+
+    // region - Private methods
+    private fun getClient() : Client {
+        var data = Client(ClientInfo.array,
+                "f11f217f-f500-4c36-96bd-a361df4009ac",
+                ConfigureBenefits.array,
+                0)
         return data
     }
 
-    private fun checkConfigureBenefits()
-    {
-        if(ConfigureBenefits.array.isEmpty())
-        {
+    private fun checkConfigureBenefits() {
+        if(ConfigureBenefits.array.isEmpty()) {
             summaryProgressBar.visibility = View.GONE
             Handler().postDelayed({
                 showWarning()
             },2000)
         }
-        else
-        {
+        else {
             hideWarning()
             presenter.processRecyclerAdapter(getClient())
         }
     }
-    private fun showWarning()
-    {
 
+    private fun showWarning() {
         warningImage.visibility = View.VISIBLE
         warningText.visibility = View.VISIBLE
     }
-    private fun hideWarning()
-    {
+
+    private fun hideWarning() {
         warningImage.visibility = View.GONE
         warningText.visibility = View.GONE
     }
-    private fun showVisibility()
-    {
+
+    private fun showVisibility() {
         summaryProgressBar.visibility = View.GONE
         summarySaveButton.visibility = View.VISIBLE
         monthlyWrapper.visibility =  View.VISIBLE
     }
 
+    private fun initRecyclerViews() {
+        summaryRecyclerView.layoutManager = LinearLayoutManager(this,
+                LinearLayout.VERTICAL,
+                false)
+        summaryNotAvailableRecylerView.layoutManager = LinearLayoutManager(this,
+                LinearLayout.VERTICAL,false)
+    }
+    // endregion
+
+    // region - Eventbus methods
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onConfigureBenefits(event : PremiumRange)
-    {
+    fun onConfigureBenefits(event : PremiumRange) {
         summaryTotalText.text =  event.totalProvider.toString() + " Results. " + "$" + event.min + " - " + "$" + event.max
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onSummaryNotAvailable(event : SummaryNotAvailable)
-    {
+    fun onSummaryNotAvailable(event : SummaryNotAvailable) {
         summaryNotAvailableRecylerView.visibility = View.VISIBLE
         summaryNotAvailableText.text = "No Result Available:"
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onSummaryAvailable(event : SummaryAvailable)
-    {
+    fun onSummaryAvailable(event : SummaryAvailable) {
         summaryRecyclerView.visibility = View.VISIBLE
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onErrorEvent(event : ErrorEvent)
-    {
+    fun onErrorEvent(event : ErrorEvent) {
         alert(event.message){  }.show()
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onProductPremium(event : ProductPremium)
-    {
+    fun onProductPremium(event : ProductPremium) {
         var intent = Intent(this,BreakdownActivity::class.java)
         intent.putExtra("clientInfo", event.clientInfo)
         intent.putExtra("qoute",event.qoute)
@@ -122,37 +146,19 @@ class SummaryActivity : BaseActivity(),SummaryMVP.View
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onCheckRecyclerView(event : CheckRecyclerView)
-    {
-        try
-        {
+    fun onCheckRecyclerView(event : CheckRecyclerView) {
+        try {
             summaryRecyclerView.adapter.itemCount
             summaryNotAvailableRecylerView.adapter.itemCount
 
-        }catch (e : Exception)
-        {
+        }catch (e : Exception) {
             summaryProgressBar.visibility = View.VISIBLE
             checkConfigureBenefits()
         }
     }
+    // endregion
 
-    public override fun onStart()
-    {
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
-
-    public override fun onStop()
-    {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
-    }
-    override fun onPause()
-    {
-        super.onPause()
-        compositeDisposable.clear()
-
-    }
+    // region - Presenter functions
     override fun setAdapter(data: QouteRequest.Result, dataSorted: QouteRequest.Result)
     {
         showVisibility()
@@ -164,4 +170,5 @@ class SummaryActivity : BaseActivity(),SummaryMVP.View
     {
         summaryProgressBar.visibility = View.GONE
     }
+    // endregion
 }

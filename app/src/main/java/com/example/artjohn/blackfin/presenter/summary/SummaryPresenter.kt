@@ -7,20 +7,22 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class SummaryPresenter(val view : SummaryMVP.View,val server : ApiServices) : SummaryMVP.Presenter
-{
+class SummaryPresenter(val view : SummaryPresenterView,
+                       val server : ApiServices) : SummaryPresenterInterface {
+
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
-    override fun processRecyclerAdapter(data : Client)
-    {
+
+    override fun processRecyclerAdapter(data : Client) {
         compositeDisposable.add(
                 server.requestQoutes(data)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.newThread())
-                        .subscribe({
-                            result ->
+                        .subscribe({ result ->
                             var unSorted = result
-                            result.data.data.result.providers.sortWith(Comparator { obj1, obj2 -> obj1.errorSummary.size.compareTo(obj2.errorSummary.size) })
-
+                            result.data.data.result.providers.sortWith(Comparator { obj1,
+                                                                                    obj2 ->
+                                obj1.errorSummary.size.compareTo(obj2.errorSummary.size)
+                            })
                             view.setAdapter(unSorted,result)
                         },{
                             error ->
@@ -29,5 +31,13 @@ class SummaryPresenter(val view : SummaryMVP.View,val server : ApiServices) : Su
                         })
         )
     }
+}
 
+interface SummaryPresenterView {
+    fun setAdapter(data : QouteRequest.Result, dataSorted : QouteRequest.Result)
+    fun requestFailed()
+}
+
+interface SummaryPresenterInterface {
+    fun processRecyclerAdapter(data : Client)
 }

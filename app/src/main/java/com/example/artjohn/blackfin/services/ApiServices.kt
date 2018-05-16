@@ -12,7 +12,7 @@ import java.util.*
 
 interface ApiServices
 {
-
+    //region - POST
     @Headers("content-type: application/json")
     @POST("LogIn")
     fun login(@Body signIn : SignIn) : Observable<Login.Signup>
@@ -20,13 +20,17 @@ interface ApiServices
     @POST("Logout")
     fun Logout() : Observable<Login.Signout>
 
+    @Headers("content-type: application/json")
+    @POST("quote/request-quote")
+    fun requestQoutes(@Body client : Client) : Observable<QouteRequest.Result>
+    //endregion
+
+    //region - GET
     @GET("product")
     fun getProduct() : Observable<Product.List>
 
     @GET("provider")
     fun getProvider() : Observable<Provider.Result>
+    //endregion
 
-    @Headers("content-type: application/json")
-    @POST("quote/request-quote")
-    fun requestQoutes(@Body client : Client) : Observable<QouteRequest.Result>
 }

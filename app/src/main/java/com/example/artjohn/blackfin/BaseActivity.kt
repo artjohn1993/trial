@@ -18,45 +18,50 @@ import org.jetbrains.anko.linearLayout
 /**
  * Created by User on 02/05/2018.
  */
-open class BaseActivity : AppCompatActivity(),ConnectivityReceiver.ConnectivityReceiverListener
-{
+open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener {
+    //region - variables
     private var dialog : Dialog? = null
-    private  var snackBar : Snackbar? = null
+    private var snackBar : Snackbar? = null
+    //endregion
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
+    //region - Lifecycle methods
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dialog = Dialog(this)
         dialog?.setContentView(R.layout.layout_noconnection)
-        dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT)
         dialog?.window?.setBackgroundDrawableResource(R.color.primaryTransparency)
-        registerReceiver(ConnectivityReceiver(), IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        registerReceiver(ConnectivityReceiver(),
+                IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
-    fun showMessage(isConnected: Boolean)
-    {
-        if(!isConnected)
-        {
+    override fun onResume() {
+        super.onResume()
+        ConnectivityReceiver.connectivityReceiverListener = this
+    }
+    //endregion
+
+    //region - ConnectivityReceiver
+    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+        showMessage(isConnected)
+    }
+    //endregion
+
+    //region - Private methods
+    private fun showMessage(isConnected: Boolean) {
+        if(!isConnected) {
             val messageToUser = "You are offline now." //TODO
-            snackBar = Snackbar.make(window.decorView.rootView, messageToUser, Snackbar.LENGTH_LONG) //Assume "rootLayout" as the root layout of every activity.
+            snackBar = Snackbar.make(window.decorView.rootView,
+                    messageToUser,
+                    Snackbar.LENGTH_LONG)
             snackBar?.duration = Snackbar.LENGTH_INDEFINITE
             snackBar?.show()
         }
-        else
-        {
+        else {
             snackBar?.dismiss()
             EventBus.getDefault().post(CheckRecyclerView())
         }
     }
-
-    override fun onResume()
-    {
-        super.onResume()
-        ConnectivityReceiver.connectivityReceiverListener = this
-    }
-    override fun onNetworkConnectionChanged(isConnected: Boolean)
-    {
-        showMessage(isConnected)
-    }
-
+    //endregion
 }

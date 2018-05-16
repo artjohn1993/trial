@@ -1,12 +1,11 @@
 package com.example.artjohn.blackfin.model
 
-class Age
-{
-
+class Age {
+    //region - Variables
     var age : Int
+    //endregion
 
-    constructor(age : Int)
-    {
+    constructor(age : Int) {
         this.age = age
     }
 }

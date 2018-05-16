@@ -21,80 +21,90 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 
 
-class BreakdownActivity : AppCompatActivity(),BreakDownMVP.View
-{
+class BreakdownActivity : AppCompatActivity(),BreakDownMVP.View {
 
-
-
+    //region - Variables
     lateinit var qoute : QouteRequest.Result
     var index : Int = 0
     var id  : Int = 0
     var totalPremium : Double = 0.0
     val presenter = BreakDownPresenter(this)
+    //endregion
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
+    //region - Lifecycle methods
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_breakdown)
         title = "Breakdown"
-        qoute = Gson().fromJson(intent.extras.get("qoute").toString(),QouteRequest.Result::class.java)
+        qoute = Gson().fromJson(intent.extras.get("qoute").toString(),
+                QouteRequest.Result::class.java)
         index = intent.extras.get("position") as Int
         id   = qoute.data.data.result.providers[index].providerId
 
-        bind()
-        producPremiumRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL,false)
-        producPremiumRecyclerView.adapter = PremiumAdapter(qoute,index)
+        this.bind()
+        this.setRecyclerLayout()
+
     }
-    fun bind()
-    {
+
+    public override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    public override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+    //endregion
+
+    //region - Private method
+    private fun bind() {
         presenter.processLogo(id)
         presenter.processProfile()
         presenter.processPT(qoute,index)
         presenter.processDetails()
     }
+    private fun setRecyclerLayout() {
+        producPremiumRecyclerView.layoutManager = LinearLayoutManager(this,
+                LinearLayout.VERTICAL,
+                false)
+        producPremiumRecyclerView.adapter = PremiumAdapter(qoute,
+                index)
+    }
+    //endregion
 
+    //region - Eventbus
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onProductPremium(event : TotalPremium)
-    {
+    fun onProductPremium(event : TotalPremium) {
         totalPremium += event.total
         presenter.processPremiumPrice(totalPremium)
     }
+    //endregion
 
-    public override fun onStart()
-    {
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
-
-    public override fun onStop()
-    {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
-    }
-
-    override fun setProfile(profileID : Int)
-    {
+    //region - Presenter methods
+    override fun setProfile(profileID : Int) {
         profile.setImageResource(profileID)
     }
 
-    override fun setLogo(image :  Int)
-    {
+    override fun setLogo(image :  Int) {
         logo.setImageResource(image)
     }
 
-    override fun setDetails(name : String, age : Int,gender : String,smoker : String,clientClass : String, status : String)
-    {
+    override fun setDetails(name : String, age : Int,gender : String,smoker : String,clientClass : String, status : String) {
         nameText.text = name
         detailsText.text = "$age, $gender, $smoker, $clientClass, $status"
     }
-    override fun setPremiumPrice(price: String)
-    {
-        premiumPriceText.text = "$" + price
+
+    @SuppressLint("SetTextI18n")
+    override fun setPremiumPrice(price: String) {
+        premiumPriceText.text = "$$price"
     }
-    override fun setPT(fee: Double)
-    {
-        policyPriceText.text = "$" + fee
+
+    @SuppressLint("SetTextI18n")
+    override fun setPT(fee: Double) {
+        policyPriceText.text = "$$fee"
         totalPremium += fee
     }
+    //endregion
 }
 

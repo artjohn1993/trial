@@ -28,94 +28,88 @@ import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 
 
-class BenefitsActivity : BaseActivity(), BenefitsMVP.View
-{
+class BenefitsActivity : BaseActivity(), BenefitsMVP.View {
 
-
+    //region - Variables
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     private val apiServer by lazy {
         BlackfinApi.create(this)
     }
-    val presenter = BenefitsPresenter(this, apiServer)
 
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
+    val presenter = BenefitsPresenter(this, apiServer)
+    //endregion
+
+    //region - Lifecycler methods
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_benefits)
         title = "Benefits"
 
         presenter.processAdapter()
 
-        benefitsRecyclerView.layoutManager = GridLayoutManager(this,2)
+        benefitsRecyclerView.layoutManager = GridLayoutManager(this,
+                2)
         benefitsNextButton.setOnClickListener {
                 startActivity<SummaryActivity>()
         }
 
     }
 
+    public override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
 
+    override fun onPause() {
+        super.onPause()
+        compositeDisposable.clear()
 
+    }
 
+    public override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+    //endregion
+
+    //region - Eventbus
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onConfigureBenefits(event : ConfigureBenefits)
-    {
+    fun onConfigureBenefits(event : ConfigureBenefits) {
         benefitsRecyclerView.adapter.notifyDataSetChanged()
     }
 
-    /*event for progress bar when calling api*/
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onBenefitsProgressbar(event : BenefitsProgressBar)
-    {
+    fun onBenefitsProgressbar(event : BenefitsProgressBar) {
 
-        if(event.visible)
-        {
+        if(event.visible) {
             benefitsProgressbar.visibility = View.VISIBLE
         }
-        else
-        {
+        else {
             benefitsProgressbar.visibility = View.GONE
         }
 
-        if(event.buttonVisible)
-        {
+        if(event.buttonVisible) {
             benefitsNextButton.visibility = View.VISIBLE
         }
 
     }
 
-    /*check benefits adapter if empty*/
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onCheckRecyclerView(event : CheckRecyclerView)
-    {
-        try
-        {
+    fun onCheckRecyclerView(event : CheckRecyclerView) {
+        try {
             benefitsRecyclerView.adapter.itemCount
-        }catch (e : Exception)
-        {
+        }catch (e : Exception) {
             benefitsProgressbar.visibility = View.VISIBLE
             presenter.processAdapter()
         }
     }
+    //endregion
 
-    public override fun onStart()
-    {
-        super.onStart()
-        EventBus.getDefault().register(this)
+    //region - Presenter
+    override fun setAdapter(product : Product.List?, provider : Provider.Result?) {
+        benefitsRecyclerView.adapter = BenefitsAdapter(this,
+                product,
+                provider)
     }
-
-    public override fun onStop()
-    {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
-    }
-    override fun onPause()
-    {
-        super.onPause()
-        compositeDisposable.clear()
-
-    }
-    override fun setAdapter(product : Product.List?, provider : Provider.Result?)
-    {
-        benefitsRecyclerView.adapter = BenefitsAdapter(this,product,provider)
-    }
+    //endregion
 }

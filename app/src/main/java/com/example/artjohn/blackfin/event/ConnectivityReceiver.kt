@@ -8,31 +8,25 @@ import android.net.ConnectivityManager
 /**
  * Created by User on 02/05/2018.
  */
-class ConnectivityReceiver : BroadcastReceiver()
-{
+class ConnectivityReceiver : BroadcastReceiver() {
 
-    override fun onReceive(context: Context, intent: Intent)
-    {
-
-        if (connectivityReceiverListener != null)
-        {
+    override fun onReceive(context: Context, intent: Intent) {
+        if (connectivityReceiverListener != null) {
             connectivityReceiverListener!!.onNetworkConnectionChanged(isConnected(context))
         }
     }
 
-    private fun isConnected(context: Context) : Boolean
-    {
+    private fun isConnected(context: Context) : Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         var networkInfo = cm.activeNetworkInfo
         return networkInfo != null && networkInfo.isConnectedOrConnecting
     }
-    interface ConnectivityReceiverListener
-    {
+
+    interface ConnectivityReceiverListener {
         fun onNetworkConnectionChanged(isConnected: Boolean)
     }
 
-    companion object
-    {
+    companion object {
         var connectivityReceiverListener: ConnectivityReceiverListener? = null
     }
 }
