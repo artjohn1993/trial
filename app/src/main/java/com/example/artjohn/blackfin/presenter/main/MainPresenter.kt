@@ -25,6 +25,7 @@ class MainPresenter(var view : MainMVP.View) : MainMVP.Presenter
     }
 
 
+
     override fun processAgeAdapter()
     {
         val age = ArrayList<Int>()
