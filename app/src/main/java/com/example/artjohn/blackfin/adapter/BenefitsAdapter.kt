@@ -25,7 +25,7 @@ class BenefitsAdapter(activity: Activity,
     var activity = activity
     var product = product
     var provider = provider
-    var titleArray  = arrayOf(
+    var titleArray  = arrayOf (
             "Health Cover",
             "Life Cover",
             "Family Protection",
@@ -36,7 +36,7 @@ class BenefitsAdapter(activity: Activity,
             "Redundancy Cover",
             "Waiver of Premium"
     )
-    var imageArray : Array<Int> = arrayOf(
+    var imageArray : Array<Int> = arrayOf (
             R.drawable.ic_01_health_benefits,
             R.drawable.ic_02_life_cover,
             R.drawable.ic_03_family_protection,
@@ -49,7 +49,7 @@ class BenefitsAdapter(activity: Activity,
     )
     //endregion
 
-    //region - RecyclerView Lifecycle
+    //region - Adapter Delegate
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): BenefitsHolder {
         val inflater = LayoutInflater.from(parent?.context)
@@ -89,7 +89,7 @@ class BenefitsAdapter(activity: Activity,
     }
     //endregion
 
-    //region - Child Class
+    //region - View Holder
     class BenefitsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var icon : ImageView = itemView.findViewById(R.id.iconImage)
         var title  : TextView = itemView.findViewById(R.id.benefitsTitleText)

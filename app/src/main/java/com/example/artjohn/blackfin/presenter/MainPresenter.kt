@@ -22,9 +22,27 @@ class MainPresenterClass(var view : MainView) : MainPresenter {
             "Female")
     //endregion
 
-    //region - MainPresenter methods
-    override fun saveClientInfo(name : String, primary : Boolean, clientID : String ,smoker : Boolean, age : String,gender : String,isChild : Boolean, status : String, occupation : Int) {
-        var qoute  = ClientsInformation(name,primary,clientID,smoker,age,gender,isChild,status,occupation)
+    //region - MainPresenter Delegate
+    override fun saveClientInfo(
+            name : String,
+            primary : Boolean,
+            clientID : String,
+            smoker : Boolean,
+            age : String,
+            gender : String,
+            isChild : Boolean,
+            status : String,
+            occupation : Int) {
+        var qoute  = ClientsInformation(
+                name,
+                primary,
+                clientID,
+                smoker,
+                age,
+                gender,
+                isChild,
+                status,
+                occupation)
         ClientInfo(qoute)
     }
 
@@ -54,5 +72,13 @@ interface MainView {
 interface MainPresenter {
     fun processAgeAdapter()
     fun setAdapters()
-    fun saveClientInfo(name : String, primary : Boolean, clientID : String ,smoker : Boolean, age : String,gender : String,isChild : Boolean, status : String, occupation : Int)
+    fun saveClientInfo(name : String,
+                       primary : Boolean,
+                       clientID : String,
+                       smoker : Boolean,
+                       age : String,
+                       gender : String,
+                       isChild : Boolean,
+                       status : String,
+                       occupation : Int)
 }

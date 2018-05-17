@@ -9,7 +9,13 @@ import android.net.ConnectivityManager
  * Created by User on 02/05/2018.
  */
 class ConnectivityReceiver : BroadcastReceiver() {
+    //region - Variables
+    companion object {
+        var connectivityReceiverListener: ConnectivityReceiverListener? = null
+    }
+    //endregion
 
+    //region - Broadcast Delegates
     override fun onReceive(context: Context, intent: Intent) {
         if (connectivityReceiverListener != null) {
             connectivityReceiverListener!!.onNetworkConnectionChanged(isConnected(context))
@@ -25,8 +31,5 @@ class ConnectivityReceiver : BroadcastReceiver() {
     interface ConnectivityReceiverListener {
         fun onNetworkConnectionChanged(isConnected: Boolean)
     }
-
-    companion object {
-        var connectivityReceiverListener: ConnectivityReceiverListener? = null
-    }
+    //endregion
 }

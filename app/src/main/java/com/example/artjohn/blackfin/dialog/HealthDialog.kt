@@ -26,7 +26,7 @@ class HealthDialog : AppCompatActivity() {
     var DOcheck : Boolean = false
     var productPass : Product.List? = null
     var providerPass : Provider.Result? = null
-    var excessArray = arrayOf(
+    var excessArray = arrayOf (
             "Nil - Excess",
             "250 Excess",
             "500 Excess",
@@ -37,7 +37,7 @@ class HealthDialog : AppCompatActivity() {
             "6000 Excess",
             "10000 Excess"
         )
-    var loadingArray = arrayOf(
+    var loadingArray = arrayOf (
             "0%",
             "50%",
             "75%",
@@ -64,13 +64,7 @@ class HealthDialog : AppCompatActivity() {
         dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT)
         dialog?.window?.setBackgroundDrawableResource(R.color.primaryTransparency)
-        closeButton = dialog?.findViewById<ImageView>(R.id.closeButton)
-        excess = dialog?.findViewById<Spinner>(R.id.excessSpinner)
-        loading = dialog?.findViewById<Spinner>(R.id.loadingSpinner)
-        apply = dialog?.findViewById<Button>(R.id.healthApplyButton)
-        ST = dialog?.findViewById<Switch>(R.id.specialistSwitch)
-        GP = dialog?.findViewById<Switch>(R.id.prescriptionSwitch)
-        DO = dialog?.findViewById<Switch>(R.id.DOSwitch)
+        dialogViewId(dialog)
 
         val statusAdapter : ArrayAdapter<String> = ArrayAdapter(activity,
                 android.R.layout.simple_list_item_1,
@@ -117,6 +111,15 @@ class HealthDialog : AppCompatActivity() {
         //endregion
 
     //region - Private methods
+    private fun dialogViewId(dialog: Dialog?) {
+        closeButton = dialog?.findViewById<ImageView>(R.id.closeButton)
+        excess = dialog?.findViewById<Spinner>(R.id.excessSpinner)
+        loading = dialog?.findViewById<Spinner>(R.id.loadingSpinner)
+        apply = dialog?.findViewById<Button>(R.id.healthApplyButton)
+        ST = dialog?.findViewById<Switch>(R.id.specialistSwitch)
+        GP = dialog?.findViewById<Switch>(R.id.prescriptionSwitch)
+        DO = dialog?.findViewById<Switch>(R.id.DOSwitch)
+    }
     private fun configuredBenefits(excess : Int,
                                    ST : Boolean,
                                    GP : Boolean,

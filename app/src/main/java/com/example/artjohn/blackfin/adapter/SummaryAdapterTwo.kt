@@ -19,7 +19,7 @@ import org.jetbrains.anko.backgroundColor
 class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryAdapterTwo.SummaryViewHolder>() {
     //region - Variables
     var qoute = data
-    var imageArray : Array<Int> = arrayOf(
+    var imageArray : Array<Int> = arrayOf (
             R.drawable.ic_accuro,
             R.drawable.ic_aia,
             R.drawable.ic_amp,
@@ -33,7 +33,7 @@ class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<Summa
             R.drawable.ic_sovereign,
             R.drawable.ic_fidelity
     )
-    var colorArray : Array<String> = arrayOf(
+    var colorArray : Array<String> = arrayOf (
             "#00aeef",
             "#d21e47",
             "#1f2b5b",
@@ -49,10 +49,10 @@ class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<Summa
     )
     //endregion
 
-    //region - RecyclerView Lifecycle
+    //region - Adapter Delegate
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SummaryViewHolder {
         val inflater = LayoutInflater.from(parent?.context)
-        val layout = inflater.inflate(R.layout.layout_summary_two,parent,false)
+        val layout = inflater.inflate(R.layout.layout_summary_two, parent, false)
         return SummaryViewHolder(layout)
     }
 
@@ -92,7 +92,7 @@ class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<Summa
     }
     //endregion
 
-    //region - Child class
+    //region - View Holder
     class SummaryViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         var title = itemView.findViewById<TextView>(R.id.summaryTitle)
         var price = itemView.findViewById<TextView>(R.id.summaryPrice)

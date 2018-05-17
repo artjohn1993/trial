@@ -30,7 +30,7 @@ class LifeDialog: AppCompatActivity() {
     var calAdapter : ArrayAdapter<String>? = null
     var cal : Int = 0
     var amountVal : Double = 0.0
-    var loadingArray = arrayOf(
+    var loadingArray = arrayOf (
             "0%",
             "50%",
             "75%",
@@ -44,7 +44,7 @@ class LifeDialog: AppCompatActivity() {
             "400%",
             "500%"
         )
-    var calArray = arrayOf(
+    var calArray = arrayOf (
             "Yearly Renewable",
             "Level (10 Years)",
             "Level (15 Years)",
@@ -97,7 +97,7 @@ class LifeDialog: AppCompatActivity() {
 
             try {
                 amountVal = amount?.text.toString().toDouble()
-            }catch (e : Exception) {
+            } catch (e : Exception) {
                 amountVal = 0.0
             }
             var calculated = LoadingPercentage(loading).calculate()

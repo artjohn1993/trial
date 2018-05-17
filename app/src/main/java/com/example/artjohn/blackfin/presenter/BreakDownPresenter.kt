@@ -32,7 +32,7 @@ class BreakDownPresenterClass(val view : BreakDownView) : BreakDownPresenter {
     var currentStatus : String = ""
     //endregion
 
-    //region - BreakDownPresenter methods
+    //region - BreakDownPresenter Delegate
     override fun processProfile() {
         var gender = ClientInfo.array[0].gender
         var age = ClientInfo.array[0].age.toInt()
@@ -97,7 +97,13 @@ class BreakDownPresenterClass(val view : BreakDownView) : BreakDownPresenter {
 interface BreakDownView {
     fun setProfile(profile : Int)
     fun setLogo(image :  Int)
-    fun setDetails(name : String,age : Int,gender : String,smoker : String,clientClass : String, status : String)
+    fun setDetails(
+            name : String,
+            age : Int,
+            gender : String,
+            smoker : String,
+            clientClass : String,
+            status : String)
     fun setPremiumPrice(price : String)
     fun setPT(fee : Double)
 }
@@ -107,5 +113,7 @@ interface BreakDownPresenter {
     fun processLogo(id : Int)
     fun processDetails()
     fun processPremiumPrice(price : Double)
-    fun processPT(data : QouteRequest.Result,index : Int)
+    fun processPT(
+            data : QouteRequest.Result,
+            index : Int)
 }

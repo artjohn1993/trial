@@ -12,16 +12,21 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 
 
-class MainActivity : BaseActivity(), MainView {
+class MainActivity : BaseActivity(),
+        MainView {
 
     //region - Variables
     val  presenter : MainPresenter by lazy{ MainPresenterClass(this) }
     var smokerChecker : Boolean = false
+    var age : String = ""
+    var gender : String = ""
+    var occupation : Int = 0
+    var status : String = ""
 
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     //endregion
 
-    //region Lifecycle methods
+    //region - Lifecycle methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,20 +38,7 @@ class MainActivity : BaseActivity(), MainView {
         }
 
         mainNextButton.setOnClickListener {
-            var age = ageSpinner.selectedItem.toString()
-            var gender =  IdentifyGender(genderSpinner.selectedItem.toString())
-            var occupation = occupationSpinner.selectedItemPosition + 1
-            var status = statusSpinner.selectedItem.toString()
-            presenter.saveClientInfo(nameEdit.text.toString(),
-                    true,
-                    "1",
-                    smokerChecker,
-                    age,
-                    gender,
-                    false,
-                    status,
-                    occupation)
-
+            setInformation()
             startActivity<BenefitsActivity>()
         }
 
@@ -73,18 +65,36 @@ class MainActivity : BaseActivity(), MainView {
             "F"
         }
     }
+    private fun setInformation() {
+        this.age = ageSpinner.selectedItem.toString()
+        this.gender =  IdentifyGender(genderSpinner.selectedItem.toString())
+        this.occupation = occupationSpinner.selectedItemPosition + 1
+        this.status = statusSpinner.selectedItem.toString()
+        this.presenter.saveClientInfo(
+                nameEdit.text.toString(),
+                true,
+                "1",
+                smokerChecker,
+                age,
+                gender,
+                false,
+                status,
+                occupation)
+    }
     //endregion
 
-    //region - Presenter funtion
+    //region - Presenter Delegates
     override fun setAgeAdapter(data : ArrayList<Int>) {
         val ageAdapter : ArrayAdapter<Int> = ArrayAdapter(this,
-                android.R.layout.simple_list_item_1,data)
+                android.R.layout.simple_list_item_1,
+                data)
         ageSpinner.adapter = ageAdapter
     }
 
     override fun setStatusAdapter(data: Array<String>) {
         val statusAdapter : ArrayAdapter<String> = ArrayAdapter(this,
-                android.R.layout.simple_list_item_1,data)
+                android.R.layout.simple_list_item_1,
+                data)
         statusSpinner.adapter = statusAdapter
     }
 

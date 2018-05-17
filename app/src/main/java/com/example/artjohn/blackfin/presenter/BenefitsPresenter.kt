@@ -15,7 +15,7 @@ class BenefitsPresenterClass(val view : BenefitsView,
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     //endregion
 
-    //region - BenefitsPresenter method
+    //region - BenefitsPresenter Delegate
     override fun processAdapter() {
        getProduct()
     }
@@ -29,7 +29,6 @@ class BenefitsPresenterClass(val view : BenefitsView,
                         },{
                             error ->
                             EventBus.getDefault().post(BenefitsProgressBar(false,false))
-                            print(error.toString())
                         })
         )
     }
@@ -45,7 +44,6 @@ class BenefitsPresenterClass(val view : BenefitsView,
                         },{
                             error ->
                             EventBus.getDefault().post(BenefitsProgressBar(false,false))
-                            print(error.toString())
                         })
         )
     }

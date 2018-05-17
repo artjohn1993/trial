@@ -13,7 +13,8 @@ import org.greenrobot.eventbus.EventBus
 /**
  * Created by User on 30/04/2018.
  */
-class PremiumAdapter(qoute : QouteRequest.Result,index : Int) : RecyclerView.Adapter<PremiumAdapter.PremiumViewHolder>() {
+class PremiumAdapter(qoute : QouteRequest.Result,
+                     index : Int) : RecyclerView.Adapter<PremiumAdapter.PremiumViewHolder>() {
 
     //region - Variables
     val qoute = qoute
@@ -21,7 +22,7 @@ class PremiumAdapter(qoute : QouteRequest.Result,index : Int) : RecyclerView.Ada
     var premium = qoute.data.data.result.providers[index].clientBreakdown[0].productPremiums
     //endregion
 
-    //region - RecyclerView Lifecycle
+    //region - Adapter Delegate
     override fun onBindViewHolder(holder: PremiumViewHolder,
                                   position: Int) {
         holder.titleBreakdown.text = premium[position].productName
@@ -44,7 +45,7 @@ class PremiumAdapter(qoute : QouteRequest.Result,index : Int) : RecyclerView.Ada
     }
     //endregion
 
-    //region - Child class
+    //region - View Holder
     class PremiumViewHolder(itemview : View) : RecyclerView.ViewHolder(itemview) {
         var titleBreakdown = itemview.findViewById<TextView>(R.id.breakdownTitle)
         var detailsBreakdown = itemview.findViewById<TextView>(R.id.breakdownDetails)

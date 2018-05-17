@@ -13,7 +13,7 @@ class OccupationGuideAdapter(context: Context) : RecyclerView.Adapter<Occupation
 
     //region - Variable
     var context : Context = context
-    var array = arrayOf(
+    var array = arrayOf (
             R.string.guide_1,
             R.string.guide_2,
             R.string.guide_3,
@@ -22,7 +22,7 @@ class OccupationGuideAdapter(context: Context) : RecyclerView.Adapter<Occupation
             )
     //endregion
 
-    //region - RecyclerView Lifecycle
+    //region - Adapter Delegate
     override fun onBindViewHolder(holder: OccupationGuideHolder,
                                   position: Int) {
         holder.title.text = "Occupation Class " + (position.plus(1)).toString()
@@ -43,7 +43,7 @@ class OccupationGuideAdapter(context: Context) : RecyclerView.Adapter<Occupation
     }
     //endregion
 
-    //region - Child class
+    //region - View Holder
     class OccupationGuideHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var content : TextView = itemView.findViewById(R.id.contentText)
         var title : TextView = itemView.findViewById(R.id.titleText)

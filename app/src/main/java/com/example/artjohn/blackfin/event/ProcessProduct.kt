@@ -8,11 +8,14 @@ import com.example.artjohn.blackfin.model.Provider
  * Created by User on 27/04/2018.
  */
 class ProcessProduct {
+    //region - Variables
     var productGroupId  : Int = 0
     var productName : String = ""
     var providerID : Int = 0
     var providerName : String = ""
+    //endregion
 
+    //region - Public methods
     fun getListProduct(product : Product.List?,
                        provider : Provider.Result?,
                        benefitID: Int) : List<BenefitsProductList> {
@@ -46,4 +49,5 @@ class ProcessProduct {
             return array
         }
     }
+    //endregion
 }

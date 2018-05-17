@@ -15,17 +15,18 @@ import org.greenrobot.eventbus.EventBus
 /**
  * Created by User on 02/05/2018.
  */
-open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener {
+open class BaseActivity : AppCompatActivity(),
+        ConnectivityReceiver.ConnectivityReceiverListener {
     //region - variables
     private var dialog : Dialog? = null
     private var snackBar : Snackbar? = null
     //endregion
 
     //region - Lifecycle methods
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        dialog = Dialog(this)
-        dialog?.setContentView(R.layout.layout_noconnection)
+    override fun onCreate (savedInstanceState: Bundle?) {
+        super.onCreate (savedInstanceState)
+        dialog = Dialog (this)
+        dialog?.setContentView (R.layout.layout_noconnection)
         dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT)
         dialog?.window?.setBackgroundDrawableResource(R.color.primaryTransparency)
@@ -33,7 +34,7 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
                 IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
-    override fun onResume() {
+    override fun onResume () {
         super.onResume()
         ConnectivityReceiver.connectivityReceiverListener = this
     }

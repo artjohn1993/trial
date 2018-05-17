@@ -19,7 +19,8 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 
-class BreakdownActivity : AppCompatActivity(), BreakDownView {
+class BreakdownActivity : AppCompatActivity(),
+        BreakDownView {
 
     //region - Variables
     lateinit var qoute : QouteRequest.Result
@@ -34,14 +35,14 @@ class BreakdownActivity : AppCompatActivity(), BreakDownView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_breakdown)
         title = "Breakdown"
-        qoute = Gson().fromJson(intent.extras.get("qoute").toString(),
+        qoute = Gson().fromJson(
+                intent.extras.get("qoute").toString(),
                 QouteRequest.Result::class.java)
         index = intent.extras.get("position") as Int
         id   = qoute.data.data.result.providers[index].providerId
 
         this.bind()
         this.setRecyclerLayout()
-
     }
 
     public override fun onStart() {
@@ -79,7 +80,7 @@ class BreakdownActivity : AppCompatActivity(), BreakDownView {
     }
     //endregion
 
-    //region - Presenter methods
+    //region - Presenter Delegates
     override fun setProfile(profileID : Int) {
         profile.setImageResource(profileID)
     }
@@ -88,7 +89,7 @@ class BreakdownActivity : AppCompatActivity(), BreakDownView {
         logo.setImageResource(image)
     }
 
-    override fun setDetails(name : String, age : Int,gender : String,smoker : String,clientClass : String, status : String) {
+    override fun setDetails(name : String, age : Int, gender : String, smoker : String, clientClass : String, status : String) {
         nameText.text = name
         detailsText.text = "$age, $gender, $smoker, $clientClass, $status"
     }

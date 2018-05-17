@@ -19,7 +19,8 @@ import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 
 
-class BenefitsActivity : BaseActivity(), BenefitsView {
+class BenefitsActivity : BaseActivity(),
+        BenefitsView {
 
     //region - Variables
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
@@ -34,7 +35,6 @@ class BenefitsActivity : BaseActivity(), BenefitsView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_benefits)
         title = "Benefits"
-
         presenter.processAdapter()
 
         benefitsRecyclerView.layoutManager = GridLayoutManager(this,
@@ -70,7 +70,6 @@ class BenefitsActivity : BaseActivity(), BenefitsView {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onBenefitsProgressbar(event : BenefitsProgressBar) {
-
         if(event.visible) {
             benefitsProgressbar.visibility = View.VISIBLE
         }
@@ -95,7 +94,7 @@ class BenefitsActivity : BaseActivity(), BenefitsView {
     }
     //endregion
 
-    //region - Presenter
+    //region - Presenter Delegates
     override fun setAdapter(product : Product.List?, provider : Provider.Result?) {
         benefitsRecyclerView.adapter = BenefitsAdapter(this,
                 product,

@@ -7,11 +7,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class SummaryPresenterClass(val view : SummaryPresenterView,
+class SummaryPresenterClass(val view : SummaryView,
                             val server : ApiServices) : SummaryPresenter {
-
+    //region - Variables
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
+    //endregion
 
+    //region - Presenter Delegate
     override fun processRecyclerAdapter(data : Client) {
         compositeDisposable.add(
                 server.requestQoutes(data)
@@ -31,9 +33,10 @@ class SummaryPresenterClass(val view : SummaryPresenterView,
                         })
         )
     }
+    //endregion
 }
 
-interface SummaryPresenterView {
+interface SummaryView {
     fun setAdapter(data : QouteRequest.Result, dataSorted : QouteRequest.Result)
     fun requestFailed()
 }

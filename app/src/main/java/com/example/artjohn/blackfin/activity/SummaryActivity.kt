@@ -14,7 +14,7 @@ import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.*
 import com.example.artjohn.blackfin.presenter.SummaryPresenter
 import com.example.artjohn.blackfin.presenter.SummaryPresenterClass
-import com.example.artjohn.blackfin.presenter.SummaryPresenterView
+import com.example.artjohn.blackfin.presenter.SummaryView
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_summary.*
 import org.greenrobot.eventbus.EventBus
@@ -22,7 +22,8 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.alert
 
-class SummaryActivity : BaseActivity(), SummaryPresenterView {
+class SummaryActivity : BaseActivity(),
+        SummaryView {
 
     // region - Variables
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
@@ -55,9 +56,6 @@ class SummaryActivity : BaseActivity(), SummaryPresenterView {
         super.onStop()
         EventBus.getDefault().unregister(this)
     }
-    // endregion
-
-    // region - Public/Open methods
     // endregion
 
     // region - Private methods
@@ -103,7 +101,8 @@ class SummaryActivity : BaseActivity(), SummaryPresenterView {
                 LinearLayout.VERTICAL,
                 false)
         summaryNotAvailableRecylerView.layoutManager = LinearLayoutManager(this,
-                LinearLayout.VERTICAL,false)
+                LinearLayout.VERTICAL,
+                false)
     }
     // endregion
 
@@ -151,7 +150,7 @@ class SummaryActivity : BaseActivity(), SummaryPresenterView {
     }
     // endregion
 
-    // region - Presenter functions
+    // region - Presenter Delegates
     override fun setAdapter(data: QouteRequest.Result, dataSorted: QouteRequest.Result)
     {
         showVisibility()
