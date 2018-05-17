@@ -1,26 +1,17 @@
-package com.example.artjohn.blackfin
+package com.example.artjohn.blackfin.activity
 
-import android.app.Dialog
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
-import android.widget.GridLayout
+import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.BenefitsAdapter
 import com.example.artjohn.blackfin.api.BlackfinApi
-import com.example.artjohn.blackfin.api.CustomHttp
-import com.example.artjohn.blackfin.dialog.HealthDialog
-import com.example.artjohn.blackfin.dialog.LifeDialog
 import com.example.artjohn.blackfin.event.BenefitsProgressBar
 import com.example.artjohn.blackfin.event.CheckRecyclerView
 import com.example.artjohn.blackfin.model.*
-import com.example.artjohn.blackfin.presenter.benefits.BenefitsMVP
-import com.example.artjohn.blackfin.presenter.benefits.BenefitsPresenter
-import com.google.gson.Gson
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.example.artjohn.blackfin.presenter.BenefitsPresenterClass
+import com.example.artjohn.blackfin.presenter.BenefitsView
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_benefits.*
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -28,15 +19,14 @@ import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 
 
-class BenefitsActivity : BaseActivity(), BenefitsMVP.View {
+class BenefitsActivity : BaseActivity(), BenefitsView {
 
     //region - Variables
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     private val apiServer by lazy {
         BlackfinApi.create(this)
     }
-
-    val presenter = BenefitsPresenter(this, apiServer)
+    val presenter = BenefitsPresenterClass(this, apiServer)
     //endregion
 
     //region - Lifecycler methods

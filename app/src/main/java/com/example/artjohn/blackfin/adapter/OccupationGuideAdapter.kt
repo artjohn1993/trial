@@ -9,46 +9,44 @@ import android.widget.TextView
 import com.example.artjohn.blackfin.R
 import kotlinx.android.synthetic.main.occupation_guide_layout.view.*
 
-class OccupationGuideAdapter(context: Context) : RecyclerView.Adapter<OccupationGuideAdapter.OccupationGuideHolder>()
-{
+class OccupationGuideAdapter(context: Context) : RecyclerView.Adapter<OccupationGuideAdapter.OccupationGuideHolder>() {
 
+    //region - Variable
     var context : Context = context
-
     var array = arrayOf(
-            "Professionals (usually tertiary qualified) typically earning over $80,000 per annum",
-            "Office workers who do not perform any manual labor",
-            "Skilled trades people(for example a qualified builder) or non-desk based workers (for example technician, shopkeeper, etc)",
-            "Skilled or semi-skilled manual workers and heavy machinery operators who are not exposed to health hazards",
-            "Housewife / Househusband / Student"
+            R.string.guide_1,
+            R.string.guide_2,
+            R.string.guide_3,
+            R.string.guide_4,
+            R.string.guide_5
             )
+    //endregion
 
-    override fun onBindViewHolder(holder: OccupationGuideHolder, position: Int)
-    {
+    //region - RecyclerView Lifecycle
+    override fun onBindViewHolder(holder: OccupationGuideHolder,
+                                  position: Int) {
         holder.title.text = "Occupation Class " + (position.plus(1)).toString()
-        holder.content.text = array[position]
+        holder.content.text = context.resources.getString(array[position])
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OccupationGuideAdapter.OccupationGuideHolder
-    {
-
+    override fun onCreateViewHolder(parent: ViewGroup,
+                                    viewType: Int): OccupationGuideAdapter.OccupationGuideHolder {
         val inflater = LayoutInflater.from(parent?.context)
-        val layout = inflater.inflate(R.layout.occupation_guide_layout,parent,false)
-
+        val layout = inflater.inflate(R.layout.occupation_guide_layout,
+                parent,
+                false)
         return OccupationGuideHolder(layout)
     }
 
-    override fun getItemCount(): Int
-    {
+    override fun getItemCount(): Int {
         return array.size
     }
+    //endregion
 
-
-
-    class OccupationGuideHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-    {
-
+    //region - Child class
+    class OccupationGuideHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var content : TextView = itemView.findViewById(R.id.contentText)
         var title : TextView = itemView.findViewById(R.id.titleText)
     }
-
+    //endregion
 }

@@ -1,9 +1,9 @@
-package com.example.artjohn.blackfin
+package com.example.artjohn.blackfin.activity
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout
+import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.OccupationGuideAdapter
 import kotlinx.android.synthetic.main.activity_occupation_guide.*
 

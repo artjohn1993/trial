@@ -1,33 +1,26 @@
-package com.example.artjohn.blackfin
+package com.example.artjohn.blackfin.activity
 
 import android.content.Intent
-import android.content.res.Resources
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import android.widget.GridLayout
 import android.widget.LinearLayout
+import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.SummaryAdapter
 import com.example.artjohn.blackfin.adapter.SummaryAdapterTwo
 import com.example.artjohn.blackfin.api.BlackfinApi
 import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.*
-import com.example.artjohn.blackfin.presenter.summary.SummaryMVP
-import com.example.artjohn.blackfin.presenter.summary.SummaryPresenter
-import com.example.artjohn.blackfin.presenter.summary.SummaryPresenterView
-import com.google.gson.Gson
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.example.artjohn.blackfin.presenter.SummaryPresenter
+import com.example.artjohn.blackfin.presenter.SummaryPresenterClass
+import com.example.artjohn.blackfin.presenter.SummaryPresenterView
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_benefits.*
 import kotlinx.android.synthetic.main.activity_summary.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.alert
-import java.util.*
 
 class SummaryActivity : BaseActivity(), SummaryPresenterView {
 
@@ -37,7 +30,7 @@ class SummaryActivity : BaseActivity(), SummaryPresenterView {
         BlackfinApi.create(this)
     }
 
-    val presenter : SummaryPresenter = SummaryPresenter(this,apiServer)
+    val presenter : SummaryPresenter = SummaryPresenterClass(this, apiServer)
     // endregion
 
     // region - Lifecycle methods
@@ -138,7 +131,7 @@ class SummaryActivity : BaseActivity(), SummaryPresenterView {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onProductPremium(event : ProductPremium) {
-        var intent = Intent(this,BreakdownActivity::class.java)
+        var intent = Intent(this, BreakdownActivity::class.java)
         intent.putExtra("clientInfo", event.clientInfo)
         intent.putExtra("qoute",event.qoute)
         intent.putExtra("position",event.position)

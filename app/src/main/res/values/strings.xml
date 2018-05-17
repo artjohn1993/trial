@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">Blackfin</string>
     <string name="occupation_detail">Here is a rough guide for selecting an Occupation. Note that,because of variations between insurers, sometimes the only way to know for sure is to call an underwriter.</string>
+
+    <string name="guide_1">Professionals (usually tertiary qualified) typically earning over $80,000 per annum</string>
+    <string name="guide_2">Office workers who do not perform any manual labor</string>
+    <string name="guide_3">Skilled trades people(for example a qualified builder) or non-desk based workers (for example technician, shopkeeper, etc)</string>
+    <string name="guide_4">Skilled or semi-skilled manual workers and heavy machinery operators who are not exposed to health hazards</string>
+    <string name="guide_5">Housewife / Househusband / Student</string>
+
+    <string name="status_1">Employed</string>
+    <string name="status_2">Self-Employed</string>
+    <string name="status_3">Self-Employed &lt; 3 years</string>
+    <string name="status_4">Non-Earner</string>
 </resources>

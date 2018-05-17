@@ -14,26 +14,24 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
 
 
-class CustomHttp
-{
-    companion object
-    {
+class CustomHttp {
+    companion object {
         var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkcm9pZDEtcWF0ZXN0QG1haWwuY29tIiwianRpIjoiZTczYTEwMzctZjlkMS00NDJlLTg4NjgtNTNjNmRjZjMzYjJhIiwiZXhwIjoxNTI3NDE2OTIzLCJpc3MiOiJodHRwOi8vYmxhY2tmaW4udGVjaG5vbG9neSIsImF1ZCI6Imh0dHA6Ly9ibGFja2Zpbi50ZWNobm9sb2d5In0.kvAgh3cLejmjLb7066G-reHjNvxOcwi27CIFde-DR70"
-        fun createOkhttp() : OkHttpClient
-        {
+        fun createOkhttp() : OkHttpClient {
             val okhttp = OkHttpClient.Builder()
 
             val interceptor = Interceptor { chain ->
                 var request: Request? = null
 
-                if(!UserInformation.array.size.equals(0))
-                {
+                if(!UserInformation.array.size.equals(0)) {
                     token = UserInformation.array[0].data.authorization.token
                 }
 
                 request = chain?.request()?.newBuilder()
-                        ?.addHeader("Authorization", "Bearer $token")
-                        ?.addHeader("Content-Type","application/json")
+                        ?.addHeader("Authorization",
+                                "Bearer $token")
+                        ?.addHeader("Content-Type",
+                                "application/json")
                         ?.build()
 
                 chain.proceed(request)
@@ -45,13 +43,9 @@ class CustomHttp
     }
 }
 
-class BlackfinApi
-{
-
-    companion object
-    {
-        fun create(context: Context) : ApiServices
-        {
+class BlackfinApi {
+    companion object {
+        fun create(context: Context) : ApiServices {
             val retrofit = Retrofit.Builder()
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(MoshiConverterFactory.create())

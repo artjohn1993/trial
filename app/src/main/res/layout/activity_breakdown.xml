@@ -9,7 +9,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.artjohn.blackfin.BreakdownActivity"
+    tools:context="com.example.artjohn.blackfin.activity.BreakdownActivity"
     android:padding="16dp"
     >
 

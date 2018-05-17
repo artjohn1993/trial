@@ -18,13 +18,13 @@ import com.example.artjohn.blackfin.model.Provider
 import kotlinx.android.synthetic.main.benefits_layout.view.*
 import org.jetbrains.anko.textColor
 
-class BenefitsAdapter(activity: Activity,product : Product.List?,provider : Provider.Result?) : RecyclerView.Adapter<BenefitsAdapter.BenefitsHolder>()
-{
+class BenefitsAdapter(activity: Activity,
+                      product : Product.List?,
+                      provider : Provider.Result?) : RecyclerView.Adapter<BenefitsAdapter.BenefitsHolder>() {
+    //region - Variables
     var activity = activity
     var product = product
     var provider = provider
-
-
     var titleArray  = arrayOf(
             "Health Cover",
             "Life Cover",
@@ -47,59 +47,53 @@ class BenefitsAdapter(activity: Activity,product : Product.List?,provider : Prov
             R.drawable.ic_08_redundancy,
             R.drawable.ic_09_waiver_of_premium
     )
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BenefitsHolder
-    {
-        val inflater = LayoutInflater.from(parent?.context)
-        val layout = inflater.inflate(R.layout.benefits_layout,parent,false)
+    //endregion
 
+    //region - RecyclerView Lifecycle
+    override fun onCreateViewHolder(parent: ViewGroup,
+                                    viewType: Int): BenefitsHolder {
+        val inflater = LayoutInflater.from(parent?.context)
+        val layout = inflater.inflate(R.layout.benefits_layout,
+                parent,
+                false)
         return BenefitsHolder(layout)
     }
 
-    override fun getItemCount(): Int
-    {
-
+    override fun getItemCount(): Int {
         return titleArray.size
     }
 
-    override fun onBindViewHolder(holder: BenefitsHolder, position: Int)
-    {
-
+    override fun onBindViewHolder(holder: BenefitsHolder,
+                                  position: Int) {
         holder.icon.setImageResource(imageArray[position])
         holder.title.text = titleArray[position]
 
-        println(position)
-        if(ConfigureBenefits.id.contains(position.plus(1)))
-        {
+        if(ConfigureBenefits.id.contains(position.plus(1))) {
                 holder.title.setTextColor(Color.parseColor("#3cbdd0"))
                 holder.icon.setColorFilter(Color.parseColor("#3cbdd0"))
                 holder.wrapper.setBackgroundResource(R.drawable.summary_color_provider)
         }
-        else
-        {
+        else {
             holder.title.setTextColor(Color.parseColor("#010026"))
             holder.icon.setColorFilter(Color.parseColor("#010026"))
         }
 
         holder.itemView.setOnClickListener {
-
-                if (position == 0)
-                {
-                        HealthDialog.show(activity,product,provider)
+                if (position == 0) {
+                        HealthDialog().show(activity,product,provider)
                 }
-                else if(position == 1)
-                {
-                    LifeDialog.show(activity,product,provider)
+                else if(position == 1) {
+                    LifeDialog().show(activity,product,provider)
                 }
-
         }
-
     }
+    //endregion
 
-    class BenefitsHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-    {
+    //region - Child Class
+    class BenefitsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var icon : ImageView = itemView.findViewById(R.id.iconImage)
         var title  : TextView = itemView.findViewById(R.id.benefitsTitleText)
         var wrapper : android.support.constraint.ConstraintLayout = itemView.findViewById(R.id.benefitsWrapper)
     }
-
+    //endregion
 }

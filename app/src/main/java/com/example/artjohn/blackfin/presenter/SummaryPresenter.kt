@@ -1,4 +1,4 @@
-package com.example.artjohn.blackfin.presenter.summary
+package com.example.artjohn.blackfin.presenter
 
 import com.example.artjohn.blackfin.model.Client
 import com.example.artjohn.blackfin.model.QouteRequest
@@ -7,8 +7,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class SummaryPresenter(val view : SummaryPresenterView,
-                       val server : ApiServices) : SummaryPresenterInterface {
+class SummaryPresenterClass(val view : SummaryPresenterView,
+                            val server : ApiServices) : SummaryPresenter {
 
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
 
@@ -38,6 +38,6 @@ interface SummaryPresenterView {
     fun requestFailed()
 }
 
-interface SummaryPresenterInterface {
+interface SummaryPresenter {
     fun processRecyclerAdapter(data : Client)
 }

@@ -13,38 +13,42 @@ import org.greenrobot.eventbus.EventBus
 /**
  * Created by User on 30/04/2018.
  */
-class PremiumAdapter(qoute : QouteRequest.Result,index : Int) : RecyclerView.Adapter<PremiumAdapter.PremiumViewHolder>()
-{
+class PremiumAdapter(qoute : QouteRequest.Result,index : Int) : RecyclerView.Adapter<PremiumAdapter.PremiumViewHolder>() {
 
+    //region - Variables
     val qoute = qoute
     var  index = index
     var premium = qoute.data.data.result.providers[index].clientBreakdown[0].productPremiums
-    override fun onBindViewHolder(holder: PremiumViewHolder, position: Int)
-    {
-            holder.titleBreakdown.text = premium[position].productName
-            holder.priceBreakdown.text = "$" + premium[position].premium.toString()
-            holder.detailsBreakdown.text = premium[position].benefitName
+    //endregion
 
+    //region - RecyclerView Lifecycle
+    override fun onBindViewHolder(holder: PremiumViewHolder,
+                                  position: Int) {
+        holder.titleBreakdown.text = premium[position].productName
+        holder.priceBreakdown.text = "$" + premium[position].premium.toString()
+        holder.detailsBreakdown.text = premium[position].benefitName
         EventBus.getDefault().post(TotalPremium(premium[position].premium))
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PremiumViewHolder
-    {
+    override fun onCreateViewHolder(parent: ViewGroup,
+                                    viewType: Int): PremiumViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val layout = inflater.inflate(R.layout.layout_breakdown,parent,false)
-
+        val layout = inflater.inflate(R.layout.layout_breakdown,
+                parent,
+                false)
         return PremiumViewHolder(layout)
     }
 
-    override fun getItemCount(): Int
-    {
+    override fun getItemCount(): Int {
         return premium.size
     }
+    //endregion
 
-    class PremiumViewHolder(itemview : View) : RecyclerView.ViewHolder(itemview)
-    {
+    //region - Child class
+    class PremiumViewHolder(itemview : View) : RecyclerView.ViewHolder(itemview) {
         var titleBreakdown = itemview.findViewById<TextView>(R.id.breakdownTitle)
         var detailsBreakdown = itemview.findViewById<TextView>(R.id.breakdownDetails)
         var priceBreakdown = itemview.findViewById<TextView>(R.id.breakdownPrice)
     }
+    //endregion
 }

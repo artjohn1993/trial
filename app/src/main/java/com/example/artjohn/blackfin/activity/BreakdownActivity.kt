@@ -1,34 +1,32 @@
-package com.example.artjohn.blackfin
+package com.example.artjohn.blackfin.activity
 
 import android.annotation.SuppressLint
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout
+import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.PremiumAdapter
-import com.example.artjohn.blackfin.model.ClientInfo
 
 import com.example.artjohn.blackfin.model.QouteRequest
 import com.example.artjohn.blackfin.event.TotalPremium
-import com.example.artjohn.blackfin.presenter.breakdown.BreakDownMVP
-import com.example.artjohn.blackfin.presenter.breakdown.BreakDownPresenter
+import com.example.artjohn.blackfin.presenter.BreakDownPresenterClass
+import com.example.artjohn.blackfin.presenter.BreakDownView
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_breakdown.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
 
-class BreakdownActivity : AppCompatActivity(),BreakDownMVP.View {
+class BreakdownActivity : AppCompatActivity(), BreakDownView {
 
     //region - Variables
     lateinit var qoute : QouteRequest.Result
     var index : Int = 0
     var id  : Int = 0
     var totalPremium : Double = 0.0
-    val presenter = BreakDownPresenter(this)
+    val presenter = BreakDownPresenterClass(this)
     //endregion
 
     //region - Lifecycle methods

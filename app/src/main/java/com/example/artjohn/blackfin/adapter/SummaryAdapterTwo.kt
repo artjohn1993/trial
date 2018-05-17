@@ -16,12 +16,9 @@ import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.backgroundColor
 
-class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryAdapterTwo.SummaryViewHolder>()
-{
+class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<SummaryAdapterTwo.SummaryViewHolder>() {
+    //region - Variables
     var qoute = data
-
-
-
     var imageArray : Array<Int> = arrayOf(
             R.drawable.ic_accuro,
             R.drawable.ic_aia,
@@ -36,7 +33,6 @@ class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<Summa
             R.drawable.ic_sovereign,
             R.drawable.ic_fidelity
     )
-
     var colorArray : Array<String> = arrayOf(
             "#00aeef",
             "#d21e47",
@@ -51,26 +47,21 @@ class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<Summa
             "#1e384b",
             "#009261"
     )
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SummaryViewHolder
-    {
+    //endregion
+
+    //region - RecyclerView Lifecycle
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SummaryViewHolder {
         val inflater = LayoutInflater.from(parent?.context)
         val layout = inflater.inflate(R.layout.layout_summary_two,parent,false)
-
         return SummaryViewHolder(layout)
     }
 
-    override fun getItemCount(): Int
-    {
-
+    override fun getItemCount(): Int {
         return qoute.data.data.result.providers.size
     }
 
-    override fun onBindViewHolder(holder: SummaryViewHolder, position: Int)
-    {
-
-
-        if (qoute.data.data.result.providers[position].containsError)
-        {
+    override fun onBindViewHolder(holder: SummaryViewHolder, position: Int) {
+        if (qoute.data.data.result.providers[position].containsError) {
             EventBus.getDefault().post(SummaryNotAvailable(true))
             holder.title.text = qoute.data.data.result.providers[position].providerName
             holder.price.text = "$" + qoute.data.data.result.providers[position].totalPremium.toString()
@@ -78,13 +69,11 @@ class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<Summa
             holder.logo.setImageResource(imageArray[id-1])
             holder.color.backgroundColor = Color.parseColor(colorArray[id-1])
 
-            if(qoute.data.data.result.providers[position].errorSummary.isNotEmpty())
-            {
+            if(qoute.data.data.result.providers[position].errorSummary.isNotEmpty()) {
                 holder.container.alpha = .5f
             }
         }
-        else
-        {
+        else {
             holder.container.visibility = View.GONE
         }
 
@@ -94,23 +83,22 @@ class SummaryAdapterTwo(data : QouteRequest.Result) : RecyclerView.Adapter<Summa
                 var  message = qoute.data.data.result.providers[position].errorSummary[0].errorMessage
                 EventBus.getDefault().post(ErrorEvent(message))
             }
-            else
-            {
+            else {
                 var clientInfoJson = Gson().toJson(ClientInfo.array)
                 var qouteJson = Gson().toJson(qoute)
                 EventBus.getDefault().post(ProductPremium(clientInfoJson, qouteJson, position))
             }
         }
     }
+    //endregion
 
-
-    class SummaryViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView)
-    {
+    //region - Child class
+    class SummaryViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         var title = itemView.findViewById<TextView>(R.id.summaryTitle)
         var price = itemView.findViewById<TextView>(R.id.summaryPrice)
         var logo = itemView.findViewById<ImageView>(R.id.summaryLogo)
         var container = itemView.findViewById<android.support.constraint.ConstraintLayout>(R.id.resultContainer)
         var color = itemView.findViewById<View>(R.id.colorProviderView)
     }
-
+    //endregion
 }

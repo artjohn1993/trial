@@ -1,20 +1,21 @@
-package com.example.artjohn.blackfin
+package com.example.artjohn.blackfin.activity
 
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.ArrayAdapter
-import com.example.artjohn.blackfin.presenter.main.MainMVP
-import com.example.artjohn.blackfin.presenter.main.MainPresenter
-import com.example.artjohn.blackfin.model.*
+import com.example.artjohn.blackfin.R
+import com.example.artjohn.blackfin.presenter.MainPresenter
+import com.example.artjohn.blackfin.presenter.MainPresenterClass
+import com.example.artjohn.blackfin.presenter.MainView
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 
 
-class MainActivity : BaseActivity(), MainMVP.View {
+class MainActivity : BaseActivity(), MainView {
 
     //region - Variables
-    val  presenter : MainPresenter by lazy{ MainPresenter(this) }
+    val  presenter : MainPresenter by lazy{ MainPresenterClass(this) }
     var smokerChecker : Boolean = false
 
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
