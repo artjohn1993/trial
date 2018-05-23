@@ -12,7 +12,6 @@ class ClientInfo {
         if(ClientInfo.array.isEmpty()) {
             ClientInfo.array.add(array)
         }
-
         else {
             ClientInfo.array.set(0,array)
         }

@@ -12,4 +12,6 @@
     <string name="status_2">Self-Employed</string>
     <string name="status_3">Self-Employed &lt; 3 years</string>
     <string name="status_4">Non-Earner</string>
+
+    <string name="add_user">Add people to this qoute...</string>
 </resources>

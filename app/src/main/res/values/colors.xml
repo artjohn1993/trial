@@ -7,4 +7,7 @@
 
     <color name="buttonBackground">#1aa9bd</color>
     <color name="primaryTransparency">#8027224e</color>
+
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorGray">#CCDCDCDC</color>
 </resources>

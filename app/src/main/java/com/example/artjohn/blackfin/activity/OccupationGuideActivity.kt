@@ -13,7 +13,7 @@ class OccupationGuideActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_occupation_guide)
-       this.setRecyclerView()
+        setRecyclerView()
     }
     //endregion
 

@@ -54,7 +54,7 @@ class MainPresenterClass(var view : MainView) : MainPresenter {
 
     override fun processAgeAdapter() {
         val age = ArrayList<Int>()
-        for(i in 0..75) {
+        for(i in 18..75) {
             age.add(i)
         }
         view.setAgeAdapter(age)

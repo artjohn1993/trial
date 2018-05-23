@@ -94,6 +94,7 @@ class Benefits {
     var loading : Double
     var isTraumaBuyback : Boolean
     var benefitProductList : List<BenefitsProductList>
+    var benefitsType : String
     //endregion
 
     constructor(dentalOptical : Boolean,
@@ -114,7 +115,8 @@ class Benefits {
                 coverAmount : Double,
                 loading : Double,
                 isTraumaBuyback : Boolean,
-                benefitProductList : List<BenefitsProductList>) {
+                benefitProductList : List<BenefitsProductList>,
+                benefitsType : String) {
         this.dentalOptical  = dentalOptical
         this.specialistsTest  = specialistsTest
         this.benefitPeriod = benefitPeriod
@@ -134,6 +136,7 @@ class Benefits {
         this.loading = loading
         this.isTraumaBuyback = isTraumaBuyback
         this.benefitProductList = benefitProductList
+        this.benefitsType = benefitsType
         }
 }
 

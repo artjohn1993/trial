@@ -169,13 +169,14 @@ class LifeDialog: AppCompatActivity() {
                     coverAmount,
                     loading,
                     isTraumaBuyback,
-                    benefitsProduct
+                    benefitsProduct,
+                    "Life Cover"
             )
-            var inputs = Inputs(1,data)
+            var inputs = Inputs(1, data)
 
             if(ConfigureBenefits.id.contains(2)) {
                 var index = ConfigureBenefits.id.indexOf(2)
-                ConfigureBenefits.array.set(index,inputs)
+                ConfigureBenefits.array.set(index, inputs)
             }
             else {
                 EventBus.getDefault().post(ConfigureBenefits(inputs))

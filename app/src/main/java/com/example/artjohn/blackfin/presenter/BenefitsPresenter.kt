@@ -19,6 +19,7 @@ class BenefitsPresenterClass(val view : BenefitsView,
     override fun processAdapter() {
        getProduct()
     }
+
     override fun getProduct() {
         compositeDisposable?.add(
                 server.getProduct()

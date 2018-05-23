@@ -163,7 +163,8 @@ class HealthDialog : AppCompatActivity() {
                 coverAmount,
                 loading,
                 isTraumaBuyback,
-                benefitsProduct
+                benefitsProduct,
+                "Health Cover"
         )
         var inputs = Inputs(1,data)
 
