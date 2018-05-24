@@ -13,7 +13,16 @@ class OccupationGuideActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_occupation_guide)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
         setRecyclerView()
+    }
+    //endregion
+
+    //region - Navigation Delegate
+    override fun onSupportNavigateUp() : Boolean {
+        onBackPressed()
+        return true
     }
     //endregion
 

@@ -8,7 +8,9 @@ import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.PeopleAdapter
 import com.example.artjohn.blackfin.model.ClientInfo
 import com.example.artjohn.blackfin.model.ConfigureBenefits
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_people.*
+import org.jetbrains.anko.startActivity
 
 class PeopleActivity : BaseActivity() {
 
@@ -18,6 +20,9 @@ class PeopleActivity : BaseActivity() {
         setContentView(R.layout.activity_people)
         title = "People"
         setRecyclerView()
+        addUser.setOnClickListener {
+            startActivity<AddActivity>()
+        }
     }
     //endregion
 
@@ -26,5 +31,5 @@ class PeopleActivity : BaseActivity() {
         peopleRecyclerView.layoutManager = LinearLayoutManager(this,LinearLayout.VERTICAL,false)
         peopleRecyclerView.adapter = PeopleAdapter(ClientInfo.array, ConfigureBenefits.array)
     }
-    //
+    //endregion
 }

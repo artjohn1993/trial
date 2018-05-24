@@ -46,8 +46,7 @@ class MainActivity : BaseActivity(),
             startActivity<OccupationGuideActivity>()
         }
 
-        presenter.processAgeAdapter()
-        presenter.setAdapters()
+       bind()
     }
 
     override fun onPause() {
@@ -57,6 +56,11 @@ class MainActivity : BaseActivity(),
     //endregion
 
     //region - Private methods
+    private fun bind() {
+        presenter.processAgeAdapter()
+        presenter.setAdapters()
+    }
+
     private fun IdentifyGender(gender : String) : String {
         return if(gender == "Male") {
             "M"

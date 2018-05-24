@@ -13,7 +13,7 @@ class ClientInfo {
             ClientInfo.array.add(array)
         }
         else {
-            ClientInfo.array.set(0,array)
+            ClientInfo.array[0] = array
         }
     }
 }
