@@ -14,6 +14,7 @@ import org.greenrobot.eventbus.EventBus
 class LifeDialog: AppCompatActivity() {
 
     //region - Variables
+    var clientID : Int = 0
     var dialog : Dialog? = null
     var closeButton : ImageView? = null
     var loading : Spinner? = null
@@ -60,7 +61,9 @@ class LifeDialog: AppCompatActivity() {
     //region - Public methods
     fun show(activity: Activity,
              product : Product.List?,
-             provider : Provider.Result?) {
+             provider : Provider.Result?,
+             clientID : Int) {
+        this.clientID = clientID
         this.productPass = product
         this.providerPass = provider
         this.dialog = Dialog(activity)
@@ -172,16 +175,22 @@ class LifeDialog: AppCompatActivity() {
                     benefitsProduct,
                     "Life Cover"
             )
-            var inputs = Inputs(1, data)
-
-            if(ConfigureBenefits.id.contains(2)) {
-                var index = ConfigureBenefits.id.indexOf(2)
-                ConfigureBenefits.array.set(index, inputs)
+        var inputs = Inputs(clientID, data)
+        if (ConfigureBenefits.array.isEmpty()) {
+            EventBus.getDefault().post(ConfigureBenefits(inputs))
+        }
+        else {
+            var exist : Boolean = false
+            for (x in 0 until ConfigureBenefits.array.size) {
+                if (ConfigureBenefits.array[x].clientId == clientID && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 2) {
+                    ConfigureBenefits.array.set(x,inputs)
+                    break
+                }
             }
-            else {
+            if (!exist) {
                 EventBus.getDefault().post(ConfigureBenefits(inputs))
-                ConfigureBenefits.id.add(2)
             }
         }
+    }
     //endregion
 }

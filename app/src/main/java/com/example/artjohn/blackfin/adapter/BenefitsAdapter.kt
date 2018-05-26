@@ -20,11 +20,13 @@ import org.jetbrains.anko.textColor
 
 class BenefitsAdapter(activity: Activity,
                       product : Product.List?,
-                      provider : Provider.Result?) : RecyclerView.Adapter<BenefitsAdapter.BenefitsHolder>() {
+                      provider : Provider.Result?,
+                      clientId : Int) : RecyclerView.Adapter<BenefitsAdapter.BenefitsHolder>() {
     //region - Variables
     var activity = activity
     var product = product
     var provider = provider
+    var clientId : Int = clientId
     var titleArray  = arrayOf (
             "Health Cover",
             "Life Cover",
@@ -67,23 +69,28 @@ class BenefitsAdapter(activity: Activity,
                                   position: Int) {
         holder.icon.setImageResource(imageArray[position])
         holder.title.text = titleArray[position]
+        var exist : Boolean = false
 
-        if(ConfigureBenefits.id.contains(position.plus(1))) {
+        for (x in 0 until ConfigureBenefits.array.size) {
+            if (ConfigureBenefits.array[x].clientId == clientId && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == position.plus(1)) {
                 holder.title.setTextColor(Color.parseColor("#3cbdd0"))
                 holder.icon.setColorFilter(Color.parseColor("#3cbdd0"))
                 holder.wrapper.setBackgroundResource(R.drawable.summary_color_provider)
+                break
+            }
         }
-        else {
+        if (!exist) {
             holder.title.setTextColor(Color.parseColor("#010026"))
             holder.icon.setColorFilter(Color.parseColor("#010026"))
         }
 
+
         holder.itemView.setOnClickListener {
                 if (position == 0) {
-                        HealthDialog().show(activity,product,provider)
+                        HealthDialog().show(activity, product, provider, clientId)
                 }
                 else if(position == 1) {
-                    LifeDialog().show(activity,product,provider)
+                    LifeDialog().show(activity, product, provider, clientId)
                 }
         }
     }

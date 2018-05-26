@@ -1,13 +1,16 @@
 package com.example.artjohn.blackfin.activity
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.ArrayAdapter
 import com.example.artjohn.blackfin.R
+import com.example.artjohn.blackfin.model.ClientInfo
 import com.example.artjohn.blackfin.presenter.AddClientClass
 import com.example.artjohn.blackfin.presenter.AddClientPresenter
 import com.example.artjohn.blackfin.presenter.AddClientView
+import kotlinx.android.synthetic.main.activity_add_client.*
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 
@@ -15,6 +18,13 @@ class AddClientActivity : BaseActivity(), AddClientView {
 
     //region - Variables
     var presenter = AddClientClass(this)
+    var smokerChecker : Boolean = false
+    var age : String = ""
+    var gender : String = ""
+    var occupation : Int = 0
+    var status : String = ""
+    var clientID : String = ""
+    var name : String = ""
     //endregion
 
     //region - Lifecycle methods
@@ -22,11 +32,21 @@ class AddClientActivity : BaseActivity(), AddClientView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_client)
         this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+        this.clientID = getID()
         title = "Add Client"
         bind()
-
-        occupationGuideText.setOnClickListener {
+        addOccupationGuideText.setOnClickListener {
             startActivity<OccupationGuideActivity>()
+        }
+        applyButton.setOnClickListener {
+            setInformation()
+            var intent = Intent(this, BenefitsActivity::class.java)
+            intent.putExtra("clientId",clientID)
+            startActivity(intent)
+            finish()
+        }
+        addSmokerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            smokerChecker = isChecked
         }
     }
     //endregion
@@ -36,27 +56,27 @@ class AddClientActivity : BaseActivity(), AddClientView {
         val ageAdapter : ArrayAdapter<Int> = ArrayAdapter(this,
                 android.R.layout.simple_list_item_1,
                 data)
-        ageSpinner.adapter = ageAdapter
+        addAgeSpinner.adapter = ageAdapter
     }
     override fun setStatusAdapter(data: Array<String>) {
         val statusAdapter : ArrayAdapter<String> = ArrayAdapter(this,
                 android.R.layout.simple_list_item_1,
                 data)
-        statusSpinner.adapter = statusAdapter
+        addStatusSpinner.adapter = statusAdapter
     }
 
     override fun setOccupationAdapter(data: Array<String>) {
         val occupationAdapter : ArrayAdapter<String> = ArrayAdapter(this,
                 android.R.layout.simple_list_item_1,
                 data)
-        occupationSpinner.adapter = occupationAdapter
+        addOccupationSpinner.adapter = occupationAdapter
     }
 
     override fun setGenderAdapter(data: Array<String>) {
         val genderAdapter : ArrayAdapter<String> = ArrayAdapter(this,
                 android.R.layout.simple_list_item_1,
                 data)
-        genderSpinner.adapter = genderAdapter
+        addGenderSpinner.adapter = genderAdapter
     }
     //endregion
 
@@ -64,6 +84,27 @@ class AddClientActivity : BaseActivity(), AddClientView {
     private fun bind() {
         presenter.processAgeAdapter()
         presenter.setAdapters()
+    }
+    private fun IdentifyGender(gender : String) : String {
+        return if(gender == "Male") {
+            "M"
+        }
+        else {
+            "F"
+        }
+    }
+    private fun setInformation() {
+        this.age = addAgeSpinner.selectedItem.toString()
+        this.gender =  IdentifyGender(addGenderSpinner.selectedItem.toString())
+        this.occupation = addOccupationSpinner.selectedItemPosition + 1
+        this.status = addStatusSpinner.selectedItem.toString()
+        this.name = addNameEdit.text.toString()
+        this.presenter.saveClientInfo(name, false, clientID, smokerChecker, age, gender, false, status, occupation)
+    }
+    private fun getID() : String {
+        var id : Int = ClientInfo.array.size
+        id += 1
+        return id.toString()
     }
     //endregion
 }

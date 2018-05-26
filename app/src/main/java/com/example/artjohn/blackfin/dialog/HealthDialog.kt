@@ -26,6 +26,7 @@ class HealthDialog : AppCompatActivity() {
     var DOcheck : Boolean = false
     var productPass : Product.List? = null
     var providerPass : Provider.Result? = null
+    var clientID : Int = 0
     var excessArray = arrayOf (
             "Nil - Excess",
             "250 Excess",
@@ -56,7 +57,9 @@ class HealthDialog : AppCompatActivity() {
     //region - Public methods
     fun show(activity: Activity,
              product : Product.List?,
-             provider : Provider.Result?) {
+             provider : Provider.Result?,
+             clientID : Int) {
+        this.clientID = clientID
         productPass = product
         providerPass = provider
         dialog = Dialog(activity)
@@ -166,15 +169,21 @@ class HealthDialog : AppCompatActivity() {
                 benefitsProduct,
                 "Health Cover"
         )
-        var inputs = Inputs(1,data)
-
-        if(ConfigureBenefits.id.contains(1)) {
-            var index = ConfigureBenefits.id.indexOf(1)
-            ConfigureBenefits.array.set(index,inputs)
+        var inputs = Inputs(clientID,data)
+        if (ConfigureBenefits.array.isEmpty()) {
+            EventBus.getDefault().post(ConfigureBenefits(inputs))
         }
         else {
-            ConfigureBenefits.id.add(1)
-            EventBus.getDefault().post(ConfigureBenefits(inputs))
+            var exist : Boolean = false
+            for (x in 0 until ConfigureBenefits.array.size) {
+                if (ConfigureBenefits.array[x].clientId == clientID && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 1) {
+                    ConfigureBenefits.array.set(x,inputs)
+                    break
+                }
+            }
+            if (!exist) {
+                EventBus.getDefault().post(ConfigureBenefits(inputs))
+            }
         }
     }
     //endregion

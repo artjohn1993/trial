@@ -28,15 +28,16 @@ class BenefitsActivity : BaseActivity(),
         BlackfinApi.create(this)
     }
     val presenter = BenefitsPresenterClass(this, apiServer)
+    var id : Int = 0
     //endregion
 
     //region - Lifecycler methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_benefits)
+        asignId()
         title = "Benefits"
         presenter.processAdapter()
-
         benefitsRecyclerView.layoutManager = GridLayoutManager(this,
                 2)
         benefitsNextButton.setOnClickListener {
@@ -50,7 +51,11 @@ class BenefitsActivity : BaseActivity(),
         EventBus.getDefault().register(this)
     }
 
-    override fun onPause() {
+    public override fun onResume() {
+        super.onResume()
+        asignId()
+    }
+    public override fun onPause() {
         super.onPause()
         compositeDisposable.clear()
 
@@ -98,7 +103,17 @@ class BenefitsActivity : BaseActivity(),
     override fun setAdapter(product : Product.List?, provider : Provider.Result?) {
         benefitsRecyclerView.adapter = BenefitsAdapter(this,
                 product,
-                provider)
+                provider,
+                id)
+    }
+    //endregion
+
+    //region - Private methods
+    private fun asignId() {
+        val extras = intent.getStringExtra("clientId")
+        if (extras != null) {
+            id = extras.toInt()
+        }
     }
     //endregion
 }

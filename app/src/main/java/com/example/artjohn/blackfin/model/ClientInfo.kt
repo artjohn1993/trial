@@ -13,7 +13,20 @@ class ClientInfo {
             ClientInfo.array.add(array)
         }
         else {
-            ClientInfo.array[0] = array
+            var exist : Boolean = false
+            var index : Int = 0
+            for (item in 0 until ClientInfo.array.size) {
+                if (ClientInfo.array[item].clientId == array.clientId) {
+                    exist = true
+                    index = item
+                }
+            }
+            if (exist) {
+                ClientInfo.array[index] = array
+            }
+            else {
+                ClientInfo.array.add(array)
+            }
         }
     }
 }

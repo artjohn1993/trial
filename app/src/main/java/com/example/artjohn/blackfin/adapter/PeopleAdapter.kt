@@ -40,8 +40,9 @@ class PeopleAdapter(var info : ArrayList<ClientsInformation>, var config : Array
 
     override fun onBindViewHolder(holder: PeopleAdapter.PeopleViewHolder,
                                   position: Int) {
+
         setDetails(position)
-        setBenefits()
+        setBenefits(position)
         holder.name.text = info[position].name
         holder.details.text = "$age, $gender, $smoker, $userClass"
         holder.benefits.text = benefits
@@ -78,13 +79,17 @@ class PeopleAdapter(var info : ArrayList<ClientsInformation>, var config : Array
         smoker = smoker(info[position].isSmoker)
         userClass = info[position].employedStatus
     }
-    private fun setBenefits() {
-        for (index in 0 until config.size) {
-            if (index == 0) {
-                benefits = config[index].inputs.benefitsType
-            }
-            else {
-                benefits = benefits + ", " + config[index].inputs.benefitsType
+    private fun setBenefits(position: Int) {
+        benefits = ""
+        var userID : Int = position.plus(1)
+        for (index in 0 until this.config.size ) {
+            if (config[index].clientId == userID) {
+                if (benefits == "") {
+                    benefits = config[index].inputs.benefitsType
+                }
+                else {
+                    benefits += ", " + config[index].inputs.benefitsType
+                }
             }
         }
     }

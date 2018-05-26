@@ -1,5 +1,6 @@
 package com.example.artjohn.blackfin.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import android.widget.ArrayAdapter
@@ -39,7 +40,9 @@ class MainActivity : BaseActivity(),
 
         mainNextButton.setOnClickListener {
             setInformation()
-            startActivity<BenefitsActivity>()
+            var intent = Intent(baseContext,BenefitsActivity::class.java)
+            intent.putExtra("clientId",1)
+            startActivity(intent)
         }
 
         occupationGuideText.setOnClickListener {
