@@ -5,13 +5,17 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.artjohn.blackfin.R
+import com.example.artjohn.blackfin.dialog.PeopleDialog
+import com.example.artjohn.blackfin.event.ConfigureClient
 import com.example.artjohn.blackfin.model.ClientInfo
 import com.example.artjohn.blackfin.model.ClientsInformation
 import com.example.artjohn.blackfin.model.Inputs
 import kotlinx.android.synthetic.main.layout_people.view.*
+import org.greenrobot.eventbus.EventBus
 
 class PeopleAdapter(var info : ArrayList<ClientsInformation>, var config : ArrayList<Inputs>) : RecyclerView.Adapter<PeopleAdapter.PeopleViewHolder>() {
 
@@ -48,6 +52,11 @@ class PeopleAdapter(var info : ArrayList<ClientsInformation>, var config : Array
         holder.benefits.text = setBenefits(position)
         holder.profile.setImageResource(setProfilePic(info[position].age.toInt(), info[position].gender))
 
+        holder.more.setOnClickListener {
+            EventBus.getDefault().post(ConfigureClient(position))
+        }
+
+
     }
     //endregion
 
@@ -57,6 +66,7 @@ class PeopleAdapter(var info : ArrayList<ClientsInformation>, var config : Array
         var name : TextView = itemView.findViewById(R.id.nameText)
         var details : TextView = itemView.findViewById(R.id.detailsText)
         var benefits : TextView = itemView.findViewById(R.id.benefitsValueText)
+        var more : ImageButton = itemView.findViewById(R.id.moreButton)
     }
     //endregion
 

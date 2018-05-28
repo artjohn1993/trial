@@ -41,7 +41,8 @@ class BenefitsActivity : BaseActivity(),
         benefitsRecyclerView.layoutManager = GridLayoutManager(this,
                 2)
         benefitsNextButton.setOnClickListener {
-                startActivity<PeopleActivity>()
+            startActivity<PeopleActivity>()
+            finish()
         }
 
     }

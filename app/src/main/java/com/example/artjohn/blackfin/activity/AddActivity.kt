@@ -16,6 +16,12 @@ class AddActivity : BaseActivity() {
 
         adultImage.setOnClickListener {
             startActivity<AddClientActivity>()
+            finish()
+        }
+
+        childImage.setOnClickListener {
+            startActivity<AddChildActivity>()
+            finish()
         }
 
         cancelButton.setOnClickListener {
