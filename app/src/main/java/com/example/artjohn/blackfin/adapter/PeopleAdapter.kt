@@ -42,10 +42,10 @@ class PeopleAdapter(var info : ArrayList<ClientsInformation>, var config : Array
                                   position: Int) {
 
         setDetails(position)
-        setBenefits(position)
+
         holder.name.text = info[position].name
         holder.details.text = "$age, $gender, $smoker, $userClass"
-        holder.benefits.text = benefits
+        holder.benefits.text = setBenefits(position)
         holder.profile.setImageResource(setProfilePic(info[position].age.toInt(), info[position].gender))
 
     }
@@ -79,19 +79,25 @@ class PeopleAdapter(var info : ArrayList<ClientsInformation>, var config : Array
         smoker = smoker(info[position].isSmoker)
         userClass = info[position].employedStatus
     }
-    private fun setBenefits(position: Int) {
-        benefits = ""
+    private fun setBenefits(position: Int) : String {
+        var data : String = ""
         var userID : Int = position.plus(1)
         for (index in 0 until this.config.size ) {
-            if (config[index].clientId == userID) {
-                if (benefits == "") {
-                    benefits = config[index].inputs.benefitsType
+            var clientID : Int = config[index].clientId
+            if (clientID == userID) {
+                print(config[index].clientId)
+                if (data == "") {
+                    data = config[index].inputs.benefitsType
                 }
                 else {
-                    benefits += ", " + config[index].inputs.benefitsType
+                    data += ", " + config[index].inputs.benefitsType
                 }
             }
+            else {
+                print("wala")
+            }
         }
+        return data
     }
     private fun setProfilePic(age : Int, gender : String) : Int {
         var image : Int = R.drawable.icon_boy

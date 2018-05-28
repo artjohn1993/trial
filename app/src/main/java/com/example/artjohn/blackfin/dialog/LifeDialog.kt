@@ -14,7 +14,7 @@ import org.greenrobot.eventbus.EventBus
 class LifeDialog: AppCompatActivity() {
 
     //region - Variables
-    var clientID : Int = 0
+    var clientID : Int = 1
     var dialog : Dialog? = null
     var closeButton : ImageView? = null
     var loading : Spinner? = null
@@ -62,8 +62,8 @@ class LifeDialog: AppCompatActivity() {
     fun show(activity: Activity,
              product : Product.List?,
              provider : Provider.Result?,
-             clientID : Int) {
-        this.clientID = clientID
+             id : Int) {
+        this.clientID = id
         this.productPass = product
         this.providerPass = provider
         this.dialog = Dialog(activity)
@@ -112,7 +112,8 @@ class LifeDialog: AppCompatActivity() {
                     indexedcheck,
                     FIcheck,
                     loading,
-                    benefitsProduct)
+                    benefitsProduct,
+                    id)
         }
         dialog?.show()
         }
@@ -134,7 +135,8 @@ class LifeDialog: AppCompatActivity() {
                                        indexed : Boolean,
                                        FI : Boolean,
                                        loading : Double,
-                                       benefitsProduct : List<BenefitsProductList>) {
+                                       benefitsProduct : List<BenefitsProductList>,
+                                   id : Int) {
             val dentalOptical : Boolean = false
             val specialistsTest : Boolean = false
             val benefitPeriod : Int = 0
@@ -175,14 +177,14 @@ class LifeDialog: AppCompatActivity() {
                     benefitsProduct,
                     "Life Cover"
             )
-        var inputs = Inputs(clientID, data)
+        var inputs = Inputs(id, data)
         if (ConfigureBenefits.array.isEmpty()) {
             EventBus.getDefault().post(ConfigureBenefits(inputs))
         }
         else {
             var exist : Boolean = false
             for (x in 0 until ConfigureBenefits.array.size) {
-                if (ConfigureBenefits.array[x].clientId == clientID && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 2) {
+                if (ConfigureBenefits.array[x].clientId == id && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 2) {
                     ConfigureBenefits.array.set(x,inputs)
                     break
                 }

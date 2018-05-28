@@ -28,7 +28,7 @@ class BenefitsActivity : BaseActivity(),
         BlackfinApi.create(this)
     }
     val presenter = BenefitsPresenterClass(this, apiServer)
-    var id : Int = 0
+    var id : Int = 1
     //endregion
 
     //region - Lifecycler methods
@@ -104,16 +104,19 @@ class BenefitsActivity : BaseActivity(),
         benefitsRecyclerView.adapter = BenefitsAdapter(this,
                 product,
                 provider,
-                id)
+                asignId())
     }
     //endregion
 
     //region - Private methods
-    private fun asignId() {
+    private fun asignId() : Int {
+        var userID : Int = 1
         val extras = intent.getStringExtra("clientId")
         if (extras != null) {
             id = extras.toInt()
+            userID = extras.toInt()
         }
+        return userID
     }
     //endregion
 }

@@ -26,7 +26,7 @@ class HealthDialog : AppCompatActivity() {
     var DOcheck : Boolean = false
     var productPass : Product.List? = null
     var providerPass : Provider.Result? = null
-    var clientID : Int = 0
+    var clientID : Int = 1
     var excessArray = arrayOf (
             "Nil - Excess",
             "250 Excess",
@@ -58,8 +58,8 @@ class HealthDialog : AppCompatActivity() {
     fun show(activity: Activity,
              product : Product.List?,
              provider : Provider.Result?,
-             clientID : Int) {
-        this.clientID = clientID
+             id : Int) {
+        clientID = id
         productPass = product
         providerPass = provider
         dialog = Dialog(activity)
@@ -106,7 +106,8 @@ class HealthDialog : AppCompatActivity() {
                     GPcheck,
                     DOcheck,
                     calculated,
-                    benefitsProduct)
+                    benefitsProduct,
+                    id)
             dialog?.hide()
         }
         dialog?.show()
@@ -128,7 +129,8 @@ class HealthDialog : AppCompatActivity() {
                                    GP : Boolean,
                                    DO : Boolean,
                                    loading : Double,
-                                   benefitsProduct : List<BenefitsProductList>) {
+                                   benefitsProduct : List<BenefitsProductList>,
+                                   id : Int) {
         var dentalOptical : Boolean = DO
         var specialistsTest : Boolean = ST
         var benefitPeriod : Int = 0
@@ -169,14 +171,14 @@ class HealthDialog : AppCompatActivity() {
                 benefitsProduct,
                 "Health Cover"
         )
-        var inputs = Inputs(clientID,data)
+        var inputs = Inputs(id,data)
         if (ConfigureBenefits.array.isEmpty()) {
             EventBus.getDefault().post(ConfigureBenefits(inputs))
         }
         else {
             var exist : Boolean = false
             for (x in 0 until ConfigureBenefits.array.size) {
-                if (ConfigureBenefits.array[x].clientId == clientID && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 1) {
+                if (ConfigureBenefits.array[x].clientId == id && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 1) {
                     ConfigureBenefits.array.set(x,inputs)
                     break
                 }
