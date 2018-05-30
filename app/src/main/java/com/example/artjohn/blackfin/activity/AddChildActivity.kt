@@ -12,6 +12,7 @@ import com.example.artjohn.blackfin.presenter.AddClientPresenter
 import com.example.artjohn.blackfin.presenter.AddClientView
 import kotlinx.android.synthetic.main.activity_add_child.*
 import kotlinx.android.synthetic.main.activity_add_client.*
+import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 
 class AddChildActivity : BaseActivity(), AddChildView {
@@ -22,6 +23,8 @@ class AddChildActivity : BaseActivity(), AddChildView {
     var gender : String = ""
     var name : String = ""
     var clientID : String = ""
+    var editMode : Boolean = false
+    var userIndex : Int? = null
     //endregion
 
     //region - Lifecycle methods
@@ -33,12 +36,24 @@ class AddChildActivity : BaseActivity(), AddChildView {
         presenter.setAdapter()
 
         applyChildButton.setOnClickListener {
-            setInformation()
-            var intent = Intent(this, BenefitsActivity::class.java)
-            intent.putExtra("clientId",clientID)
-            startActivity(intent)
-            finish()
+            if (editMode) {
+                setInformation()
+                startActivity<PeopleActivity>()
+                finish()
+            }
+            else {
+                setInformation()
+                var intent = Intent(this, BenefitsActivity::class.java)
+                intent.putExtra("clientId",clientID)
+                startActivity(intent)
+                finish()
+            }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkEdit()
     }
     //endregion
 
@@ -59,6 +74,32 @@ class AddChildActivity : BaseActivity(), AddChildView {
     //endregion
 
     //region - Private methods
+    private fun checkEdit() {
+        val extras = intent.extras
+        if (extras != null) {
+            var  id = extras.getInt("edit_user")
+
+            if (id != null) {
+                userIndex = id
+                editMode = true
+                clientID = ClientInfo.array[id].clientId
+                var name = ClientInfo.array[id].name
+                childNameEdit.setText(name)
+
+                var agePosition = ClientInfo.array[id].age.toInt()
+                agePosition -= 1
+                childAgeSpinner.setSelection(agePosition)
+
+                if (ClientInfo.array[id].gender == "M") {
+                    childGenderSpinner.setSelection(0)
+                }
+                else {
+                    childGenderSpinner.setSelection(1)
+                }
+
+            }
+        }
+    }
     private fun IdentifyGender(gender : String) : String {
         return if(gender == "Male") {
             "M"

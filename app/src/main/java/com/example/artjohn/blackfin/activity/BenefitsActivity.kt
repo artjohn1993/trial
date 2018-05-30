@@ -35,6 +35,9 @@ class BenefitsActivity : BaseActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_benefits)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
         asignId()
         title = "Benefits"
         presenter.processAdapter()
@@ -54,7 +57,7 @@ class BenefitsActivity : BaseActivity(),
 
     public override fun onResume() {
         super.onResume()
-        asignId()
+        id = asignId()
     }
     public override fun onPause() {
         super.onPause()
@@ -105,7 +108,7 @@ class BenefitsActivity : BaseActivity(),
         benefitsRecyclerView.adapter = BenefitsAdapter(this,
                 product,
                 provider,
-                asignId())
+                id)
     }
     //endregion
 
@@ -118,6 +121,13 @@ class BenefitsActivity : BaseActivity(),
             userID = extras.toInt()
         }
         return userID
+    }
+    //endregion
+
+    //region - Navigation Delegates
+    override fun onSupportNavigateUp() : Boolean {
+        onBackPressed()
+        return true
     }
     //endregion
 }

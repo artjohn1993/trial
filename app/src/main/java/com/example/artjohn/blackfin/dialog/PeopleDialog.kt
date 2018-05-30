@@ -8,14 +8,18 @@ import android.widget.TextView
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.model.ClientInfo
 import android.content.Context.LAYOUT_INFLATER_SERVICE
+import android.renderscript.ScriptGroup
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toolbar
+import com.example.artjohn.blackfin.event.EditUser
 import com.example.artjohn.blackfin.event.RefreshPeopleEvent
 import com.example.artjohn.blackfin.model.ConfigureBenefits
+import com.example.artjohn.blackfin.model.Inputs
 import org.greenrobot.eventbus.EventBus
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class PeopleDialog {
@@ -43,6 +47,11 @@ class PeopleDialog {
             dialog?.hide()
         }
 
+        edit?.setOnClickListener {
+            EventBus.getDefault().post(EditUser(index))
+            dialog?.hide()
+        }
+
         this.dialog?.show()
     }
 
@@ -59,14 +68,40 @@ class PeopleDialog {
     private fun removeUser(index : Int) {
         var userID : Int = ClientInfo.array[index].clientId.toInt()
         var size : Int = ConfigureBenefits.array.size
+
         ClientInfo.array.removeAt(index)
+        var clientIndex : Int = 0
+        ClientInfo.array.forEach { data ->
+            ClientInfo.array[clientIndex].clientId = (++clientIndex).toString()
+        }
         removeBenefits(userID)
-        EventBus.getDefault().post(RefreshPeopleEvent())
+        EventBus.getDefault().post(RefreshPeopleEvent(index))
     }
     private fun removeBenefits(userID : Int) {
+        var oldID : Int = userID + 1
+        var newID : Int = userID
+        var configIndex : Int = 0
+        var tempArray : ArrayList<Inputs> = ArrayList()
+        ConfigureBenefits.array.forEach { data ->
+            var id = data.clientId
+            if (id != newID) {
+                tempArray.add(ConfigureBenefits.array[configIndex])
+            }
+            ++configIndex
+        }
+        ConfigureBenefits.array = tempArray
 
-        for (x in 0 until ConfigureBenefits.array.size) {
-
+        ClientInfo.array.forEach { data ->
+            configIndex = 0
+            ConfigureBenefits.array.forEach { data ->
+                print("")
+                if (data.clientId == oldID) {
+                    ConfigureBenefits.array[configIndex].clientId = newID
+                }
+                ++configIndex
+            }
+            newID = oldID
+            oldID++
         }
     }
 }

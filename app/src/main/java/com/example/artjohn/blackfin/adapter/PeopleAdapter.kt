@@ -11,13 +11,15 @@ import android.widget.TextView
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.dialog.PeopleDialog
 import com.example.artjohn.blackfin.event.ConfigureClient
+import com.example.artjohn.blackfin.event.EditUserBenefits
 import com.example.artjohn.blackfin.model.ClientInfo
 import com.example.artjohn.blackfin.model.ClientsInformation
+import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Inputs
 import kotlinx.android.synthetic.main.layout_people.view.*
 import org.greenrobot.eventbus.EventBus
 
-class PeopleAdapter(var info : ArrayList<ClientsInformation>, var config : ArrayList<Inputs>) : RecyclerView.Adapter<PeopleAdapter.PeopleViewHolder>() {
+class PeopleAdapter() : RecyclerView.Adapter<PeopleAdapter.PeopleViewHolder>() {
 
     //region - Variables
     var age : Int  = 0
@@ -39,7 +41,7 @@ class PeopleAdapter(var info : ArrayList<ClientsInformation>, var config : Array
     }
 
     override fun getItemCount(): Int {
-        return info.size
+        return ClientInfo.array.size
     }
 
     override fun onBindViewHolder(holder: PeopleAdapter.PeopleViewHolder,
@@ -47,15 +49,18 @@ class PeopleAdapter(var info : ArrayList<ClientsInformation>, var config : Array
 
         setDetails(position)
 
-        holder.name.text = info[position].name
+        holder.name.text = ClientInfo.array[position].name
         holder.details.text = "$age, $gender, $smoker, $userClass"
         holder.benefits.text = setBenefits(position)
-        holder.profile.setImageResource(setProfilePic(info[position].age.toInt(), info[position].gender))
+        holder.profile.setImageResource(setProfilePic(ClientInfo.array[position].age.toInt(), ClientInfo.array[position].gender))
 
         holder.more.setOnClickListener {
             EventBus.getDefault().post(ConfigureClient(position))
         }
 
+        holder.container.setOnClickListener {
+            EventBus.getDefault().post(EditUserBenefits(position.plus(1)))
+        }
 
     }
     //endregion
@@ -67,6 +72,7 @@ class PeopleAdapter(var info : ArrayList<ClientsInformation>, var config : Array
         var details : TextView = itemView.findViewById(R.id.detailsText)
         var benefits : TextView = itemView.findViewById(R.id.benefitsValueText)
         var more : ImageButton = itemView.findViewById(R.id.moreButton)
+        var container : android.support.v7.widget.CardView = itemView.findViewById(R.id.peopleContainer)
     }
     //endregion
 
@@ -84,27 +90,23 @@ class PeopleAdapter(var info : ArrayList<ClientsInformation>, var config : Array
         return smoker
     }
     private fun setDetails(position : Int) {
-        age = info[position].age.toInt()
-        gender = info[position].gender
-        smoker = smoker(info[position].isSmoker)
-        userClass = info[position].employedStatus
+        age = ClientInfo.array[position].age.toInt()
+        gender = ClientInfo.array[position].gender
+        smoker = smoker(ClientInfo.array[position].isSmoker)
+        userClass = ClientInfo.array[position].employedStatus
     }
     private fun setBenefits(position: Int) : String {
         var data : String = ""
         var userID : Int = position.plus(1)
-        for (index in 0 until this.config.size ) {
-            var clientID : Int = config[index].clientId
+        for (index in 0 until ConfigureBenefits.array.size ) {
+            var clientID : Int = ConfigureBenefits.array[index].clientId
             if (clientID == userID) {
-                print(config[index].clientId)
                 if (data == "") {
-                    data = config[index].inputs.benefitsType
+                    data = ConfigureBenefits.array[index].inputs.benefitsType
                 }
                 else {
-                    data += ", " + config[index].inputs.benefitsType
+                    data += ", " + ConfigureBenefits.array[index].inputs.benefitsType
                 }
-            }
-            else {
-                print("wala")
             }
         }
         return data

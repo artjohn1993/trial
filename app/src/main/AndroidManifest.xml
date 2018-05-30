@@ -22,13 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.OccupationGuideActivity" />
-        <activity
-            android:name=".activity.BenefitsActivity"
-            android:launchMode="singleTop">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
-        </activity>
+        <activity android:name=".activity.BenefitsActivity"/>
         <activity
             android:name=".activity.SummaryActivity"
             android:launchMode="singleTop">

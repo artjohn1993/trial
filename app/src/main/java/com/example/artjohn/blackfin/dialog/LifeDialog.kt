@@ -185,7 +185,8 @@ class LifeDialog: AppCompatActivity() {
             var exist : Boolean = false
             for (x in 0 until ConfigureBenefits.array.size) {
                 if (ConfigureBenefits.array[x].clientId == id && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 2) {
-                    ConfigureBenefits.array.set(x,inputs)
+                    ConfigureBenefits.array[x] = inputs
+                    exist = true
                     break
                 }
             }

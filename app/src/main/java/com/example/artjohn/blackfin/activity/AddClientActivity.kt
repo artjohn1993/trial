@@ -25,6 +25,9 @@ class AddClientActivity : BaseActivity(), AddClientView {
     var status : String = ""
     var clientID : String = ""
     var name : String = ""
+    var editMode : Boolean = false
+
+
     //endregion
 
     //region - Lifecycle methods
@@ -39,15 +42,28 @@ class AddClientActivity : BaseActivity(), AddClientView {
             startActivity<OccupationGuideActivity>()
         }
         applyButton.setOnClickListener {
-            setInformation()
-            var intent = Intent(this, BenefitsActivity::class.java)
-            intent.putExtra("clientId",clientID)
-            startActivity(intent)
-            finish()
+
+            if (editMode) {
+                setInformation()
+                startActivity<PeopleActivity>()
+                finish()
+            }
+            else {
+                setInformation()
+                var intent = Intent(this, BenefitsActivity::class.java)
+                intent.putExtra("clientId",clientID)
+                startActivity(intent)
+                finish()
+            }
         }
         addSmokerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             smokerChecker = isChecked
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkEdit()
     }
     //endregion
 
@@ -62,6 +78,7 @@ class AddClientActivity : BaseActivity(), AddClientView {
         val statusAdapter : ArrayAdapter<String> = ArrayAdapter(this,
                 android.R.layout.simple_list_item_1,
                 data)
+
         addStatusSpinner.adapter = statusAdapter
     }
 
@@ -105,6 +122,32 @@ class AddClientActivity : BaseActivity(), AddClientView {
         var id : Int = ClientInfo.array.size
         id += 1
         return id.toString()
+    }
+    private fun checkEdit() {
+        var extra = intent.extras
+        if (extra != null) {
+            var id = extra.getInt("edit_user")
+            addNameEdit.setText(ClientInfo.array[id].name)
+            addAgeSpinner.setSelection(ClientInfo.array[id].age.toInt() - 18)
+            if (ClientInfo.array[id].gender == "M") {
+                addGenderSpinner.setSelection(0)
+            }
+            else {
+                addGenderSpinner.setSelection(1)
+            }
+            addSmokerSwitch.isChecked = ClientInfo.array[id].isSmoker
+            addOccupationSpinner.setSelection(ClientInfo.array[id].occupationId - 1)
+            var status = arrayOf(
+                    "Employed",
+                    "Self-Employed",
+                    "Self-Employed < 3 years",
+                    "Non-Earner")
+            addStatusSpinner.setSelection(status.indexOf(ClientInfo.array[id].employedStatus))
+
+            clientID = ClientInfo.array[id].clientId
+            editMode = true
+
+        }
     }
     //endregion
 }

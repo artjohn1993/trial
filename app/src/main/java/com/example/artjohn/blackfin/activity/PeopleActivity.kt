@@ -1,5 +1,6 @@
 package com.example.artjohn.blackfin.activity
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -7,9 +8,7 @@ import android.widget.LinearLayout
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.PeopleAdapter
 import com.example.artjohn.blackfin.dialog.PeopleDialog
-import com.example.artjohn.blackfin.event.ConfigureClient
-import com.example.artjohn.blackfin.event.PremiumRange
-import com.example.artjohn.blackfin.event.RefreshPeopleEvent
+import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.ClientInfo
 import com.example.artjohn.blackfin.model.ConfigureBenefits
 import kotlinx.android.synthetic.main.activity_login.*
@@ -30,6 +29,9 @@ class PeopleActivity : BaseActivity() {
         setRecyclerView()
         addUser.setOnClickListener {
             startActivity<AddActivity>()
+        }
+        calculateButton.setOnClickListener {
+            startActivity<SummaryActivity>()
         }
     }
 
@@ -53,16 +55,40 @@ class PeopleActivity : BaseActivity() {
     fun onConfigureClient(event : ConfigureClient) {
        PeopleDialog().show(this, event.index)
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onConfigureClient(event : RefreshPeopleEvent) {
+    fun onRefreshPeople(event : RefreshPeopleEvent) {
         peopleRecyclerView.adapter.notifyDataSetChanged()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEditUser(event : EditUser) {
+
+        if (ClientInfo.array[event.index].isChild) {
+            var intent = Intent(this, AddChildActivity::class.java)
+            intent.putExtra("edit_user", event.index)
+            startActivity(intent)
+        }
+        else {
+            var intent = Intent(this , AddClientActivity::class.java)
+            intent.putExtra("edit_user", event.index)
+            startActivity(intent)
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEditUserBenefits(event : EditUserBenefits) {
+        var intent = Intent(baseContext, BenefitsActivity::class.java)
+        var eventID : String = event.id.toString()
+        intent.putExtra("clientId", eventID)
+        startActivity(intent)
     }
     //endregion
 
     //region - Private methods
     private fun setRecyclerView() {
         peopleRecyclerView.layoutManager = LinearLayoutManager(this,LinearLayout.VERTICAL,false)
-        peopleRecyclerView.adapter = PeopleAdapter(ClientInfo.array, ConfigureBenefits.array)
+        peopleRecyclerView.adapter = PeopleAdapter()
     }
     //endregion
 }
