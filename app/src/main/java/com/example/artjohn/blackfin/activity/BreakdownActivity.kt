@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.LinearLayout
 import com.example.artjohn.blackfin.R
+import com.example.artjohn.blackfin.adapter.BreakdownAdapter
 import com.example.artjohn.blackfin.adapter.PremiumAdapter
 
 import com.example.artjohn.blackfin.model.QouteRequest
@@ -42,7 +43,6 @@ class BreakdownActivity : AppCompatActivity(),
         id   = qoute.data.data.result.providers[index].providerId
 
         this.bind()
-        this.setRecyclerLayout()
     }
 
     public override fun onStart() {
@@ -59,16 +59,16 @@ class BreakdownActivity : AppCompatActivity(),
     //region - Private method
     private fun bind() {
         presenter.processLogo(id)
-        presenter.processProfile()
         presenter.processPT(qoute,index)
-        presenter.processDetails()
+        setRecyclerLayout()
     }
     private fun setRecyclerLayout() {
-        producPremiumRecyclerView.layoutManager = LinearLayoutManager(this,
+        breakMainRecyclerView.layoutManager = LinearLayoutManager(this,
                 LinearLayout.VERTICAL,
                 false)
-        producPremiumRecyclerView.adapter = PremiumAdapter(qoute,
-                index)
+        breakMainRecyclerView.adapter = BreakdownAdapter(qoute,
+                index,
+                baseContext)
     }
     //endregion
 
@@ -81,17 +81,8 @@ class BreakdownActivity : AppCompatActivity(),
     //endregion
 
     //region - Presenter Delegates
-    override fun setProfile(profileID : Int) {
-        profile.setImageResource(profileID)
-    }
-
     override fun setLogo(image :  Int) {
         logo.setImageResource(image)
-    }
-
-    override fun setDetails(name : String, age : Int, gender : String, smoker : String, clientClass : String, status : String) {
-        nameText.text = name
-        detailsText.text = "$age, $gender, $smoker, $clientClass, $status"
     }
 
     @SuppressLint("SetTextI18n")

@@ -33,53 +33,8 @@ class BreakDownPresenterClass(val view : BreakDownView) : BreakDownPresenter {
     //endregion
 
     //region - BreakDownPresenter Delegate
-    override fun processProfile() {
-        var gender = ClientInfo.array[0].gender
-        var age = ClientInfo.array[0].age.toInt()
-
-        if(gender.equals("M")) {
-            if (age>18) {
-                view.setProfile(R.drawable.icon_male)
-            }
-            else {
-                view.setProfile(R.drawable.icon_boy)
-            }
-        }
-        else {
-            if (age>18) {
-                view.setProfile(R.drawable.icon_female)
-            }
-            else {
-                view.setProfile(R.drawable.icon_girl)
-            }
-        }
-    }
-
     override fun processLogo(id : Int) {
         view.setLogo(imageArray[id-1])
-    }
-
-    override fun processDetails() {
-        this.name = ClientInfo.array[0].name
-        this.age = ClientInfo.array[0].age.toInt()
-        this.status = arrayOf("Class 1","Class 2","Class 3","Class 4","Class 5")
-        this.clientClass = this.status!![ClientInfo.array[0].occupationId - 1]
-        this.currentStatus = ClientInfo.array[0].employedStatus
-
-        if(ClientInfo.array[0].isChild){
-            this.smoker = "Smoker"
-        }
-        else {
-            this.smoker = "Not Smoker"
-        }
-        if(ClientInfo.array[0].gender == "M"){
-            this.gender = "Male"
-        }
-        else{
-            this.gender = "Female"
-        }
-
-        view.setDetails(name,age,this.gender,this.smoker,clientClass,currentStatus)
     }
 
     override fun processPremiumPrice(price: Double) {
@@ -95,23 +50,15 @@ class BreakDownPresenterClass(val view : BreakDownView) : BreakDownPresenter {
 }
 
 interface BreakDownView {
-    fun setProfile(profile : Int)
+
     fun setLogo(image :  Int)
-    fun setDetails(
-            name : String,
-            age : Int,
-            gender : String,
-            smoker : String,
-            clientClass : String,
-            status : String)
     fun setPremiumPrice(price : String)
     fun setPT(fee : Double)
 }
 
 interface BreakDownPresenter {
-    fun processProfile()
+
     fun processLogo(id : Int)
-    fun processDetails()
     fun processPremiumPrice(price : Double)
     fun processPT(
             data : QouteRequest.Result,
