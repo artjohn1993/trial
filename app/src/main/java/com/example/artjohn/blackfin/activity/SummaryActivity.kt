@@ -5,17 +5,21 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.SummaryAdapter
 import com.example.artjohn.blackfin.adapter.SummaryAdapterTwo
 import com.example.artjohn.blackfin.api.BlackfinApi
+import com.example.artjohn.blackfin.dialog.LoadingDialog
 import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.*
 import com.example.artjohn.blackfin.presenter.SummaryPresenter
 import com.example.artjohn.blackfin.presenter.SummaryPresenterClass
 import com.example.artjohn.blackfin.presenter.SummaryView
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_summary.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -26,6 +30,7 @@ class SummaryActivity : BaseActivity(),
         SummaryView {
 
     // region - Variables
+    var loading = LoadingDialog(this)
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     private val apiServer by lazy {
         BlackfinApi.create(this)
@@ -40,6 +45,18 @@ class SummaryActivity : BaseActivity(),
         setContentView(R.layout.activity_summary)
         title = "Result"
         this.initRecyclerViews()
+        presenter.processFrequency()
+
+        frequencySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                loading.show()
+                presenter.processChangeFrequency(position)
+            }
+        }
     }
 
     public override fun onStart() {
@@ -69,7 +86,7 @@ class SummaryActivity : BaseActivity(),
 
     private fun checkConfigureBenefits() {
         if(ConfigureBenefits.array.isEmpty()) {
-            summaryProgressBar.visibility = View.GONE
+            loading.hide()
             Handler().postDelayed({
                 showWarning()
             },2000)
@@ -91,7 +108,7 @@ class SummaryActivity : BaseActivity(),
     }
 
     private fun showVisibility() {
-        summaryProgressBar.visibility = View.GONE
+        loading.hide()
         summarySaveButton.visibility = View.VISIBLE
         monthlyWrapper.visibility =  View.VISIBLE
     }
@@ -144,7 +161,7 @@ class SummaryActivity : BaseActivity(),
             summaryNotAvailableRecylerView.adapter.itemCount
 
         }catch (e : Exception) {
-            summaryProgressBar.visibility = View.VISIBLE
+            loading.show()
             checkConfigureBenefits()
         }
     }
@@ -160,7 +177,18 @@ class SummaryActivity : BaseActivity(),
 
     override fun requestFailed()
     {
-        summaryProgressBar.visibility = View.GONE
+        loading.hide()
+    }
+
+    override fun setFrequencySpinner(data: Array<String>) {
+        val frequencyAdapter : ArrayAdapter<String> = ArrayAdapter(this,
+                android.R.layout.simple_list_item_1,
+                data)
+        frequencySpinner.adapter = frequencyAdapter
+        frequencySpinner.setSelection(1)
+    }
+    override fun updatedFrequency() {
+        checkConfigureBenefits()
     }
     // endregion
 }

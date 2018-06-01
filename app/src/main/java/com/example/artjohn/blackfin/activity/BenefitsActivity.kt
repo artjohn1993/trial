@@ -6,6 +6,7 @@ import android.view.View
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.BenefitsAdapter
 import com.example.artjohn.blackfin.api.BlackfinApi
+import com.example.artjohn.blackfin.dialog.LoadingDialog
 import com.example.artjohn.blackfin.event.BenefitsProgressBar
 import com.example.artjohn.blackfin.event.CheckRecyclerView
 import com.example.artjohn.blackfin.model.*
@@ -23,6 +24,7 @@ class BenefitsActivity : BaseActivity(),
         BenefitsView {
 
     //region - Variables
+    var loading = LoadingDialog(this)
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     private val apiServer by lazy {
         BlackfinApi.create(this)
@@ -80,10 +82,10 @@ class BenefitsActivity : BaseActivity(),
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onBenefitsProgressbar(event : BenefitsProgressBar) {
         if(event.visible) {
-            benefitsProgressbar.visibility = View.VISIBLE
+            loading.show()
         }
         else {
-            benefitsProgressbar.visibility = View.GONE
+            loading.hide()
         }
 
         if(event.buttonVisible) {
@@ -97,7 +99,7 @@ class BenefitsActivity : BaseActivity(),
         try {
             benefitsRecyclerView.adapter.itemCount
         }catch (e : Exception) {
-            benefitsProgressbar.visibility = View.VISIBLE
+            loading.show()
             presenter.processAdapter()
         }
     }
