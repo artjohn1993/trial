@@ -10,8 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.artjohn.blackfin.R
-import com.example.artjohn.blackfin.dialog.HealthDialog
-import com.example.artjohn.blackfin.dialog.LifeDialog
+import com.example.artjohn.blackfin.dialog.*
 import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
@@ -87,12 +86,36 @@ class BenefitsAdapter(activity: Activity,
 
 
         holder.itemView.setOnClickListener {
-                if (position == 0) {
-                        HealthDialog().show(activity, product, provider, clientId)
+
+            when(position) {
+                0 -> {
+                    HealthDialog().show(activity, product, provider, clientId)
                 }
-                else if(position == 1) {
+                1 -> {
                     LifeDialog().show(activity, product, provider, clientId)
                 }
+                2 -> {
+                    FamilyProtectionDialog().show(activity, product, provider, clientId)
+                }
+                3 -> {
+                    TraumaDialog().show(activity, product, provider, clientId)
+                }
+                4 -> {
+                    PermanentDisabilityDialog().show(activity, product, provider, clientId)
+                }
+                5 -> {
+                    IncomeProtectionDialog().show(activity, product, provider, clientId)
+                }
+                6 -> {
+                    MortgageRepaymentDialog().show(activity, product, provider, clientId)
+                }
+                7 -> {
+                    RedundancyDialog().show(activity, product, provider, clientId)
+                }
+                8 -> {
+                    WaiverPremiumDialog().show(activity, product, provider, clientId)
+                }
+            }
         }
     }
     //endregion

@@ -168,15 +168,13 @@ class SummaryActivity : BaseActivity(),
     // endregion
 
     // region - Presenter Delegates
-    override fun setAdapter(data: QouteRequest.Result, dataSorted: QouteRequest.Result)
-    {
+    override fun setAdapter(data: QouteRequest.Result, dataSorted: QouteRequest.Result) {
         showVisibility()
         summaryRecyclerView.adapter = SummaryAdapter(data)
         summaryNotAvailableRecylerView.adapter = SummaryAdapterTwo(dataSorted)
     }
 
-    override fun requestFailed()
-    {
+    override fun requestFailed() {
         loading.hide()
     }
 

@@ -7,6 +7,9 @@ import com.example.artjohn.blackfin.services.ApiServices
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import com.squareup.moshi.Moshi
+
+
 
 class SummaryPresenterClass(val view : SummaryView,
                             val server : ApiServices) : SummaryPresenter {
@@ -23,6 +26,12 @@ class SummaryPresenterClass(val view : SummaryView,
 
     //region - Presenter Delegate
     override fun processRecyclerAdapter(data : Client) {
+
+        val moshi = Moshi.Builder().build()
+        val jsonAdapter = moshi.adapter<Client>(Client::class.java)
+        val json = jsonAdapter.toJson(data)
+
+        println(json)
         compositeDisposable.add(
                 server.requestQoutes(data)
                         .observeOn(AndroidSchedulers.mainThread())
