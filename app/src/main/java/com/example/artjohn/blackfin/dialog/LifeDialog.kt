@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.*
 import com.example.artjohn.blackfin.R
+import com.example.artjohn.blackfin.array.PublicArray
+import com.example.artjohn.blackfin.event.ConfiguredBenefits
 import com.example.artjohn.blackfin.event.LoadingPercentage
 import com.example.artjohn.blackfin.event.ProcessProduct
 import com.example.artjohn.blackfin.model.*
@@ -31,31 +33,6 @@ class LifeDialog: AppCompatActivity() {
     var calAdapter : ArrayAdapter<String>? = null
     var cal : Int = 0
     var amountVal : Double = 0.0
-    var loadingArray = arrayOf (
-            "0%",
-            "50%",
-            "75%",
-            "100%",
-            "125%",
-            "150%",
-            "175%",
-            "200%",
-            "250%",
-            "300%",
-            "400%",
-            "500%"
-        )
-    var calArray = arrayOf (
-            "Yearly Renewable",
-            "Level (10 Years)",
-            "Level (15 Years)",
-            "Level (To Age 65)",
-            "Level (To Age 70)",
-            "Level (To Age 80)",
-            "Level (To Age 85)",
-            "Level (To Age 90)",
-            "Level (To Age 100)"
-        )
     //endregion
 
     //region - Public methods
@@ -74,11 +51,11 @@ class LifeDialog: AppCompatActivity() {
         dialogViewId(dialog)
         this.loadingAdapter = ArrayAdapter(activity,
                 android.R.layout.simple_list_item_1,
-                loadingArray)
+                PublicArray.loading)
         this.loading?.adapter = loadingAdapter
         this.calAdapter = ArrayAdapter(activity,
                 android.R.layout.simple_list_item_1,
-                calArray)
+                PublicArray.calPeriod)
         this.calcuSpinner?.adapter = calAdapter
 
         closeButton?.setOnClickListener {
@@ -107,13 +84,28 @@ class LifeDialog: AppCompatActivity() {
             var benefitsProduct = ProcessProduct().getListProduct(productPass ,
                     providerPass,
                     2)
-            configuredBenefits(amountVal,
+            ConfiguredBenefits(false,
+                    false,
+                    0,
                     cal,
-                    indexedcheck,
+                    false,
+                    false,
+                    12,
+                    false,
+                    false,
+                    "Term",
+                    "AnyOccupation",
+                    0,
                     FIcheck,
-                    loading,
+                    false,
+                    0,
+                    amountVal,
+                    calculated,
+                    false,
                     benefitsProduct,
-                    id)
+            "Life Cover",
+                    id,
+            2)
         }
         dialog?.show()
         }
@@ -128,72 +120,6 @@ class LifeDialog: AppCompatActivity() {
         amount = dialog?.findViewById<EditText>(R.id.coverAmountEdit)
         indexed = dialog?.findViewById<Switch>(R.id.indexedSwitch)
         FI = dialog?.findViewById<Switch>(R.id.FISwitch)
-    }
-
-    private fun configuredBenefits(amount : Double,
-                                       cal : Int,
-                                       indexed : Boolean,
-                                       FI : Boolean,
-                                       loading : Double,
-                                       benefitsProduct : List<BenefitsProductList>,
-                                   id : Int) {
-            val dentalOptical : Boolean = false
-            val specialistsTest : Boolean = false
-            val benefitPeriod : Int = 0
-            val calcPeriod : Int = cal
-            val isAccelerated : Boolean = false
-            val gpPrescriptions : Boolean = false
-            val frequency : Int = 12
-            val isLifeBuyback : Boolean = false
-            val isTpdAddon : Boolean = false
-            val benefitPeriodType : String = "Term"
-            val occupationType : String = "AnyOccupation"
-            val wopWeekWaitPeriod : Int = 0
-            val isFutureInsurability : Boolean = FI
-            val booster : Boolean = false
-            val excess : Int = 0
-            val coverAmount : Double = amount
-            val loading : Double = loading
-            val isTraumaBuyback : Boolean = false
-            val benefitsProduct = benefitsProduct
-            val data = Benefits(dentalOptical,
-                    specialistsTest,
-                    benefitPeriod,
-                    calcPeriod,
-                    isAccelerated,
-                    gpPrescriptions,
-                    frequency,
-                    isLifeBuyback,
-                    isTpdAddon,
-                    benefitPeriodType,
-                    occupationType,
-                    wopWeekWaitPeriod,
-                    isFutureInsurability,
-                    booster,
-                    excess,
-                    coverAmount,
-                    loading,
-                    isTraumaBuyback,
-                    benefitsProduct,
-                    "Life Cover"
-            )
-        var inputs = Inputs(id, data)
-        if (ConfigureBenefits.array.isEmpty()) {
-            EventBus.getDefault().post(ConfigureBenefits(inputs))
-        }
-        else {
-            var exist : Boolean = false
-            for (x in 0 until ConfigureBenefits.array.size) {
-                if (ConfigureBenefits.array[x].clientId == id && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 2) {
-                    ConfigureBenefits.array[x] = inputs
-                    exist = true
-                    break
-                }
-            }
-            if (!exist) {
-                EventBus.getDefault().post(ConfigureBenefits(inputs))
-            }
-        }
     }
     //endregion
 }

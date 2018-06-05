@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.*
 import com.example.artjohn.blackfin.R
+import com.example.artjohn.blackfin.array.PublicArray
+import com.example.artjohn.blackfin.event.ConfiguredBenefits
 import com.example.artjohn.blackfin.event.LoadingPercentage
 import com.example.artjohn.blackfin.event.ProcessProduct
 import com.example.artjohn.blackfin.model.*
@@ -27,31 +29,7 @@ class HealthDialog : AppCompatActivity() {
     var productPass : Product.List? = null
     var providerPass : Provider.Result? = null
     var clientID : Int = 1
-    var excessArray = arrayOf (
-            "Nil - Excess",
-            "250 Excess",
-            "500 Excess",
-            "1000 Excess",
-            "2000 Excess",
-            "3000 Excess",
-            "4000 Excess",
-            "6000 Excess",
-            "10000 Excess"
-        )
-    var loadingArray = arrayOf (
-            "0%",
-            "50%",
-            "75%",
-            "100%",
-            "125%",
-            "150%",
-            "175%",
-            "200%",
-            "250%",
-            "300%",
-            "400%",
-            "500%"
-        )
+
         //endregion
 
     //region - Public methods
@@ -71,13 +49,14 @@ class HealthDialog : AppCompatActivity() {
 
         val statusAdapter : ArrayAdapter<String> = ArrayAdapter(activity,
                 android.R.layout.simple_list_item_1,
-                excessArray)
+                PublicArray.excess)
         excess?.adapter = statusAdapter
 
         val loadingAdapter : ArrayAdapter<String> = ArrayAdapter(activity,
                 android.R.layout.simple_list_item_1,
-                loadingArray)
+                PublicArray.loading)
         loading?.adapter = loadingAdapter
+
         closeButton?.setOnClickListener {
             dialog?.hide()
         }
@@ -101,13 +80,29 @@ class HealthDialog : AppCompatActivity() {
             var benefitsProduct = ProcessProduct().getListProduct(productPass ,
                     providerPass,
                     1)
-            configuredBenefits(excessVal,
+
+            ConfiguredBenefits(DOcheck,
                     STcheck,
+                    0,
+                    1,
+                    false,
                     GPcheck,
-                    DOcheck,
+                    12,
+                    false,
+                    false,
+                    "Term",
+                    "AnyOccupation",
+                    0,
+                    false,
+                    false,
+                    excessVal,
+                    0.0,
                     calculated,
+                    false,
                     benefitsProduct,
-                    id)
+                    "Health Cover",
+                    id,
+                    1)
             dialog?.hide()
         }
         dialog?.show()
@@ -123,71 +118,6 @@ class HealthDialog : AppCompatActivity() {
         ST = dialog?.findViewById<Switch>(R.id.specialistSwitch)
         GP = dialog?.findViewById<Switch>(R.id.prescriptionSwitch)
         DO = dialog?.findViewById<Switch>(R.id.DOSwitch)
-    }
-    private fun configuredBenefits(excess : Int,
-                                   ST : Boolean,
-                                   GP : Boolean,
-                                   DO : Boolean,
-                                   loading : Double,
-                                   benefitsProduct : List<BenefitsProductList>,
-                                   id : Int) {
-        var dentalOptical : Boolean = DO
-        var specialistsTest : Boolean = ST
-        var benefitPeriod : Int = 0
-        var calcPeriod : Int = 1
-        var isAccelerated : Boolean = false
-        var gpPrescriptions : Boolean = GP
-        var frequency : Int = 12
-        var isLifeBuyback : Boolean = false
-        var isTpdAddon : Boolean = false
-        var benefitPeriodType : String = "Term"
-        var occupationType : String = "AnyOccupation"
-        var wopWeekWaitPeriod : Int = 0
-        var isFutureInsurability : Boolean = false
-        var booster : Boolean = false
-        var excess : Int = excess
-        var coverAmount : Double = 0.0
-        var loading : Double = loading
-        var isTraumaBuyback : Boolean = false
-        var benefitsProduct = benefitsProduct
-        val data = Benefits(dentalOptical,
-                specialistsTest,
-                benefitPeriod,
-                calcPeriod,
-                isAccelerated,
-                gpPrescriptions,
-                frequency,
-                isLifeBuyback,
-                isTpdAddon,
-                benefitPeriodType,
-                occupationType,
-                wopWeekWaitPeriod,
-                isFutureInsurability,
-                booster,
-                excess,
-                coverAmount,
-                loading,
-                isTraumaBuyback,
-                benefitsProduct,
-                "Health Cover"
-        )
-        var inputs = Inputs(id,data)
-        if (ConfigureBenefits.array.isEmpty()) {
-            EventBus.getDefault().post(ConfigureBenefits(inputs))
-        }
-        else {
-            var exist : Boolean = false
-            for (x in 0 until ConfigureBenefits.array.size) {
-                if (ConfigureBenefits.array[x].clientId == id && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 1) {
-                    ConfigureBenefits.array[x] = inputs
-                    exist = true
-                    break
-                }
-            }
-            if (!exist) {
-                EventBus.getDefault().post(ConfigureBenefits(inputs))
-            }
-        }
     }
     //endregion
 }
