@@ -24,7 +24,7 @@ class TraumaDialog {
     var applyButton : Button? = null
 
     var coverVal : Double = 0.0
-    var policyTypeVal : Int = 0
+    var occupationType : String = ""
     var calPeriodVal : Int = 0
     var indexVal : Boolean = false
     var traumaBBVal : Boolean = false
@@ -57,7 +57,7 @@ class TraumaDialog {
             } catch (e : Exception) {
                 0.0
             }
-            policyTypeVal = type?.selectedItem.toString().substringAfter("percent").toInt()
+            occupationType = type?.selectedItem.toString().toLowerCase()
             calPeriodVal = CalculatedPeriod.convert(calPeriod?.selectedItem.toString())
             var benefitsProduct = ProcessProduct().getListProduct(product ,
                     provider,
@@ -72,7 +72,7 @@ class TraumaDialog {
                     false,
                     tpdVal,
                     "Term",
-                    "AnyOccupation",
+                    occupationType,
                     0,
                     false,
                     false,
@@ -108,7 +108,7 @@ class TraumaDialog {
     private fun setAdapter(activity: Activity) {
         val typeAdapter : ArrayAdapter<String> = ArrayAdapter(activity,
                 android.R.layout.simple_list_item_1,
-                PublicArray.policyType)
+                PublicArray.occupationType)
         val calPerioddapter : ArrayAdapter<String> = ArrayAdapter(activity,
                 android.R.layout.simple_list_item_1,
                 PublicArray.calPeriod)

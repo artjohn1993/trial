@@ -38,13 +38,37 @@ class PublicArray {
                 "6000 Excess",
                 "10000 Excess"
         )
-        var benefitPeriod = arrayOf(
+        var benefitTerm = arrayOf(
                 "Fixed Term",
                 "To Age"
         )
         var policyType = arrayOf(
                 "percent55",
                 "percent75"
+        )
+        var benefitType = arrayOf(
+                "Accelerated",
+                "Standalone"
+        )
+        var occupationType = arrayOf(
+                "Own Occupation",
+                "Any Occupation"
+        )
+        var waitPeriod = arrayOf(
+                "week 4",
+                "week 8",
+                "week 13",
+                "week 26",
+                "week 52",
+                "week 104"
+        )
+        var benefitPeriod = arrayOf(
+                "--",
+                "year 1",
+                "year 2",
+                "year 5",
+                "age 65",
+                "age 70"
         )
     }
 }
