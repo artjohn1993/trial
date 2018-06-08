@@ -7,9 +7,7 @@ import android.view.WindowManager
 import android.widget.*
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.array.PublicArray
-import com.example.artjohn.blackfin.event.ConfiguredBenefits
-import com.example.artjohn.blackfin.event.LoadingPercentage
-import com.example.artjohn.blackfin.event.ProcessProduct
+import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.*
 import org.greenrobot.eventbus.EventBus
 
@@ -43,20 +41,10 @@ class LifeDialog: AppCompatActivity() {
         this.clientID = id
         this.productPass = product
         this.providerPass = provider
-        this.dialog = Dialog(activity)
-        this.dialog?.setContentView(R.layout.dialog_life_layout)
-        this.dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT)
-        this.dialog?.window?.setBackgroundDrawableResource(R.color.primaryTransparency)
+        setDialog(activity)
         dialogViewId(dialog)
-        this.loadingAdapter = ArrayAdapter(activity,
-                android.R.layout.simple_list_item_1,
-                PublicArray.loading)
-        this.loading?.adapter = loadingAdapter
-        this.calAdapter = ArrayAdapter(activity,
-                android.R.layout.simple_list_item_1,
-                PublicArray.calPeriod)
-        this.calcuSpinner?.adapter = calAdapter
+        setAdapter(activity)
+        setConfiguredBenefits(id)
 
         closeButton?.setOnClickListener {
             dialog?.hide()
@@ -69,21 +57,14 @@ class LifeDialog: AppCompatActivity() {
         }
         apply?.setOnClickListener {
             dialog?.hide()
-            if(calcuSpinner?.selectedItemPosition != null) {
-                cal = calcuSpinner!!.selectedItemPosition
-            }
 
-            var loading : Double = this.loading?.selectedItem.toString().substringBefore("%").toDouble()
-
-            try {
-                amountVal = amount?.text.toString().toDouble()
-            } catch (e : Exception) {
-                amountVal = 0.0
-            }
-            var calculated = LoadingPercentage(loading).calculate()
+            cal = Conversion.calPeriod(calcuSpinner?.selectedItem.toString())
+            var loadingVal : Double = Conversion.loading(this.loading?.selectedItem.toString())
+            amountVal = Conversion.coverAmount(amount?.text.toString())
             var benefitsProduct = ProcessProduct().getListProduct(productPass ,
                     providerPass,
                     2)
+
             ConfiguredBenefits(false,
                     false,
                     0,
@@ -100,7 +81,7 @@ class LifeDialog: AppCompatActivity() {
                     false,
                     0,
                     amountVal,
-                    calculated,
+                    loadingVal,
                     false,
                     benefitsProduct,
             "Life Cover",
@@ -112,6 +93,13 @@ class LifeDialog: AppCompatActivity() {
     //endregion
 
     //region - Private methods
+    private fun setDialog(activity: Activity) {
+        dialog = Dialog(activity)
+        dialog?.setContentView(R.layout.dialog_life_layout)
+        dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT)
+        dialog?.window?.setBackgroundDrawableResource(R.color.primaryTransparency)
+    }
     private fun dialogViewId(dialog: Dialog?) {
         closeButton = dialog?.findViewById<ImageView>(R.id.closeButton)
         loading = dialog?.findViewById<Spinner>(R.id.loadingSpinner)
@@ -120,6 +108,27 @@ class LifeDialog: AppCompatActivity() {
         amount = dialog?.findViewById<EditText>(R.id.coverAmountEdit)
         indexed = dialog?.findViewById<Switch>(R.id.indexedSwitch)
         FI = dialog?.findViewById<Switch>(R.id.FISwitch)
+    }
+    private fun setAdapter(activity: Activity) {
+        loadingAdapter = ArrayAdapter(activity,
+                android.R.layout.simple_list_item_1,
+                PublicArray.loading)
+        loading?.adapter = loadingAdapter
+        calAdapter = ArrayAdapter(activity,
+                android.R.layout.simple_list_item_1,
+                PublicArray.calPeriod)
+        calcuSpinner?.adapter = calAdapter
+    }
+    private fun setConfiguredBenefits(id : Int) {
+        for (x in 0 until ConfigureBenefits.array.size) {
+            if (ConfigureBenefits.array[x].clientId == id && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 2) {
+                amount?.setText(ConfigureBenefits.array[x].inputs.coverAmount.toString())
+                loading?.setSelection(Position.loading(ConfigureBenefits.array[x].inputs.loading))
+                FI?.isChecked = ConfigureBenefits.array[x].inputs.isFutureInsurability
+                calcuSpinner?.setSelection(Position.calPeriod(ConfigureBenefits.array[x].inputs.calcPeriod))
+                break
+            }
+        }
     }
     //endregion
 }

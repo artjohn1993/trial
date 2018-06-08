@@ -6,9 +6,11 @@ import android.view.WindowManager
 import android.widget.*
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.array.PublicArray
-import com.example.artjohn.blackfin.event.CalculatedPeriod
 import com.example.artjohn.blackfin.event.ConfiguredBenefits
+import com.example.artjohn.blackfin.event.Conversion
+import com.example.artjohn.blackfin.event.Position
 import com.example.artjohn.blackfin.event.ProcessProduct
+import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
 
@@ -38,6 +40,7 @@ class TraumaDialog {
         setupDialog(dialog)
         dialogViewId(dialog)
         setAdapter(activity)
+        setConfiguredBenefits(id)
         indexed?.setOnCheckedChangeListener { buttonView, isChecked ->
             indexVal = isChecked
         }
@@ -52,16 +55,13 @@ class TraumaDialog {
         }
         applyButton?.setOnClickListener {
             dialog?.hide()
-            coverVal = try {
-                cover?.text.toString().toDouble()
-            } catch (e : Exception) {
-                0.0
-            }
-            occupationType = type?.selectedItem.toString().toLowerCase()
-            calPeriodVal = CalculatedPeriod.convert(calPeriod?.selectedItem.toString())
+            coverVal = Conversion.coverAmount(cover?.text.toString())
+            occupationType = Conversion.occupationType(type?.selectedItem.toString())
+            calPeriodVal = Conversion.calPeriod(calPeriod?.selectedItem.toString())
             var benefitsProduct = ProcessProduct().getListProduct(product ,
                     provider,
                     4)
+
             ConfiguredBenefits(false,
                     false,
                     0,
@@ -104,6 +104,20 @@ class TraumaDialog {
         trauma = dialog?.findViewById(R.id.traumaBuyBackSwitch)
         tpd = dialog?.findViewById(R.id.addOnSwitch)
         applyButton = dialog?.findViewById(R.id.applyButton)
+    }
+    private fun setConfiguredBenefits(id : Int) {
+        for (x in 0 until ConfigureBenefits.array.size) {
+            if (ConfigureBenefits.array[x].clientId == id && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 4) {
+                cover?.setText(ConfigureBenefits.array[x].inputs.coverAmount.toString())
+                calPeriod?.setSelection(Position.calPeriod(ConfigureBenefits.array[x].inputs.calcPeriod))
+                type?.setSelection(Position.occupationType(ConfigureBenefits.array[x].inputs.occupationType))
+                traumaBBVal = ConfigureBenefits.array[x].inputs.isTraumaBuyback
+                tpdVal = ConfigureBenefits.array[x].inputs.isTpdAddon
+                trauma?.isChecked = traumaBBVal
+                tpd?.isChecked = tpdVal
+                break
+            }
+        }
     }
     private fun setAdapter(activity: Activity) {
         val typeAdapter : ArrayAdapter<String> = ArrayAdapter(activity,

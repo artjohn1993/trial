@@ -7,13 +7,12 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import com.example.artjohn.blackfin.R
-import com.example.artjohn.blackfin.event.ConfiguredBenefits
-import com.example.artjohn.blackfin.event.LoadingPercentage
-import com.example.artjohn.blackfin.event.ProcessProduct
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
 import android.widget.AdapterView
 import com.example.artjohn.blackfin.array.PublicArray
+import com.example.artjohn.blackfin.event.*
+import com.example.artjohn.blackfin.model.ConfigureBenefits
 
 
 class FamilyProtectionDialog {
@@ -46,7 +45,7 @@ class FamilyProtectionDialog {
         dialogViewId(dialog)
         setyears()
         setAdapters(activity)
-
+        setConfiguredBenefits(id)
         closeButton?.setOnClickListener {
             dialog?.hide()
         }
@@ -73,23 +72,10 @@ class FamilyProtectionDialog {
 
         apply?.setOnClickListener {
             dialog?.hide()
-            loadingVal = this.loading?.selectedItem.toString().substringBefore("%").toDouble()
-            try {
-                coverAmountVal = cover?.text.toString().toDouble()
-            } catch (e : Exception) {
-                coverAmountVal = 0.0
-            }
-            benefitYearVal = yearPeriod?.selectedItem.toString().substringBefore(" Years").toInt()
-
-            when(termPeriod?.selectedItemPosition) {
-                0 -> {
-                    benefitTermPeriodVal = "Term"
-                }
-                1 -> {
-                    benefitTermPeriodVal = "Age"
-                }
-            }
-            var calculated = LoadingPercentage(loadingVal).calculate()
+            loadingVal = Conversion.loading(loading?.selectedItem.toString())
+            coverAmountVal = Conversion.coverAmount(cover?.text.toString())
+            benefitYearVal = Conversion.yearPeriod(yearPeriod?.selectedItem.toString())
+            benefitTermPeriodVal = Conversion.termPeriod(termPeriod?.selectedItem.toString())
             var benefitsProduct = ProcessProduct().getListProduct(product ,
                     provider,
                     3)
@@ -103,14 +89,14 @@ class FamilyProtectionDialog {
                     12,
                     false,
                     false,
-                    "Term",
+                    benefitTermPeriodVal,
                     "AnyOccupation",
                     0,
                     false,
                     false,
                     0,
                     coverAmountVal,
-                    calculated,
+                    loadingVal,
                     false,
                     benefitsProduct,
                     "Family Protection Cover",
@@ -129,6 +115,17 @@ class FamilyProtectionDialog {
         index = dialog?.findViewById(R.id.indexedSwitch)
         apply = dialog?.findViewById(R.id.lifeApplyButton)
     }
+    private fun setConfiguredBenefits(id : Int) {
+        for (x in 0 until ConfigureBenefits.array.size) {
+            if (ConfigureBenefits.array[x].clientId == id && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 3) {
+                cover?.setText(ConfigureBenefits.array[x].inputs.coverAmount.toString())
+                loading?.setSelection(Position.loading(ConfigureBenefits.array[x].inputs.loading))
+                termPeriod?.setSelection(Position.termbenefit(ConfigureBenefits.array[x].inputs.benefitPeriodType))
+                yearPeriod?.setSelection(Position.yearPeriod(ConfigureBenefits.array[x].inputs.benefitPeriod))
+                break
+            }
+        }
+    }
     private fun setupDialog(customDialog: Dialog?) {
         customDialog?.setContentView(R.layout.layout_family_protection)
         customDialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
@@ -146,7 +143,7 @@ class FamilyProtectionDialog {
     private fun setAdapters(activity: Activity) {
         val benefitAdapter : ArrayAdapter<String> = ArrayAdapter(activity,
                 android.R.layout.simple_list_item_1,
-                PublicArray.benefitPeriod)
+                PublicArray.benefitTerm)
 
         val loadingAdapter : ArrayAdapter<String> = ArrayAdapter(activity,
                 android.R.layout.simple_list_item_1,

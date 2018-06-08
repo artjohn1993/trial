@@ -74,7 +74,7 @@ class BenefitsAdapter(activity: Activity,
             if (ConfigureBenefits.array[x].clientId == clientId && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == position.plus(1)) {
                 holder.title.setTextColor(Color.parseColor("#3cbdd0"))
                 holder.icon.setColorFilter(Color.parseColor("#3cbdd0"))
-                holder.wrapper.setBackgroundResource(R.drawable.summary_color_provider)
+                //holder.wrapper.setBackgroundResource(R.drawable.summary_color_provider)
                 exist = true
                 break
             }

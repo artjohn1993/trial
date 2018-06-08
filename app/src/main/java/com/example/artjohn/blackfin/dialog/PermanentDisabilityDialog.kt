@@ -6,9 +6,11 @@ import android.view.WindowManager
 import android.widget.*
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.array.PublicArray
-import com.example.artjohn.blackfin.event.CalculatedPeriod
 import com.example.artjohn.blackfin.event.ConfiguredBenefits
+import com.example.artjohn.blackfin.event.Conversion
+import com.example.artjohn.blackfin.event.Position
 import com.example.artjohn.blackfin.event.ProcessProduct
+import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
 
@@ -17,7 +19,6 @@ class PermanentDisabilityDialog {
     var closeButton : ImageView? = null
     var coverAmount : EditText? = null
     var occupation : Spinner? = null
-    var typeSpinner : Spinner? = null
     var calPeriod : Spinner? = null
     var loading : Spinner? = null
     var index : Switch? = null
@@ -25,7 +26,6 @@ class PermanentDisabilityDialog {
 
     var coverAmountVal : Double = 0.0
     var occupationVal : String = ""
-    var typeSpinnerVal : String = ""
     var calPeriodVal : Int = 0
     var loadingVal : Double = 0.0
     var indexVal : Boolean = false
@@ -38,20 +38,16 @@ class PermanentDisabilityDialog {
         setupDialog(dialog)
         dialogViewId(dialog)
         setAdapter(activity)
-
+        setConfiguredBenefits(id)
         closeButton?.setOnClickListener {
             dialog?.hide()
         }
         applyButton?.setOnClickListener {
             dialog?.hide()
-            try {
-                coverAmountVal = coverAmount?.text.toString().toDouble()
-            } catch (e : Exception) {
-                coverAmountVal = 0.0
-            }
-            occupationVal = occupation?.selectedItem.toString().toLowerCase()
-            calPeriodVal = CalculatedPeriod.convert(calPeriod?.selectedItem.toString())
-            loadingVal = loading?.selectedItem.toString().substringBefore("%").toDouble()
+            coverAmountVal = Conversion.coverAmount(coverAmount?.text.toString())
+            occupationVal = Conversion.occupationType(occupation?.selectedItem.toString())
+            calPeriodVal = Conversion.calPeriod(calPeriod?.selectedItem.toString())
+            loadingVal = Conversion.loading(loading?.selectedItem.toString())
             var benefitsProduct = ProcessProduct().getListProduct(product ,
                     provider,
                     5)
@@ -93,19 +89,27 @@ class PermanentDisabilityDialog {
         closeButton = dialog?.findViewById(R.id.closeButton)
         coverAmount = dialog?.findViewById(R.id.coverAmountEdit)
         occupation = dialog?.findViewById(R.id.occupationSpinner)
-        typeSpinner = dialog?.findViewById(R.id.typeSpinner)
         calPeriod = dialog?.findViewById(R.id.calPeriodSpinner)
         loading = dialog?.findViewById(R.id.loadingSpinner)
         index = dialog?.findViewById(R.id.indexedSwitch)
         applyButton = dialog?.findViewById(R.id.applyButton)
     }
+    private fun setConfiguredBenefits(id : Int) {
+        for (x in 0 until ConfigureBenefits.array.size) {
+            if (ConfigureBenefits.array[x].clientId == id && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 5) {
+                coverAmount?.setText(ConfigureBenefits.array[x].inputs.coverAmount.toString())
+                calPeriod?.setSelection(Position.calPeriod(ConfigureBenefits.array[x].inputs.calcPeriod))
+                occupation?.setSelection(Position.occupationType(ConfigureBenefits.array[x].inputs.occupationType))
+                calPeriod?.setSelection(Position.calPeriod(ConfigureBenefits.array[x].inputs.calcPeriod))
+                loading?.setSelection(Position.loading(ConfigureBenefits.array[x].inputs.loading))
+                break
+            }
+        }
+    }
     private fun setAdapter(activity: Activity) {
         val occupationAdapter : ArrayAdapter<String> = ArrayAdapter(activity,
                 android.R.layout.simple_list_item_1,
                 PublicArray.occupationType)
-        val typeAdapter : ArrayAdapter<String> = ArrayAdapter(activity,
-                android.R.layout.simple_list_item_1,
-                PublicArray.calPeriod)
         val calperiodAdapter : ArrayAdapter<String> = ArrayAdapter(activity,
                 android.R.layout.simple_list_item_1,
                 PublicArray.calPeriod)

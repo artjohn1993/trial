@@ -2,14 +2,13 @@ package com.example.artjohn.blackfin.dialog
 
 import android.app.Activity
 import android.app.Dialog
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.*
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.array.PublicArray
-import com.example.artjohn.blackfin.event.ConfiguredBenefits
-import com.example.artjohn.blackfin.event.LoadingPercentage
-import com.example.artjohn.blackfin.event.ProcessProduct
+import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.*
 import org.greenrobot.eventbus.EventBus
 
@@ -40,22 +39,10 @@ class HealthDialog : AppCompatActivity() {
         clientID = id
         productPass = product
         providerPass = provider
-        dialog = Dialog(activity)
-        dialog?.setContentView(R.layout.dialog_health_layout)
-        dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT)
-        dialog?.window?.setBackgroundDrawableResource(R.color.primaryTransparency)
+        setDialog(activity)
         dialogViewId(dialog)
-
-        val statusAdapter : ArrayAdapter<String> = ArrayAdapter(activity,
-                android.R.layout.simple_list_item_1,
-                PublicArray.excess)
-        excess?.adapter = statusAdapter
-
-        val loadingAdapter : ArrayAdapter<String> = ArrayAdapter(activity,
-                android.R.layout.simple_list_item_1,
-                PublicArray.loading)
-        loading?.adapter = loadingAdapter
+        setAdapter(activity)
+        setConfiguredBenefits(id)
 
         closeButton?.setOnClickListener {
             dialog?.hide()
@@ -72,11 +59,9 @@ class HealthDialog : AppCompatActivity() {
 
         apply?.setOnClickListener {
             var excessVal = 0
-            if(!excess?.selectedItem.toString().substringBefore(" ").equals("Nil")) {
-                excessVal = excess?.selectedItem.toString().substringBefore(" ").toInt()
-            }
-            var loading = loading?.selectedItem.toString().substringBefore("%").toDouble()
-            var calculated = LoadingPercentage(loading).calculate()
+
+            excessVal = Conversion.excess(excess?.selectedItem.toString())
+            var loadingVal = Conversion.loading(loading?.selectedItem.toString())
             var benefitsProduct = ProcessProduct().getListProduct(productPass ,
                     providerPass,
                     1)
@@ -97,7 +82,7 @@ class HealthDialog : AppCompatActivity() {
                     false,
                     excessVal,
                     0.0,
-                    calculated,
+                    loadingVal,
                     false,
                     benefitsProduct,
                     "Health Cover",
@@ -110,6 +95,13 @@ class HealthDialog : AppCompatActivity() {
         //endregion
 
     //region - Private methods
+    private fun setDialog(activity: Activity) {
+        dialog = Dialog(activity)
+        dialog?.setContentView(R.layout.dialog_health_layout)
+        dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT)
+        dialog?.window?.setBackgroundDrawableResource(R.color.primaryTransparency)
+    }
     private fun dialogViewId(dialog: Dialog?) {
         closeButton = dialog?.findViewById<ImageView>(R.id.closeButton)
         excess = dialog?.findViewById<Spinner>(R.id.excessSpinner)
@@ -118,6 +110,32 @@ class HealthDialog : AppCompatActivity() {
         ST = dialog?.findViewById<Switch>(R.id.specialistSwitch)
         GP = dialog?.findViewById<Switch>(R.id.prescriptionSwitch)
         DO = dialog?.findViewById<Switch>(R.id.DOSwitch)
+    }
+    private fun setAdapter(activity: Activity) {
+        val statusAdapter : ArrayAdapter<String> = ArrayAdapter(activity,
+                android.R.layout.simple_list_item_1,
+                PublicArray.excess)
+        excess?.adapter = statusAdapter
+
+        val loadingAdapter : ArrayAdapter<String> = ArrayAdapter(activity,
+                android.R.layout.simple_list_item_1,
+                PublicArray.loading)
+        loading?.adapter = loadingAdapter
+    }
+    private fun setConfiguredBenefits(id : Int) {
+        for (x in 0 until ConfigureBenefits.array.size) {
+            if (ConfigureBenefits.array[x].clientId == id && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 1) {
+                excess?.setSelection(Position.excess(ConfigureBenefits.array[x].inputs.excess))
+                loading?.setSelection(Position.loading(ConfigureBenefits.array[x].inputs.loading))
+                STcheck = ConfigureBenefits.array[x].inputs.specialistsTest
+                GPcheck = ConfigureBenefits.array[x].inputs.gpPrescriptions
+                DOcheck = ConfigureBenefits.array[x].inputs.dentalOptical
+                ST?.isChecked = STcheck
+                GP?.isChecked = GPcheck
+                DO?.isChecked = DOcheck
+                break
+            }
+        }
     }
     //endregion
 }

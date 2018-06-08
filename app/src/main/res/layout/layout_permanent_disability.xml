@@ -108,39 +108,12 @@
 
 
     <TextView
-        android:id="@+id/typeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Type"
-        android:textColor="#fff"
-        app:layout_constraintTop_toBottomOf="@id/occupationWrapper"
-        android:layout_marginTop="16dp"
-        />
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/typeWrapper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
-        app:layout_constraintTop_toBottomOf="@id/typeText"
-        android:layout_marginTop="8dp"
-        >
-        <Spinner
-            android:id="@+id/typeSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:spinnerMode="dialog"
-            android:textAlignment="center"
-            >
-        </Spinner>
-    </android.support.constraint.ConstraintLayout>
-
-    <TextView
         android:id="@+id/calPeriodText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Calc Period"
         android:textColor="#fff"
-        app:layout_constraintTop_toBottomOf="@id/typeWrapper"
+        app:layout_constraintTop_toBottomOf="@id/occupationWrapper"
         android:layout_marginTop="16dp"
         />
     <android.support.constraint.ConstraintLayout

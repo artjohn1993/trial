@@ -7,8 +7,10 @@ import android.widget.*
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.array.PublicArray
 import com.example.artjohn.blackfin.event.ConfiguredBenefits
-import com.example.artjohn.blackfin.event.ConvertBenefitPeriod
+import com.example.artjohn.blackfin.event.Conversion
+import com.example.artjohn.blackfin.event.Position
 import com.example.artjohn.blackfin.event.ProcessProduct
+import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
 
@@ -36,6 +38,7 @@ class MortgageRepaymentDialog {
         setupDialog(dialog)
         dialogViewId(dialog)
         setAdapter(activity)
+        setConfiguredBenefits(id)
         var benefitsProduct = ProcessProduct().getListProduct(product ,
                 provider,
                 7)
@@ -44,14 +47,10 @@ class MortgageRepaymentDialog {
         }
         applyButton?.setOnClickListener {
             dialog?.hide()
-            try {
-                coverAmountVal = coverAmount?.text.toString().toDouble()
-            } catch (e : Exception) {
-                coverAmountVal = 0.0
-            }
-            waitPeriodVal = waitPeriod?.selectedItem.toString().substringAfter("week ").toInt()
-            benefitPeriodVal = ConvertBenefitPeriod.value(benefitPeriod?.selectedItem.toString())
-            loadingVal = loading?.selectedItem.toString().substringBefore("%").toDouble()
+            coverAmountVal = Conversion.coverAmount(coverAmount?.text.toString())
+            waitPeriodVal = Conversion.waitPeriod(waitPeriod?.selectedItem.toString())
+            benefitPeriodVal = Conversion.benefitPeriod(benefitPeriod?.selectedItem.toString())
+            loadingVal = Conversion.loading(loading?.selectedItem.toString())
             ConfiguredBenefits(false,
                     false,
                     benefitPeriodVal,
@@ -92,6 +91,17 @@ class MortgageRepaymentDialog {
         loading = dialog?.findViewById(R.id.loadingSpinner)
         index = dialog?.findViewById(R.id.indexedSwitch)
         applyButton = dialog?.findViewById(R.id.applyButton)
+    }
+    private fun setConfiguredBenefits(id : Int) {
+        for (x in 0 until ConfigureBenefits.array.size) {
+            if (ConfigureBenefits.array[x].clientId == id && ConfigureBenefits.array[x].inputs.benefitProductList[0].benefitId == 7) {
+                coverAmount?.setText(ConfigureBenefits.array[x].inputs.coverAmount.toString())
+                loading?.setSelection(Position.loading(ConfigureBenefits.array[x].inputs.loading))
+                waitPeriod?.setSelection(Position.waitPeriod(ConfigureBenefits.array[x].inputs.wopWeekWaitPeriod))
+                benefitPeriod?.setSelection(Position.benefitPeriod(ConfigureBenefits.array[x].inputs.benefitPeriod))
+                break
+            }
+        }
     }
     private fun setAdapter(activity: Activity) {
         val waitPeriodAdapter : ArrayAdapter<String> = ArrayAdapter(activity,

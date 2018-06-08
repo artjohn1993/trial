@@ -22,12 +22,12 @@ class ProcessProduct {
         var  array : ArrayList<BenefitsProductList> = ArrayList()
 
         if (product != null) {
-            for(index in 0..product.data.products.size - 1) {
+            for(index in 0 until product.data.products.size) {
                 if(product.data.products[index].benefitId == benefitID) {
                     productGroupId = product.data.products[index].productGroupId
                     productName = product.data.products[index].productName
                     if (provider != null) {
-                        for(index2 in 0..provider.data.providers.size - 1) {
+                        for(index2 in 0 until provider.data.providers.size) {
                             if(product.data.products[index].providerId == provider.data.providers[index2].providerId) {
                                 providerID = provider.data.providers[index2].providerId
                                 providerName = provider.data.providers[index2].providerName
