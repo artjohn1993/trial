@@ -2,17 +2,16 @@ package com.example.artjohn.blackfin.dialog
 
 import android.app.Activity
 import android.app.Dialog
+import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.array.PublicArray
-import com.example.artjohn.blackfin.event.ConfiguredBenefits
-import com.example.artjohn.blackfin.event.Conversion
-import com.example.artjohn.blackfin.event.Position
-import com.example.artjohn.blackfin.event.ProcessProduct
+import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
+import org.greenrobot.eventbus.EventBus
 
 class MortgageRepaymentDialog {
     var dialog : Dialog? = null
@@ -23,6 +22,7 @@ class MortgageRepaymentDialog {
     var loading : Spinner? = null
     var index : Switch? = null
     var applyButton : Button? = null
+    var remove : Button? = null
 
     var coverAmountVal : Double = 0.0
     var waitPeriodVal : Int = 0
@@ -45,34 +45,40 @@ class MortgageRepaymentDialog {
         closeButton?.setOnClickListener {
             dialog?.hide()
         }
-        applyButton?.setOnClickListener {
+        remove?.setOnClickListener {
             dialog?.hide()
-            coverAmountVal = Conversion.coverAmount(coverAmount?.text.toString())
-            waitPeriodVal = Conversion.waitPeriod(waitPeriod?.selectedItem.toString())
-            benefitPeriodVal = Conversion.benefitPeriod(benefitPeriod?.selectedItem.toString())
-            loadingVal = Conversion.loading(loading?.selectedItem.toString())
-            ConfiguredBenefits(false,
-                    false,
-                    benefitPeriodVal,
-                    1,
-                    false,
-                    false,
-                    12,
-                    false,
-                    false,
-                    "Term",
-                    "AnyOccupation",
-                    waitPeriodVal,
-                    false,
-                    false,
-                    0,
-                    coverAmountVal,
-                    loadingVal,
-                    false,
-                    benefitsProduct,
-                    "Mortgage Repayment Cover",
-                    id,
-                    7)
+            EventBus.getDefault().post(RemoveConfiguredBenefits(id,7))
+        }
+        applyButton?.setOnClickListener {
+            if (!coverAmount?.text.isNullOrEmpty()) {
+                dialog?.hide()
+                coverAmountVal = Conversion.coverAmount(coverAmount?.text.toString())
+                waitPeriodVal = Conversion.waitPeriod(waitPeriod?.selectedItem.toString())
+                benefitPeriodVal = Conversion.benefitPeriod(benefitPeriod?.selectedItem.toString())
+                loadingVal = Conversion.loading(loading?.selectedItem.toString())
+                ConfiguredBenefits(false,
+                        false,
+                        benefitPeriodVal,
+                        1,
+                        false,
+                        false,
+                        12,
+                        false,
+                        false,
+                        "Term",
+                        "AnyOccupation",
+                        waitPeriodVal,
+                        false,
+                        false,
+                        0,
+                        coverAmountVal,
+                        loadingVal,
+                        false,
+                        benefitsProduct,
+                        "Mortgage Repayment Cover",
+                        id,
+                        7)
+            }
         }
 
         dialog?.show()
@@ -91,6 +97,7 @@ class MortgageRepaymentDialog {
         loading = dialog?.findViewById(R.id.loadingSpinner)
         index = dialog?.findViewById(R.id.indexedSwitch)
         applyButton = dialog?.findViewById(R.id.applyButton)
+        remove = dialog?.findViewById(R.id.removeButton)
     }
     private fun setConfiguredBenefits(id : Int) {
         for (x in 0 until ConfigureBenefits.array.size) {
@@ -99,6 +106,7 @@ class MortgageRepaymentDialog {
                 loading?.setSelection(Position.loading(ConfigureBenefits.array[x].inputs.loading))
                 waitPeriod?.setSelection(Position.waitPeriod(ConfigureBenefits.array[x].inputs.wopWeekWaitPeriod))
                 benefitPeriod?.setSelection(Position.benefitPeriod(ConfigureBenefits.array[x].inputs.benefitPeriod))
+                remove?.visibility = View.VISIBLE
                 break
             }
         }

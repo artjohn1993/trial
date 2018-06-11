@@ -13,6 +13,7 @@ import android.widget.AdapterView
 import com.example.artjohn.blackfin.array.PublicArray
 import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.ConfigureBenefits
+import org.greenrobot.eventbus.EventBus
 
 
 class FamilyProtectionDialog {
@@ -25,8 +26,7 @@ class FamilyProtectionDialog {
     var loading : Spinner? = null
     var index : Switch? = null
     var apply : Button? = null
-
-
+    var remove : Button? = null
     var yearsArray1 : ArrayList<String> = ArrayList()
     var yearsArray2 : ArrayList<String> = ArrayList()
     var coverAmountVal : Double = 0.0
@@ -70,38 +70,45 @@ class FamilyProtectionDialog {
             }
         }
 
-        apply?.setOnClickListener {
+        remove?.setOnClickListener {
             dialog?.hide()
-            loadingVal = Conversion.loading(loading?.selectedItem.toString())
-            coverAmountVal = Conversion.coverAmount(cover?.text.toString())
-            benefitYearVal = Conversion.yearPeriod(yearPeriod?.selectedItem.toString())
-            benefitTermPeriodVal = Conversion.termPeriod(termPeriod?.selectedItem.toString())
-            var benefitsProduct = ProcessProduct().getListProduct(product ,
-                    provider,
-                    3)
+            EventBus.getDefault().post(RemoveConfiguredBenefits(id,3))
+        }
 
-            ConfiguredBenefits(false,
-                    false,
-                    benefitYearVal,
-                    1,
-                    false,
-                    false,
-                    12,
-                    false,
-                    false,
-                    benefitTermPeriodVal,
-                    "AnyOccupation",
-                    0,
-                    false,
-                    false,
-                    0,
-                    coverAmountVal,
-                    loadingVal,
-                    false,
-                    benefitsProduct,
-                    "Family Protection Cover",
-                    id,
-                    3)
+        apply?.setOnClickListener {
+            if (!cover?.text.isNullOrEmpty()) {
+                dialog?.hide()
+                loadingVal = Conversion.loading(loading?.selectedItem.toString())
+                coverAmountVal = Conversion.coverAmount(cover?.text.toString())
+                benefitYearVal = Conversion.yearPeriod(yearPeriod?.selectedItem.toString())
+                benefitTermPeriodVal = Conversion.termPeriod(termPeriod?.selectedItem.toString())
+                var benefitsProduct = ProcessProduct().getListProduct(product,
+                        provider,
+                        3)
+
+                ConfiguredBenefits(false,
+                        false,
+                        benefitYearVal,
+                        1,
+                        false,
+                        false,
+                        12,
+                        false,
+                        false,
+                        benefitTermPeriodVal,
+                        "AnyOccupation",
+                        0,
+                        false,
+                        false,
+                        0,
+                        coverAmountVal,
+                        loadingVal,
+                        false,
+                        benefitsProduct,
+                        "Family Protection Cover",
+                        id,
+                        3)
+            }
         }
         dialog?.show()
     }
@@ -114,6 +121,7 @@ class FamilyProtectionDialog {
         loading = dialog?.findViewById(R.id.loadingSpinner)
         index = dialog?.findViewById(R.id.indexedSwitch)
         apply = dialog?.findViewById(R.id.lifeApplyButton)
+        remove = dialog?.findViewById(R.id.removeButton)
     }
     private fun setConfiguredBenefits(id : Int) {
         for (x in 0 until ConfigureBenefits.array.size) {
@@ -122,6 +130,7 @@ class FamilyProtectionDialog {
                 loading?.setSelection(Position.loading(ConfigureBenefits.array[x].inputs.loading))
                 termPeriod?.setSelection(Position.termbenefit(ConfigureBenefits.array[x].inputs.benefitPeriodType))
                 yearPeriod?.setSelection(Position.yearPeriod(ConfigureBenefits.array[x].inputs.benefitPeriod))
+                remove?.visibility = View.VISIBLE
                 break
             }
         }

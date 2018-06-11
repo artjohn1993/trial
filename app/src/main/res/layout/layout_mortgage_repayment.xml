@@ -230,6 +230,17 @@
             app:layout_constraintTop_toBottomOf="@id/indexedText"
             android:layout_marginTop="16dp"
             />
-
+        <Button
+            android:id="@+id/removeButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/color_error_layout"
+            android:text="Remove"
+            android:textAllCaps="false"
+            android:textColor="#fff"
+            app:layout_constraintTop_toBottomOf="@id/applyButton"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            />
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

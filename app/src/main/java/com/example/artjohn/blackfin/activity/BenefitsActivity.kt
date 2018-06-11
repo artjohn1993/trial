@@ -9,6 +9,7 @@ import com.example.artjohn.blackfin.api.BlackfinApi
 import com.example.artjohn.blackfin.dialog.LoadingDialog
 import com.example.artjohn.blackfin.event.BenefitsProgressBar
 import com.example.artjohn.blackfin.event.CheckRecyclerView
+import com.example.artjohn.blackfin.event.RemoveConfiguredBenefits
 import com.example.artjohn.blackfin.model.*
 import com.example.artjohn.blackfin.presenter.BenefitsPresenterClass
 import com.example.artjohn.blackfin.presenter.BenefitsView
@@ -102,6 +103,11 @@ class BenefitsActivity : BaseActivity(),
             loading.show()
             presenter.processAdapter()
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onRemoveConfiguredBenefits(event : RemoveConfiguredBenefits) {
+        benefitsRecyclerView.adapter.notifyDataSetChanged()
     }
     //endregion
 

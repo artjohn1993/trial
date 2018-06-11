@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_height="match_parent"
+<ScrollView
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    >
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="8dp"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
@@ -26,13 +28,13 @@
         android:id="@+id/iconHealth"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/ic_02_life_cover"
+        android:src="@drawable/ic_01_health_benefits"
         app:layout_constraintTop_toBottomOf="@id/closeButton"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Life Cover"
+        android:text="health Cover"
         android:textColor="#fff"
         android:textSize="20sp"
         app:layout_constraintTop_toTopOf="@id/iconHealth"
@@ -47,57 +49,28 @@
         android:background="#fff"
         app:layout_constraintTop_toBottomOf="@id/iconHealth"
         android:layout_marginTop="8dp"
+
         />
+
     <TextView
         android:id="@+id/excessText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cover Amount"
+        android:text="Excess"
         android:textColor="#fff"
         app:layout_constraintTop_toBottomOf="@id/divider"
         android:layout_marginTop="16dp"
         />
-    
-    <EditText
-        android:id="@+id/coverAmountEdit"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#80ffffff"
-        app:layout_constraintTop_toBottomOf="@id/excessText"
-        android:layout_marginTop="8dp"
-        android:paddingStart="20dp"
-        android:textColor="#fff"
-        android:inputType="number"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="$"
-        android:textColor="#fff"
-        app:layout_constraintTop_toTopOf="@id/coverAmountEdit"
-        app:layout_constraintBottom_toBottomOf="@id/coverAmountEdit"
-        app:layout_constraintStart_toStartOf="@id/coverAmountEdit"
-        android:layout_marginStart="8dp"
-        />
-    <TextView
-        android:id="@+id/calcuText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Calc Period"
-        android:textColor="#fff"
-        app:layout_constraintTop_toBottomOf="@id/coverAmountEdit"
-        android:layout_marginTop="16dp"
-        />
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/calcuWrapper"
+        android:id="@+id/excessWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fff"
-        app:layout_constraintTop_toBottomOf="@id/calcuText"
+        app:layout_constraintTop_toBottomOf="@id/excessText"
         android:layout_marginTop="8dp"
         >
         <Spinner
-            android:id="@+id/calcuSpinner"
+            android:id="@+id/excessSpinner"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:spinnerMode="dialog"
@@ -108,12 +81,68 @@
     </android.support.constraint.ConstraintLayout>
 
     <TextView
+        android:id="@+id/specialistText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Specialist Tests"
+        android:textColor="#fff"
+        app:layout_constraintTop_toBottomOf="@id/excessWrapper"
+
+        android:layout_marginTop="16dp"
+        />
+    <Switch
+        android:id="@+id/specialistSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/specialistText"
+        app:layout_constraintBottom_toBottomOf="@id/specialistText"
+        />
+    <TextView
+        android:id="@+id/prescriptionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GP Prescription"
+        android:textColor="#fff"
+        app:layout_constraintTop_toBottomOf="@id/specialistText"
+
+        android:layout_marginTop="8dp"
+        />
+    <Switch
+        android:id="@+id/prescriptionSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/prescriptionText"
+        app:layout_constraintBottom_toBottomOf="@id/prescriptionText"
+        />
+
+    <TextView
+        android:id="@+id/DOText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dental Optical"
+        android:textColor="#fff"
+        app:layout_constraintTop_toBottomOf="@id/prescriptionText"
+        android:layout_marginTop="8dp"
+        />
+
+    <Switch
+        android:id="@+id/DOSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/DOText"
+        app:layout_constraintBottom_toBottomOf="@id/DOText"
+        />
+
+    <TextView
         android:id="@+id/advancedOptionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Advanced Options"
         android:textColor="#fff"
-        app:layout_constraintTop_toBottomOf="@id/calcuWrapper"
+        app:layout_constraintTop_toBottomOf="@id/DOText"
         android:layout_marginTop="8dp"
         />
     <View
@@ -124,7 +153,6 @@
         app:layout_constraintTop_toBottomOf="@id/advancedOptionText"
         android:layout_marginTop="8dp"
         />
-
     <TextView
         android:id="@+id/loadingText"
         android:layout_width="wrap_content"
@@ -142,66 +170,39 @@
         app:layout_constraintTop_toBottomOf="@id/loadingText"
         android:layout_marginTop="8dp"
         >
-        <Spinner
-            android:id="@+id/loadingSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:spinnerMode="dialog"
-            android:textAlignment="center"
-            >
+    <Spinner
+        android:id="@+id/loadingSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:spinnerMode="dialog"
+        android:textAlignment="center"
+        >
 
-        </Spinner>
+    </Spinner>
     </android.support.constraint.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/indexedText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Indexed"
-        android:textColor="#fff"
-        app:layout_constraintTop_toBottomOf="@id/loadingWrapper"
-        android:layout_marginTop="16dp"
-        />
-
-    <Switch
-        android:id="@+id/indexedSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/indexedText"
-        app:layout_constraintBottom_toBottomOf="@id/indexedText"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        />
-    <TextView
-        android:id="@+id/FIText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Future Insurability"
-        android:textColor="#fff"
-        app:layout_constraintTop_toBottomOf="@id/indexedText"
-        android:layout_marginTop="16dp"
-        />
-
-    <Switch
-        android:id="@+id/FISwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/FIText"
-        app:layout_constraintBottom_toBottomOf="@id/FIText"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        />
-
     <Button
-        android:id="@+id/lifeApplyButton"
+        android:id="@+id/healthApplyButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/button_background"
         android:text="Apply Changes"
         android:textAllCaps="false"
         android:textColor="#fff"
-        app:layout_constraintTop_toBottomOf="@id/FIText"
+        app:layout_constraintTop_toBottomOf="@id/loadingWrapper"
         android:layout_marginTop="16dp"
+        />
+    <Button
+        android:id="@+id/removeButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/color_error_layout"
+        android:text="Remove"
+        android:textAllCaps="false"
+        android:textColor="#fff"
+        app:layout_constraintTop_toBottomOf="@id/healthApplyButton"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
         />
 </android.support.constraint.ConstraintLayout>
 </ScrollView>

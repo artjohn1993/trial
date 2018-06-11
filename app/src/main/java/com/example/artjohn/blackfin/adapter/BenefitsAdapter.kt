@@ -66,6 +66,7 @@ class BenefitsAdapter(activity: Activity,
 
     override fun onBindViewHolder(holder: BenefitsHolder,
                                   position: Int) {
+
         holder.icon.setImageResource(imageArray[position])
         holder.title.text = titleArray[position]
         var exist : Boolean = false
@@ -82,6 +83,9 @@ class BenefitsAdapter(activity: Activity,
         if (!exist) {
             holder.title.setTextColor(Color.parseColor("#010026"))
             holder.icon.setColorFilter(Color.parseColor("#010026"))
+        }
+        if (ConfigureBenefits.array.isEmpty() && position == 8) {
+            holder.itemView.visibility = View.GONE
         }
 
 

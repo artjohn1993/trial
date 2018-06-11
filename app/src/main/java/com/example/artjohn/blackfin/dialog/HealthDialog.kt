@@ -2,8 +2,8 @@ package com.example.artjohn.blackfin.dialog
 
 import android.app.Activity
 import android.app.Dialog
-import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import com.example.artjohn.blackfin.R
@@ -19,6 +19,7 @@ class HealthDialog : AppCompatActivity() {
     var excess : Spinner? = null
     var loading : Spinner? = null
     var apply : Button? = null
+    var remove : Button? = null
     var ST : Switch? = null
     var GP : Switch? = null
     var DO : Switch? = null
@@ -55,6 +56,10 @@ class HealthDialog : AppCompatActivity() {
         }
         DO?.setOnCheckedChangeListener { buttonView, isChecked ->
             DOcheck = isChecked
+        }
+        remove?.setOnClickListener {
+            dialog?.hide()
+            EventBus.getDefault().post(RemoveConfiguredBenefits(clientID,1))
         }
 
         apply?.setOnClickListener {
@@ -97,7 +102,7 @@ class HealthDialog : AppCompatActivity() {
     //region - Private methods
     private fun setDialog(activity: Activity) {
         dialog = Dialog(activity)
-        dialog?.setContentView(R.layout.dialog_health_layout)
+        dialog?.setContentView(R.layout.layout_health)
         dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT)
         dialog?.window?.setBackgroundDrawableResource(R.color.primaryTransparency)
@@ -107,6 +112,7 @@ class HealthDialog : AppCompatActivity() {
         excess = dialog?.findViewById<Spinner>(R.id.excessSpinner)
         loading = dialog?.findViewById<Spinner>(R.id.loadingSpinner)
         apply = dialog?.findViewById<Button>(R.id.healthApplyButton)
+        remove = dialog?.findViewById<Button>(R.id.removeButton)
         ST = dialog?.findViewById<Switch>(R.id.specialistSwitch)
         GP = dialog?.findViewById<Switch>(R.id.prescriptionSwitch)
         DO = dialog?.findViewById<Switch>(R.id.DOSwitch)
@@ -133,6 +139,7 @@ class HealthDialog : AppCompatActivity() {
                 ST?.isChecked = STcheck
                 GP?.isChecked = GPcheck
                 DO?.isChecked = DOcheck
+                remove?.visibility = View.VISIBLE
                 break
             }
         }

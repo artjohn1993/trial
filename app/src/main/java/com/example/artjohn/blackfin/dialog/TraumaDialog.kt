@@ -2,17 +2,16 @@ package com.example.artjohn.blackfin.dialog
 
 import android.app.Activity
 import android.app.Dialog
+import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.array.PublicArray
-import com.example.artjohn.blackfin.event.ConfiguredBenefits
-import com.example.artjohn.blackfin.event.Conversion
-import com.example.artjohn.blackfin.event.Position
-import com.example.artjohn.blackfin.event.ProcessProduct
+import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
+import org.greenrobot.eventbus.EventBus
 
 class TraumaDialog {
     var dialog : Dialog? = null
@@ -24,7 +23,7 @@ class TraumaDialog {
     var trauma : Switch? = null
     var tpd : Switch? = null
     var applyButton : Button? = null
-
+    var remove : Button? = null
     var coverVal : Double = 0.0
     var occupationType : String = ""
     var calPeriodVal : Int = 0
@@ -53,37 +52,43 @@ class TraumaDialog {
         closeButton?.setOnClickListener {
             dialog?.hide()
         }
-        applyButton?.setOnClickListener {
+        remove?.setOnClickListener {
             dialog?.hide()
-            coverVal = Conversion.coverAmount(cover?.text.toString())
-            occupationType = Conversion.occupationType(type?.selectedItem.toString())
-            calPeriodVal = Conversion.calPeriod(calPeriod?.selectedItem.toString())
-            var benefitsProduct = ProcessProduct().getListProduct(product ,
-                    provider,
-                    4)
+            EventBus.getDefault().post(RemoveConfiguredBenefits(id,4))
+        }
+        applyButton?.setOnClickListener {
+            if (!cover?.text.isNullOrEmpty()) {
+                dialog?.hide()
+                coverVal = Conversion.coverAmount(cover?.text.toString())
+                occupationType = Conversion.occupationType(type?.selectedItem.toString())
+                calPeriodVal = Conversion.calPeriod(calPeriod?.selectedItem.toString())
+                var benefitsProduct = ProcessProduct().getListProduct(product,
+                        provider,
+                        4)
 
-            ConfiguredBenefits(false,
-                    false,
-                    0,
-                    calPeriodVal,
-                    false,
-                    false,
-                    12,
-                    false,
-                    tpdVal,
-                    "Term",
-                    occupationType,
-                    0,
-                    false,
-                    false,
-                    0,
-                    coverVal,
-                    0.0,
-                    traumaBBVal,
-                    benefitsProduct,
-                    "Trauma Cover",
-                    id,
-                    4)
+                ConfiguredBenefits(false,
+                        false,
+                        0,
+                        calPeriodVal,
+                        false,
+                        false,
+                        12,
+                        false,
+                        tpdVal,
+                        "Term",
+                        occupationType,
+                        0,
+                        false,
+                        false,
+                        0,
+                        coverVal,
+                        0.0,
+                        traumaBBVal,
+                        benefitsProduct,
+                        "Trauma Cover",
+                        id,
+                        4)
+            }
         }
 
         dialog?.show()
@@ -104,6 +109,7 @@ class TraumaDialog {
         trauma = dialog?.findViewById(R.id.traumaBuyBackSwitch)
         tpd = dialog?.findViewById(R.id.addOnSwitch)
         applyButton = dialog?.findViewById(R.id.applyButton)
+        remove = dialog?.findViewById(R.id.removeButton)
     }
     private fun setConfiguredBenefits(id : Int) {
         for (x in 0 until ConfigureBenefits.array.size) {
@@ -115,6 +121,7 @@ class TraumaDialog {
                 tpdVal = ConfigureBenefits.array[x].inputs.isTpdAddon
                 trauma?.isChecked = traumaBBVal
                 tpd?.isChecked = tpdVal
+                remove?.visibility = View.VISIBLE
                 break
             }
         }

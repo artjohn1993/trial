@@ -2,17 +2,16 @@ package com.example.artjohn.blackfin.dialog
 
 import android.app.Activity
 import android.app.Dialog
+import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.array.PublicArray
-import com.example.artjohn.blackfin.event.ConfiguredBenefits
-import com.example.artjohn.blackfin.event.Conversion
-import com.example.artjohn.blackfin.event.Position
-import com.example.artjohn.blackfin.event.ProcessProduct
+import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
+import org.greenrobot.eventbus.EventBus
 
 class PermanentDisabilityDialog {
     var dialog : Dialog? = null
@@ -23,7 +22,7 @@ class PermanentDisabilityDialog {
     var loading : Spinner? = null
     var index : Switch? = null
     var applyButton : Button? = null
-
+    var remove : Button? = null
     var coverAmountVal : Double = 0.0
     var occupationVal : String = ""
     var calPeriodVal : Int = 0
@@ -42,37 +41,43 @@ class PermanentDisabilityDialog {
         closeButton?.setOnClickListener {
             dialog?.hide()
         }
-        applyButton?.setOnClickListener {
+        remove?.setOnClickListener {
             dialog?.hide()
-            coverAmountVal = Conversion.coverAmount(coverAmount?.text.toString())
-            occupationVal = Conversion.occupationType(occupation?.selectedItem.toString())
-            calPeriodVal = Conversion.calPeriod(calPeriod?.selectedItem.toString())
-            loadingVal = Conversion.loading(loading?.selectedItem.toString())
-            var benefitsProduct = ProcessProduct().getListProduct(product ,
-                    provider,
-                    5)
-            ConfiguredBenefits(false,
-                    false,
-                    0,
-                    calPeriodVal,
-                    false,
-                    false,
-                    12,
-                    false,
-                    false,
-                    "Term",
-                    occupationVal,
-                    0,
-                    false,
-                    false,
-                    0,
-                    coverAmountVal,
-                    loadingVal,
-                    false,
-                    benefitsProduct,
-                    "Total & Permanent Disability Cover",
-                    id,
-                    5)
+            EventBus.getDefault().post(RemoveConfiguredBenefits(id,7))
+        }
+        applyButton?.setOnClickListener {
+            if (!coverAmount?.text.isNullOrEmpty()) {
+                dialog?.hide()
+                coverAmountVal = Conversion.coverAmount(coverAmount?.text.toString())
+                occupationVal = Conversion.occupationType(occupation?.selectedItem.toString())
+                calPeriodVal = Conversion.calPeriod(calPeriod?.selectedItem.toString())
+                loadingVal = Conversion.loading(loading?.selectedItem.toString())
+                var benefitsProduct = ProcessProduct().getListProduct(product,
+                        provider,
+                        5)
+                ConfiguredBenefits(false,
+                        false,
+                        0,
+                        calPeriodVal,
+                        false,
+                        false,
+                        12,
+                        false,
+                        false,
+                        "Term",
+                        occupationVal,
+                        0,
+                        false,
+                        false,
+                        0,
+                        coverAmountVal,
+                        loadingVal,
+                        false,
+                        benefitsProduct,
+                        "Total & Permanent Disability Cover",
+                        id,
+                        5)
+            }
         }
 
 
@@ -93,6 +98,7 @@ class PermanentDisabilityDialog {
         loading = dialog?.findViewById(R.id.loadingSpinner)
         index = dialog?.findViewById(R.id.indexedSwitch)
         applyButton = dialog?.findViewById(R.id.applyButton)
+        remove = dialog?.findViewById(R.id.removeButton)
     }
     private fun setConfiguredBenefits(id : Int) {
         for (x in 0 until ConfigureBenefits.array.size) {
@@ -102,6 +108,7 @@ class PermanentDisabilityDialog {
                 occupation?.setSelection(Position.occupationType(ConfigureBenefits.array[x].inputs.occupationType))
                 calPeriod?.setSelection(Position.calPeriod(ConfigureBenefits.array[x].inputs.calcPeriod))
                 loading?.setSelection(Position.loading(ConfigureBenefits.array[x].inputs.loading))
+                remove?.visibility = View.VISIBLE
                 break
             }
         }
