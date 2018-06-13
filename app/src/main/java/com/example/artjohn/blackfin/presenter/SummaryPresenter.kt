@@ -31,7 +31,6 @@ class SummaryPresenterClass(val view : SummaryView,
         val jsonAdapter = moshi.adapter<Client>(Client::class.java)
         val json = jsonAdapter.toJson(data)
 
-        println(json)
         compositeDisposable.add(
                 server.requestQoutes(data)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -91,5 +90,4 @@ interface SummaryPresenter {
     fun processRecyclerAdapter(data : Client)
     fun processFrequency()
     fun processChangeFrequency(id : Int)
-
 }

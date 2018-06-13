@@ -4,10 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import android.widget.Toast
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.SummaryAdapter
 import com.example.artjohn.blackfin.adapter.SummaryAdapterTwo
@@ -25,6 +28,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.startActivity
 
 class SummaryActivity : BaseActivity(),
         SummaryView {
@@ -189,4 +193,18 @@ class SummaryActivity : BaseActivity(),
         checkConfigureBenefits()
     }
     // endregion
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.qoute_settings, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId) {
+            R.id.settings -> {
+                startActivity<QouteSettingActivity>()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

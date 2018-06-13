@@ -31,6 +31,9 @@ interface ApiServices
 
     @GET("provider")
     fun getProvider() : Observable<Provider.Result>
+
+    @GET("benefit")
+    fun getBenefit() : Observable<Benefit.Result>
     //endregion
 
 }
