@@ -66,12 +66,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.SummaryActivity" />
         </activity>
-        <activity android:name=".activity.ProductSettingsActivity"
+        <activity
+            android:name=".activity.ProductSettingsActivity"
             android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.QouteSettingActivity" />
         </activity>
+        <activity android:name=".activity.SelectedProductActivity"></activity>
     </application>
 
 </manifest>

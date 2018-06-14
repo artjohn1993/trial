@@ -10,7 +10,9 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.ProductSettingsActivity">
+        tools:context=".activity.ProductSettingsActivity"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <ImageView
             android:id="@+id/providerLogo"
@@ -31,7 +33,7 @@
             android:layout_marginTop="8dp"
             />
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/providerRecyclerView"
+            android:id="@+id/productRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/activeProductText"

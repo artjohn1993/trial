@@ -1,5 +1,6 @@
 package com.example.artjohn.blackfin.activity
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -8,6 +9,7 @@ import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.PeopleAdapter
 import com.example.artjohn.blackfin.adapter.QouteSettingsAdapter
 import com.example.artjohn.blackfin.api.BlackfinApi
+import com.example.artjohn.blackfin.dialog.LoadingDialog
 import com.example.artjohn.blackfin.event.PremiumRange
 import com.example.artjohn.blackfin.event.ViewProduct
 import com.example.artjohn.blackfin.model.Benefit
@@ -24,6 +26,7 @@ import org.jetbrains.anko.startActivity
 class QouteSettingActivity : BaseActivity(),QouteSettingsView {
 
     //region - Variables
+    var loading = LoadingDialog(this)
     private val apiServer by lazy {
         BlackfinApi.create(this)
     }
@@ -35,6 +38,7 @@ class QouteSettingActivity : BaseActivity(),QouteSettingsView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qoute_setting)
         title = "Qoute Settings"
+        loading.show()
         presenter.processAdapter()
     }
     public override fun onStart() {
@@ -51,13 +55,17 @@ class QouteSettingActivity : BaseActivity(),QouteSettingsView {
     //region - EventBus method
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onViewProduct(event : ViewProduct) {
-        startActivity<ProductSettingsActivity>()
+        var intent = Intent(baseContext, ProductSettingsActivity::class.java)
+        intent.putExtra("id", event.id)
+        startActivity(intent)
     }
     //endregion
+
     //region - Presenter Delegates
     override fun setAdapter(data : Provider.Result) {
         qouteSettingsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL,false)
         qouteSettingsRecyclerView.adapter = QouteSettingsAdapter(data)
+        loading.hide()
     }
     //endregion
 }

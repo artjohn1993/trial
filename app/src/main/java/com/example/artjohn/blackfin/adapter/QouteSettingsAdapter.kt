@@ -49,7 +49,7 @@ class QouteSettingsAdapter(val result : Provider.Result) : RecyclerView.Adapter<
         holder.switch.isChecked = result.data.providers[position].status
 
         holder.itemView.setOnClickListener {
-            EventBus.getDefault().post(ViewProduct())
+            EventBus.getDefault().post(ViewProduct(position))
         }
     }
 
