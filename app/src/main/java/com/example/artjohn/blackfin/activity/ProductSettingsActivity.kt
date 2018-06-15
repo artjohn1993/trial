@@ -18,6 +18,7 @@ import com.example.artjohn.blackfin.presenter.ProductSettingPresenterClass
 import com.example.artjohn.blackfin.presenter.ProductSettingView
 import com.example.artjohn.blackfin.presenter.QouteSettingsPresenter
 import com.example.artjohn.blackfin.presenter.QouteSettingsPresenterClass
+import com.squareup.moshi.Moshi
 import kotlinx.android.synthetic.main.activity_product_settings.*
 import kotlinx.android.synthetic.main.activity_qoute_setting.*
 import kotlinx.android.synthetic.main.layout_product_settings.*
@@ -92,6 +93,19 @@ class ProductSettingsActivity : BaseActivity(), ProductSettingView {
        }
        return array
     }
+    private fun objectToJson(item : Product.List) : String {
+        var moshi = Moshi.Builder().build()
+        var jsonAdapter = moshi.adapter(Product.List::class.java)
+        var json = jsonAdapter.toJson(item)
+        return json
+    }
+    private fun moveSelectedActivity(data : String, benefitID : Int) {
+        var intent = Intent(baseContext, SelectedProductActivity::class.java)
+        intent.putExtra("benefitID", benefitID)
+        intent.putExtra("providerID", id)
+        intent.putExtra("data", data)
+        startActivity(intent)
+    }
     //endregion
 
     //region - Presenter delegates
@@ -107,7 +121,15 @@ class ProductSettingsActivity : BaseActivity(), ProductSettingView {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onSelectActiveProducr(event : SelectActiveProduct) {
         var intent = Intent(baseContext, SelectedProductActivity::class.java)
+        var items = product?.data?.products
+        var array : ArrayList<Product.Products> = arrayListOf()
+        moveSelectedActivity(objectToJson(this!!.product!!), event.id)
 
+        /*for(index in 0 until product?.data?.products!!.size) {
+            if (id.plus(1) == items!![index].providerId && event.id == items!![index].benefitId) {
+                array.add(items!![index])
+            }
+        }*/
 
     }
     //endregion
