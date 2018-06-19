@@ -11,9 +11,10 @@ import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.event.SelectActiveProduct
 import com.example.artjohn.blackfin.model.Benefit
 import com.example.artjohn.blackfin.model.Product
+import com.example.artjohn.blackfin.model.QouteSettings
 import org.greenrobot.eventbus.EventBus
 
-class ProductSettingsAdapter(val data : List<Product.Products>) : RecyclerView.Adapter<ProductSettingsAdapter.ProductSettingsViewHolder>() {
+class ProductSettingsAdapter(val data : List<QouteSettings.Benefits>) : RecyclerView.Adapter<ProductSettingsAdapter.ProductSettingsViewHolder>() {
     var titleArray  = arrayOf (
             "Health",
             "Life",
@@ -51,7 +52,7 @@ class ProductSettingsAdapter(val data : List<Product.Products>) : RecyclerView.A
     override fun onBindViewHolder(holder: ProductSettingsAdapter.ProductSettingsViewHolder, position: Int) {
         holder.image.setImageResource(imageArray[data[position].benefitId - 1])
         holder.name.text = titleArray[data[position].benefitId - 1]
-        holder.item.text = data[position].productName
+        holder.item.text = data[position].product.productName
 
         holder.itemView.setOnClickListener {
             EventBus.getDefault().post(SelectActiveProduct(data[position].benefitId))

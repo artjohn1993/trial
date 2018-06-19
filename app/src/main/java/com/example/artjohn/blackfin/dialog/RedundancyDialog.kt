@@ -11,6 +11,7 @@ import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
+import com.example.artjohn.blackfin.model.QouteSettings
 import org.greenrobot.eventbus.EventBus
 
 class RedundancyDialog {
@@ -25,8 +26,7 @@ class RedundancyDialog {
     var loadingVal : Double = 0.0
 
     fun show(activity: Activity,
-             product : Product.List?,
-             provider : Provider.Result?,
+             data : QouteSettings.Result,
              id : Int) {
         dialog = Dialog(activity)
         setupDialog(dialog)
@@ -43,8 +43,7 @@ class RedundancyDialog {
         applyButton?.setOnClickListener {
             if (!coverAmount?.text.isNullOrEmpty()) {
                 dialog?.hide()
-                var benefitsProduct = ProcessProduct().getListProduct(product,
-                        provider,
+                var benefitsProduct = ProcessProduct().getListProduct(data,
                         8)
                 coverAmountVal = Conversion.coverAmount(coverAmount?.text.toString())
                 loadingVal = Conversion.loading(loading?.selectedItem.toString())

@@ -14,6 +14,7 @@ import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
+import com.example.artjohn.blackfin.model.QouteSettings
 import org.greenrobot.eventbus.EventBus
 
 class WaiverPremiumDialog {
@@ -28,8 +29,7 @@ class WaiverPremiumDialog {
     var loadingVal : Double = 0.0
 
     fun show(activity: Activity,
-             product : Product.List?,
-             provider : Provider.Result?,
+             data : QouteSettings.Result,
              id : Int) {
         dialog = Dialog(activity)
         setupDialog(dialog)
@@ -47,8 +47,7 @@ class WaiverPremiumDialog {
             dialog?.hide()
             waitPeriodVal = Conversion.waitPeriod(waitPeriod?.selectedItem.toString())
             loadingVal = Conversion.loading(loading?.selectedItem.toString())
-            var benefitsProduct = ProcessProduct().getListProduct(product ,
-                    provider,
+            var benefitsProduct = ProcessProduct().getListProduct(data,
                     9)
             ConfiguredBenefits(false,
                     false,

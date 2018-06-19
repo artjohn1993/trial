@@ -11,6 +11,7 @@ import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
+import com.example.artjohn.blackfin.model.QouteSettings
 import org.greenrobot.eventbus.EventBus
 
 class PermanentDisabilityDialog {
@@ -30,8 +31,7 @@ class PermanentDisabilityDialog {
     var indexVal : Boolean = false
 
     fun show(activity: Activity,
-             product : Product.List?,
-             provider : Provider.Result?,
+             data : QouteSettings.Result,
              id : Int) {
         dialog = Dialog(activity)
         setupDialog(dialog)
@@ -52,8 +52,7 @@ class PermanentDisabilityDialog {
                 occupationVal = Conversion.occupationType(occupation?.selectedItem.toString())
                 calPeriodVal = Conversion.calPeriod(calPeriod?.selectedItem.toString())
                 loadingVal = Conversion.loading(loading?.selectedItem.toString())
-                var benefitsProduct = ProcessProduct().getListProduct(product,
-                        provider,
+                var benefitsProduct = ProcessProduct().getListProduct(data,
                         5)
                 ConfiguredBenefits(false,
                         false,

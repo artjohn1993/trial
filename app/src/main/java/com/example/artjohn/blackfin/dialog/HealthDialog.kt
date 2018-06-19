@@ -26,20 +26,15 @@ class HealthDialog : AppCompatActivity() {
     var STcheck : Boolean = false
     var GPcheck : Boolean = false
     var DOcheck : Boolean = false
-    var productPass : Product.List? = null
-    var providerPass : Provider.Result? = null
     var clientID : Int = 1
 
         //endregion
 
     //region - Public methods
     fun show(activity: Activity,
-             product : Product.List?,
-             provider : Provider.Result?,
+             data : QouteSettings.Result,
              id : Int) {
         clientID = id
-        productPass = product
-        providerPass = provider
         setDialog(activity)
         dialogViewId(dialog)
         setAdapter(activity)
@@ -67,8 +62,7 @@ class HealthDialog : AppCompatActivity() {
 
             excessVal = Conversion.excess(excess?.selectedItem.toString())
             var loadingVal = Conversion.loading(loading?.selectedItem.toString())
-            var benefitsProduct = ProcessProduct().getListProduct(productPass ,
-                    providerPass,
+            var benefitsProduct = ProcessProduct().getListProduct(data,
                     1)
 
             ConfiguredBenefits(DOcheck,

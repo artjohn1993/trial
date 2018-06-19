@@ -11,6 +11,7 @@ import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
+import com.example.artjohn.blackfin.model.QouteSettings
 import org.greenrobot.eventbus.EventBus
 
 class IncomeProtectionDialog {
@@ -23,7 +24,6 @@ class IncomeProtectionDialog {
     var index : Switch? = null
     var applyButton : Button? = null
     var remove : Button? = null
-
     var coverAmountVal : Double = 0.0
     var waitPeriodVal : Int = 0
     var benefitPeriodVal : Int = 0
@@ -32,16 +32,14 @@ class IncomeProtectionDialog {
 
 
     fun show(activity: Activity,
-             product : Product.List?,
-             provider : Provider.Result?,
+             data : QouteSettings.Result,
              id : Int) {
         dialog = Dialog(activity)
         setupDialog(dialog)
         dialogViewId(dialog)
         setAdapter(activity)
         setConfiguredBenefits(id)
-        var benefitsProduct = ProcessProduct().getListProduct(product ,
-                provider,
+        var benefitsProduct = ProcessProduct().getListProduct(data,
                 6)
         closeButton?.setOnClickListener {
             dialog?.hide()

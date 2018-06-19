@@ -32,6 +32,7 @@ class BenefitsActivity : BaseActivity(),
     }
     val presenter = BenefitsPresenterClass(this, apiServer)
     var id : Int = 1
+    var userID = "ba3e6661-2f25-4bb9-b08d-6509eb0ad524"
     //endregion
 
     //region - Lifecycler methods
@@ -43,7 +44,7 @@ class BenefitsActivity : BaseActivity(),
 
         asignId()
         title = "Benefits"
-        presenter.processAdapter()
+        presenter.getQouteSetting(QouteSettings.Body(userID, 0))
         benefitsRecyclerView.layoutManager = GridLayoutManager(this,
                 2)
         benefitsNextButton.setOnClickListener {
@@ -101,7 +102,7 @@ class BenefitsActivity : BaseActivity(),
             benefitsRecyclerView.adapter.itemCount
         }catch (e : Exception) {
             loading.show()
-            presenter.processAdapter()
+            presenter.getQouteSetting(QouteSettings.Body(userID, id))
         }
     }
 
@@ -112,10 +113,9 @@ class BenefitsActivity : BaseActivity(),
     //endregion
 
     //region - Presenter Delegates
-    override fun setAdapter(product : Product.List?, provider : Provider.Result?) {
+    override fun setAdapter(data : QouteSettings.Result) {
         benefitsRecyclerView.adapter = BenefitsAdapter(this,
-                product,
-                provider,
+                data,
                 id)
     }
     //endregion

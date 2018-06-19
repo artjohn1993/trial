@@ -27,8 +27,6 @@ class LifeDialog: AppCompatActivity() {
     var FI : Switch? = null
     var indexedcheck : Boolean = false
     var FIcheck : Boolean = false
-    var productPass : Product.List? = null
-    var providerPass : Provider.Result? = null
     var loadingAdapter : ArrayAdapter<String>? = null
     var calAdapter : ArrayAdapter<String>? = null
     var cal : Int = 0
@@ -37,12 +35,9 @@ class LifeDialog: AppCompatActivity() {
 
     //region - Public methods
     fun show(activity: Activity,
-             product : Product.List?,
-             provider : Provider.Result?,
+             data : QouteSettings.Result,
              id : Int) {
         this.clientID = id
-        this.productPass = product
-        this.providerPass = provider
         setDialog(activity)
         dialogViewId(dialog)
         setAdapter(activity)
@@ -68,8 +63,7 @@ class LifeDialog: AppCompatActivity() {
                 cal = Conversion.calPeriod(calcuSpinner?.selectedItem.toString())
                 var loadingVal: Double = Conversion.loading(this.loading?.selectedItem.toString())
                 amountVal = Conversion.coverAmount(amount?.text.toString())
-                var benefitsProduct = ProcessProduct().getListProduct(productPass,
-                        providerPass,
+                var benefitsProduct = ProcessProduct().getListProduct(data,
                         2)
 
                 ConfiguredBenefits(false,

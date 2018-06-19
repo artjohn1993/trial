@@ -3,6 +3,7 @@ package com.example.artjohn.blackfin.event
 import com.example.artjohn.blackfin.model.BenefitsProductList
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
+import com.example.artjohn.blackfin.model.QouteSettings
 
 /**
  * Created by User on 27/04/2018.
@@ -16,24 +17,17 @@ class ProcessProduct {
     //endregion
 
     //region - Public methods
-    fun getListProduct(product : Product.List?,
-                       provider : Provider.Result?,
+    fun getListProduct(data : QouteSettings.Result,
                        benefitID: Int) : List<BenefitsProductList> {
         var  array : ArrayList<BenefitsProductList> = ArrayList()
 
-        if (product != null) {
-            for(index in 0 until product.data.products.size) {
-                if(product.data.products[index].benefitId == benefitID) {
-                    productGroupId = product.data.products[index].productGroupId
-                    productName = product.data.products[index].productName
-                    if (provider != null) {
-                        for(index2 in 0 until provider.data.providers.size) {
-                            if(product.data.products[index].providerId == provider.data.providers[index2].providerId) {
-                                providerID = provider.data.providers[index2].providerId
-                                providerName = provider.data.providers[index2].providerName
-                            }
-                        }
-                    }
+        for(index in 0 until data.data.providers.size) {
+            for (index2 in 0 until data.data.providers[index].benefits.size) {
+                if (benefitID == data.data.providers[index].benefits[index2].benefitId && data.data.providers[index].providerStatus) {
+                    productName = data.data.providers[index].benefits[index2].product.productName
+                    providerID = data.data.providers[index].providerId
+                    providerName = data.data.providers[index].providerName
+                    productGroupId = data.data.providers[index].benefits[index2].product.defaultProductGroupId
                     array.add(BenefitsProductList(benefitID,
                             productName,
                             providerID,
@@ -41,13 +35,9 @@ class ProcessProduct {
                             0,
                             productGroupId))
                 }
-            }//end of first loop
-            return array
+            }
         }
-
-        else {
-            return array
-        }
+        return array
     }
     //endregion
 }

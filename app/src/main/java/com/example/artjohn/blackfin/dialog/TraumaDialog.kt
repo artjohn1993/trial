@@ -11,6 +11,7 @@ import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
+import com.example.artjohn.blackfin.model.QouteSettings
 import org.greenrobot.eventbus.EventBus
 
 class TraumaDialog {
@@ -32,8 +33,7 @@ class TraumaDialog {
     var tpdVal : Boolean = false
 
     fun show(activity: Activity,
-             product : Product.List?,
-             provider : Provider.Result?,
+             data : QouteSettings.Result,
              id : Int) {
         dialog = Dialog(activity)
         setupDialog(dialog)
@@ -62,8 +62,7 @@ class TraumaDialog {
                 coverVal = Conversion.coverAmount(cover?.text.toString())
                 occupationType = Conversion.occupationType(type?.selectedItem.toString())
                 calPeriodVal = Conversion.calPeriod(calPeriod?.selectedItem.toString())
-                var benefitsProduct = ProcessProduct().getListProduct(product,
-                        provider,
+                var benefitsProduct = ProcessProduct().getListProduct(data,
                         4)
 
                 ConfiguredBenefits(false,

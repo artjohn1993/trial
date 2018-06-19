@@ -11,6 +11,7 @@ import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
+import com.example.artjohn.blackfin.model.QouteSettings
 import org.greenrobot.eventbus.EventBus
 
 class MortgageRepaymentDialog {
@@ -31,16 +32,14 @@ class MortgageRepaymentDialog {
     var indexVal : Boolean = false
 
     fun show(activity: Activity,
-             product : Product.List?,
-             provider : Provider.Result?,
+             data : QouteSettings.Result,
              id : Int) {
         dialog = Dialog(activity)
         setupDialog(dialog)
         dialogViewId(dialog)
         setAdapter(activity)
         setConfiguredBenefits(id)
-        var benefitsProduct = ProcessProduct().getListProduct(product ,
-                provider,
+        var benefitsProduct = ProcessProduct().getListProduct(data,
                 7)
         closeButton?.setOnClickListener {
             dialog?.hide()

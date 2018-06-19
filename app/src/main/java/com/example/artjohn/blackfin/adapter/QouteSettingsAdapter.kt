@@ -10,10 +10,12 @@ import android.widget.TextView
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.event.ViewProduct
 import com.example.artjohn.blackfin.model.Benefit
+import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
+import com.example.artjohn.blackfin.model.QouteSettings
 import org.greenrobot.eventbus.EventBus
 
-class QouteSettingsAdapter(val result : Provider.Result) : RecyclerView.Adapter<QouteSettingsAdapter.QouteSettingsViewHolder>() {
+class QouteSettingsAdapter(val data : QouteSettings.Result, val data2 : Product.List) : RecyclerView.Adapter<QouteSettingsAdapter.QouteSettingsViewHolder>() {
 
     //region - Variables
     var imageArray : Array<Int> = arrayOf (
@@ -41,12 +43,12 @@ class QouteSettingsAdapter(val result : Provider.Result) : RecyclerView.Adapter<
 
     override fun getItemCount(): Int {
 
-        return result.data.providers.size
+        return data.data.providers.size
     }
 
     override fun onBindViewHolder(holder: QouteSettingsAdapter.QouteSettingsViewHolder, position: Int) {
-        holder.image.setImageResource(imageArray[position])
-        holder.switch.isChecked = result.data.providers[position].status
+        holder.image.setImageResource(imageArray[data.data.providers[position].providerId - 1])
+        holder.switch.isChecked = data.data.providers[position].providerStatus
 
         holder.itemView.setOnClickListener {
             EventBus.getDefault().post(ViewProduct(position))

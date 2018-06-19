@@ -13,7 +13,9 @@ import com.example.artjohn.blackfin.dialog.LoadingDialog
 import com.example.artjohn.blackfin.event.SelectActiveProduct
 import com.example.artjohn.blackfin.event.ViewProduct
 import com.example.artjohn.blackfin.model.Benefit
+import com.example.artjohn.blackfin.model.ConfigureBenefits.Companion.id
 import com.example.artjohn.blackfin.model.Product
+import com.example.artjohn.blackfin.model.QouteSettings
 import com.example.artjohn.blackfin.presenter.ProductSettingPresenterClass
 import com.example.artjohn.blackfin.presenter.ProductSettingView
 import com.example.artjohn.blackfin.presenter.QouteSettingsPresenter
@@ -26,12 +28,12 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class ProductSettingsActivity : BaseActivity(), ProductSettingView {
+class ProductSettingsActivity : BaseActivity() {
 
     //region - Variables
-    var product : Product.List? = null
+    var product : String = ""
     var loading = LoadingDialog(this)
-    var id : Int = 0
+    var data : QouteSettings.Providers? = null
     var imageArray : Array<Int> = arrayOf (
             R.drawable.ic_accuro,
             R.drawable.ic_aia,
@@ -46,10 +48,7 @@ class ProductSettingsActivity : BaseActivity(), ProductSettingView {
             R.drawable.ic_sovereign,
             R.drawable.ic_fidelity
     )
-    private val apiServer by lazy {
-        BlackfinApi.create(this)
-    }
-    val presenter : ProductSettingPresenterClass = ProductSettingPresenterClass(this, apiServer)
+    var moshi = Moshi.Builder().build()
     //endregion
 
     //region - Life cycle method
@@ -57,9 +56,7 @@ class ProductSettingsActivity : BaseActivity(), ProductSettingView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_settings)
         title = "Product Settings"
-        setID()
-        loading.show()
-        presenter.processAdapter()
+        bind()
     }
     public override fun onStart() {
         super.onStart()
@@ -70,67 +67,42 @@ class ProductSettingsActivity : BaseActivity(), ProductSettingView {
         super.onStop()
         EventBus.getDefault().unregister(this)
     }
+
+    override fun onResume() {
+        super.onResume()
+        productRecyclerView.adapter.notifyDataSetChanged()
+    }
     //endregion
 
     //region - Private method
-    private fun setID() {
-        id = intent.getIntExtra("id", 0)
+    private fun bind() {
+        getIntentData()
         setImage()
+        setAdapter()
+    }
+    private fun getIntentData() {
+        val jsonAdapter = moshi.adapter(QouteSettings.Providers::class.java)
+        data = jsonAdapter.fromJson(intent.getStringExtra("data"))
+        product = intent.getStringExtra("product")
     }
     private fun setImage() {
-        providerLogo.setImageResource(imageArray[id])
+        providerLogo.setImageResource(imageArray[data?.providerId!! - 1])
     }
-
-    private fun setBenefitResult(data : Product.List) : List<Product.Products> {
-        var array : ArrayList<Product.Products> = arrayListOf()
-        var product = data.data.products
-        var exist : ArrayList<Int> = arrayListOf()
-       for (index in 0 until product.size) {
-           if (id.plus(1) == product[index].providerId && !exist.contains(product[index].benefitId)) {
-               exist.add(product[index].benefitId)
-               array.add(product[index])
-           }
-       }
-       return array
-    }
-    private fun objectToJson(item : Product.List) : String {
-        var moshi = Moshi.Builder().build()
-        var jsonAdapter = moshi.adapter(Product.List::class.java)
-        var json = jsonAdapter.toJson(item)
-        return json
-    }
-    private fun moveSelectedActivity(data : String, benefitID : Int) {
-        var intent = Intent(baseContext, SelectedProductActivity::class.java)
-        intent.putExtra("benefitID", benefitID)
-        intent.putExtra("providerID", id)
-        intent.putExtra("data", data)
-        startActivity(intent)
-    }
-    //endregion
-
-    //region - Presenter delegates
-    override fun setAdapter(data : Product.List) {
-        product = data
+    private fun setAdapter() {
         productRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL,false)
-        productRecyclerView.adapter = ProductSettingsAdapter(setBenefitResult(product!!))
+        productRecyclerView.adapter = ProductSettingsAdapter(this.data?.benefits!!)
         loading.hide()
     }
     //endregion
 
     //region - EventBus method
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onSelectActiveProducr(event : SelectActiveProduct) {
+    fun onSelectActiveProduct(event : SelectActiveProduct) {
         var intent = Intent(baseContext, SelectedProductActivity::class.java)
-        var items = product?.data?.products
-        var array : ArrayList<Product.Products> = arrayListOf()
-        moveSelectedActivity(objectToJson(this!!.product!!), event.id)
-
-        /*for(index in 0 until product?.data?.products!!.size) {
-            if (id.plus(1) == items!![index].providerId && event.id == items!![index].benefitId) {
-                array.add(items!![index])
-            }
-        }*/
-
+        intent.putExtra("benefitID", event.id)
+        intent.putExtra("providerID", data?.providerId)
+        intent.putExtra("product", product)
+        startActivity(intent)
     }
     //endregion
 }

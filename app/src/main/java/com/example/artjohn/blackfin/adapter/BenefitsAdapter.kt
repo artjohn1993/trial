@@ -14,17 +14,16 @@ import com.example.artjohn.blackfin.dialog.*
 import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.Provider
+import com.example.artjohn.blackfin.model.QouteSettings
 import kotlinx.android.synthetic.main.benefits_layout.view.*
 import org.jetbrains.anko.textColor
 
-class BenefitsAdapter(activity: Activity,
-                      product : Product.List?,
-                      provider : Provider.Result?,
+class BenefitsAdapter(activity : Activity,
+                      data : QouteSettings.Result,
                       clientId : Int) : RecyclerView.Adapter<BenefitsAdapter.BenefitsHolder>() {
     //region - Variables
     var activity = activity
-    var product = product
-    var provider = provider
+    var qouteSetting = data
     var clientId : Int = clientId
     var titleArray  = arrayOf (
             "Health Cover",
@@ -93,31 +92,31 @@ class BenefitsAdapter(activity: Activity,
 
             when(position) {
                 0 -> {
-                    HealthDialog().show(activity, product, provider, clientId)
+                    HealthDialog().show(activity, qouteSetting, clientId)
                 }
                 1 -> {
-                    LifeDialog().show(activity, product, provider, clientId)
+                    LifeDialog().show(activity, qouteSetting, clientId)
                 }
                 2 -> {
-                    FamilyProtectionDialog().show(activity, product, provider, clientId)
+                    FamilyProtectionDialog().show(activity, qouteSetting, clientId)
                 }
                 3 -> {
-                    TraumaDialog().show(activity, product, provider, clientId)
+                    TraumaDialog().show(activity, qouteSetting, clientId)
                 }
                 4 -> {
-                    PermanentDisabilityDialog().show(activity, product, provider, clientId)
+                    PermanentDisabilityDialog().show(activity, qouteSetting, clientId)
                 }
                 5 -> {
-                    IncomeProtectionDialog().show(activity, product, provider, clientId)
+                    IncomeProtectionDialog().show(activity, qouteSetting, clientId)
                 }
                 6 -> {
-                    MortgageRepaymentDialog().show(activity, product, provider, clientId)
+                    MortgageRepaymentDialog().show(activity, qouteSetting, clientId)
                 }
                 7 -> {
-                    RedundancyDialog().show(activity, product, provider, clientId)
+                    RedundancyDialog().show(activity, qouteSetting, clientId)
                 }
                 8 -> {
-                    WaiverPremiumDialog().show(activity, product, provider, clientId)
+                    WaiverPremiumDialog().show(activity, qouteSetting, clientId)
                 }
             }
         }

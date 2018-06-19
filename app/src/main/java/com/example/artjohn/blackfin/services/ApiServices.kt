@@ -23,6 +23,14 @@ interface ApiServices
     @Headers("content-type: application/json")
     @POST("quote/request-quote")
     fun requestQoutes(@Body client : Client) : Observable<QouteRequest.Result>
+
+    @Headers("content-type: application/json")
+    @POST("quotesettings")
+    fun requestQouteSettings(@Body client : QouteSettings.Body) : Observable<QouteSettings.Result>
+
+    @Headers("content-type: application/json")
+    @POST("quotesettings/update-quotesettings")
+    fun updateQouteSettings(@Body client : UpdateQouteSetting.Body) : Observable<UpdateQouteSetting.Result>
     //endregion
 
     //region - GET
@@ -34,6 +42,7 @@ interface ApiServices
 
     @GET("benefit")
     fun getBenefit() : Observable<Benefit.Result>
+
     //endregion
 
 }

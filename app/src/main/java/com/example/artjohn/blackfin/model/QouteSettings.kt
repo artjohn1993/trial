@@ -21,6 +21,11 @@ object QouteSettings {
     )
     data class Product(
             var defaultProductGroupId : Int,
-            var productName : Int
+            var productName : String
+    )
+
+    data class Body(
+            var userId : String,
+            var quoteId : Int
     )
 }

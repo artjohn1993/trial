@@ -13,6 +13,7 @@ import android.widget.AdapterView
 import com.example.artjohn.blackfin.array.PublicArray
 import com.example.artjohn.blackfin.event.*
 import com.example.artjohn.blackfin.model.ConfigureBenefits
+import com.example.artjohn.blackfin.model.QouteSettings
 import org.greenrobot.eventbus.EventBus
 
 
@@ -37,8 +38,7 @@ class FamilyProtectionDialog {
 
 
     fun show(activity: Activity,
-             product : Product.List?,
-             provider : Provider.Result?,
+             data : QouteSettings.Result,
              id : Int) {
         dialog = Dialog(activity as Context?)
         setupDialog(dialog)
@@ -82,8 +82,7 @@ class FamilyProtectionDialog {
                 coverAmountVal = Conversion.coverAmount(cover?.text.toString())
                 benefitYearVal = Conversion.yearPeriod(yearPeriod?.selectedItem.toString())
                 benefitTermPeriodVal = Conversion.termPeriod(termPeriod?.selectedItem.toString())
-                var benefitsProduct = ProcessProduct().getListProduct(product,
-                        provider,
+                var benefitsProduct = ProcessProduct().getListProduct(data,
                         3)
 
                 ConfiguredBenefits(false,
