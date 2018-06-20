@@ -2,6 +2,7 @@ package com.example.artjohn.blackfin.presenter
 
 import com.example.artjohn.blackfin.model.Benefit
 import com.example.artjohn.blackfin.model.Product
+import com.example.artjohn.blackfin.model.QouteSettings
 import com.example.artjohn.blackfin.services.ApiServices
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -12,9 +13,9 @@ class ProductSettingPresenterClass(val view : ProductSettingView,
 
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
 
-    override fun processAdapter() {
+    override fun processAdapter(data : QouteSettings.Body) {
         compositeDisposable.add(
-                server.getProduct()
+                server.requestQouteSettings(data)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.newThread())
                         .subscribe({ result ->
@@ -29,8 +30,8 @@ class ProductSettingPresenterClass(val view : ProductSettingView,
 }
 
 interface ProductSettingView {
-    fun setAdapter(data : Product.List)
+    fun setAdapter(data : QouteSettings.Result)
 }
 interface ProductSettingPresenter {
-    fun processAdapter()
+    fun processAdapter(data : QouteSettings.Body)
 }

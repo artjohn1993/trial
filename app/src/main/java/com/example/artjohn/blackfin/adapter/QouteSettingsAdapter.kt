@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
 import com.example.artjohn.blackfin.R
+import com.example.artjohn.blackfin.event.ProviderCheckEvent
 import com.example.artjohn.blackfin.event.ViewProduct
 import com.example.artjohn.blackfin.model.Benefit
 import com.example.artjohn.blackfin.model.Product
@@ -34,7 +35,6 @@ class QouteSettingsAdapter(val data : QouteSettings.Result, val data2 : Product.
     )
     //endregion
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QouteSettingsAdapter.QouteSettingsViewHolder {
         val inflater = LayoutInflater.from(parent?.context)
         val layout = inflater.inflate(R.layout.layout_qoute_settings,parent,false)
@@ -42,13 +42,17 @@ class QouteSettingsAdapter(val data : QouteSettings.Result, val data2 : Product.
     }
 
     override fun getItemCount(): Int {
-
         return data.data.providers.size
     }
 
     override fun onBindViewHolder(holder: QouteSettingsAdapter.QouteSettingsViewHolder, position: Int) {
         holder.image.setImageResource(imageArray[data.data.providers[position].providerId - 1])
         holder.switch.isChecked = data.data.providers[position].providerStatus
+
+        holder.switch.setOnCheckedChangeListener { buttonView, isChecked ->
+            EventBus.getDefault().post(ProviderCheckEvent(data.data.providers[position].providerId,
+                    isChecked))
+        }
 
         holder.itemView.setOnClickListener {
             EventBus.getDefault().post(ViewProduct(position))

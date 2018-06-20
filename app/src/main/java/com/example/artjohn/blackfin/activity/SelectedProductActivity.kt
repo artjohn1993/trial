@@ -9,7 +9,11 @@ import com.example.artjohn.blackfin.event.SelectProduct
 import com.example.artjohn.blackfin.adapter.SelectedProductAdapter
 import com.example.artjohn.blackfin.api.BlackfinApi
 import com.example.artjohn.blackfin.dialog.LoadingDialog
+import com.example.artjohn.blackfin.event.ConfiguredBenefits
+import com.example.artjohn.blackfin.event.ProcessProduct
+import com.example.artjohn.blackfin.model.ConfigureBenefits
 import com.example.artjohn.blackfin.model.Product
+import com.example.artjohn.blackfin.model.QouteSettings
 import com.example.artjohn.blackfin.model.UpdateQouteSetting
 import com.example.artjohn.blackfin.presenter.SelectedProductPresenterClass
 import com.example.artjohn.blackfin.presenter.SelectedProductView
@@ -20,6 +24,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 class SelectedProductActivity : BaseActivity(), SelectedProductView {
+
 
     //region - Variables
     var benefitID : Int = 0
@@ -33,6 +38,7 @@ class SelectedProductActivity : BaseActivity(), SelectedProductView {
     var userID = "ba3e6661-2f25-4bb9-b08d-6509eb0ad524"
     var loading = LoadingDialog(this)
     var data = ProductSettingsActivity().data
+    var message : String = ""
     //endregion
 
     //region - Lifecycle methods
@@ -96,14 +102,28 @@ class SelectedProductActivity : BaseActivity(), SelectedProductView {
         selectedRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL,false)
         selectedRecyclerView.adapter = SelectedProductAdapter(filtered)
     }
-
+    private fun setConfiguredBenefits(data: QouteSettings.Result) {
+        var inputs = ConfigureBenefits.array
+        for (index in 0 until inputs.size) {
+            var id : Int = inputs[index].inputs.benefitProductList[0].benefitId
+            var benefitsProduct = ProcessProduct().getListProduct(data,
+                    id)
+            ConfigureBenefits.array[index].inputs.benefitProductList = benefitsProduct
+        }
+    }
     //endregion
 
     //region - EventBus
     override fun updatedQouteSetting(data: UpdateQouteSetting.Result) {
+        message = data.data.message
+        presenter.requestQouteSettings(QouteSettings.Body(userID, 0))
+    }
+
+    override fun setConfiguredbenefits(data: QouteSettings.Result) {
+        setConfiguredBenefits(data)
         loading.hide()
         Snackbar.make(window.decorView.rootView,
-                data.data.message,
+                message,
                 Snackbar.LENGTH_LONG).show()
     }
     //endregion

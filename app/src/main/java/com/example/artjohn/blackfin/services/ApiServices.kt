@@ -31,6 +31,10 @@ interface ApiServices
     @Headers("content-type: application/json")
     @POST("quotesettings/update-quotesettings")
     fun updateQouteSettings(@Body client : UpdateQouteSetting.Body) : Observable<UpdateQouteSetting.Result>
+
+    @Headers("content-type: application/json")
+    @POST("quotesettings/update-quotesettingsbyprovider")
+    fun updateQouteSettingsByProvider(@Body client : UpdateQouteSettingByProvider.Body) : Observable<UpdateQouteSettingByProvider.Result>
     //endregion
 
     //region - GET

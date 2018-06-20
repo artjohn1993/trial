@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
-import android.widget.Toast
 import com.example.artjohn.blackfin.R
 import com.example.artjohn.blackfin.adapter.SummaryAdapter
 import com.example.artjohn.blackfin.adapter.SummaryAdapterTwo
@@ -22,7 +21,6 @@ import com.example.artjohn.blackfin.presenter.SummaryPresenter
 import com.example.artjohn.blackfin.presenter.SummaryPresenterClass
 import com.example.artjohn.blackfin.presenter.SummaryView
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_summary.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -76,6 +74,11 @@ class SummaryActivity : BaseActivity(),
     public override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkConfigureBenefits()
     }
     // endregion
 

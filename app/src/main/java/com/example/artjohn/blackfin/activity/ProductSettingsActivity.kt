@@ -16,10 +16,7 @@ import com.example.artjohn.blackfin.model.Benefit
 import com.example.artjohn.blackfin.model.ConfigureBenefits.Companion.id
 import com.example.artjohn.blackfin.model.Product
 import com.example.artjohn.blackfin.model.QouteSettings
-import com.example.artjohn.blackfin.presenter.ProductSettingPresenterClass
-import com.example.artjohn.blackfin.presenter.ProductSettingView
-import com.example.artjohn.blackfin.presenter.QouteSettingsPresenter
-import com.example.artjohn.blackfin.presenter.QouteSettingsPresenterClass
+import com.example.artjohn.blackfin.presenter.*
 import com.squareup.moshi.Moshi
 import kotlinx.android.synthetic.main.activity_product_settings.*
 import kotlinx.android.synthetic.main.activity_qoute_setting.*
@@ -28,12 +25,14 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-class ProductSettingsActivity : BaseActivity() {
+class ProductSettingsActivity : BaseActivity(), ProductSettingView {
+
 
     //region - Variables
     var product : String = ""
     var loading = LoadingDialog(this)
     var data : QouteSettings.Providers? = null
+    var position : Int = 0
     var imageArray : Array<Int> = arrayOf (
             R.drawable.ic_accuro,
             R.drawable.ic_aia,
@@ -49,6 +48,11 @@ class ProductSettingsActivity : BaseActivity() {
             R.drawable.ic_fidelity
     )
     var moshi = Moshi.Builder().build()
+    private val apiServer by lazy {
+        BlackfinApi.create(this)
+    }
+    val presenter : ProductSettingPresenter = ProductSettingPresenterClass(this, apiServer)
+    var userID = "ba3e6661-2f25-4bb9-b08d-6509eb0ad524"
     //endregion
 
     //region - Life cycle method
@@ -70,7 +74,8 @@ class ProductSettingsActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        productRecyclerView.adapter.notifyDataSetChanged()
+        loading.show()
+        presenter.processAdapter(QouteSettings.Body(userID, 0))
     }
     //endregion
 
@@ -78,12 +83,12 @@ class ProductSettingsActivity : BaseActivity() {
     private fun bind() {
         getIntentData()
         setImage()
-        setAdapter()
     }
     private fun getIntentData() {
         val jsonAdapter = moshi.adapter(QouteSettings.Providers::class.java)
         data = jsonAdapter.fromJson(intent.getStringExtra("data"))
         product = intent.getStringExtra("product")
+        position = intent.getIntExtra("position", 0)
     }
     private fun setImage() {
         providerLogo.setImageResource(imageArray[data?.providerId!! - 1])
@@ -91,7 +96,6 @@ class ProductSettingsActivity : BaseActivity() {
     private fun setAdapter() {
         productRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL,false)
         productRecyclerView.adapter = ProductSettingsAdapter(this.data?.benefits!!)
-        loading.hide()
     }
     //endregion
 
@@ -103,6 +107,14 @@ class ProductSettingsActivity : BaseActivity() {
         intent.putExtra("providerID", data?.providerId)
         intent.putExtra("product", product)
         startActivity(intent)
+    }
+    //endregion
+
+    //region - Presenter Delegate
+    override fun setAdapter(data: QouteSettings.Result) {
+        loading.hide()
+        productRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL,false)
+        productRecyclerView.adapter = ProductSettingsAdapter(data.data.providers[position].benefits)
     }
     //endregion
 }

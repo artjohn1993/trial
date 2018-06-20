@@ -16,7 +16,7 @@ import java.util.*
 
 class CustomHttp {
     companion object {
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb25zbm93QG1haWwuY29tIiwianRpIjoiNTRkYTgxYmQtODQ5MC00OGE0LWJlZjUtMDg1ZWU0ZDAxYzliIiwiZXhwIjoxNTI5NDAxNTQxLCJpc3MiOiJodHRwOi8vYmxhY2tmaW4udGVjaG5vbG9neSIsImF1ZCI6Imh0dHA6Ly9ibGFja2Zpbi50ZWNobm9sb2d5In0.sQYs9B7-sMiN9kFbFcQC0FVXsv6duzVZ8g8mRB2oymY"
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqb25zbm93QG1haWwuY29tIiwianRpIjoiM2RhMTMyNzktOGFkNi00MWE3LTgzNTMtZmIyOTgzMDlkM2Q4IiwiZXhwIjoxNTI5NDgyNTE0LCJpc3MiOiJodHRwOi8vYmxhY2tmaW4udGVjaG5vbG9neSIsImF1ZCI6Imh0dHA6Ly9ibGFja2Zpbi50ZWNobm9sb2d5In0.1d1h--aqD96AhDG7ED9K3thOhX-NUq6YBU1KOC3niGg"
         fun createOkhttp() : OkHttpClient {
             val okhttp = OkHttpClient.Builder()
 
